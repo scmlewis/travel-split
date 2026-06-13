@@ -4,6 +4,7 @@ import { CURRENCY_MAP } from "../types";
 import ThemeToggle from "./ThemeToggle";
 import type { Theme } from "../hooks/useTheme";
 import { useToast } from "../hooks/useToast";
+import { XIcon, GlobeIcon } from "./Icons";
 
 interface TripListProps {
   trips: Group[];
@@ -100,9 +101,9 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                           addToast(`Trip "${trip.name}" deleted`);
                         }
                       }}
-                      className="text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors text-sm px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      ✕
+                      <XIcon className="w-4 h-4" />
                     </button>
                   </div>
                 );
@@ -113,7 +114,9 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
 
         {trips.length === 0 && (
           <div className="text-center py-10">
-            <div className="text-5xl mb-3">🌍</div>
+            <div className="flex justify-center mb-3 text-slate-300 dark:text-slate-600">
+              <GlobeIcon className="w-12 h-12" />
+            </div>
             <div className="text-base font-medium text-slate-600 dark:text-slate-300 mb-1">No trips yet</div>
             <div className="text-sm text-slate-400 dark:text-slate-500">Create your first trip above to start splitting expenses!</div>
           </div>

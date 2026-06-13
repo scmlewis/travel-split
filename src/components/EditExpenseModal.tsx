@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { Expense, Member, CurrencyCode, ExpenseShare } from "../types";
 import { CURRENCY_MAP } from "../types";
 import { useToast } from "../hooks/useToast";
+import { XIcon, CheckIcon } from "./Icons";
 
 interface EditExpenseModalProps {
   expense: Expense;
@@ -122,7 +123,7 @@ export default function EditExpenseModal({
       <div className="relative bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md p-5 space-y-4 border border-slate-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Edit Expense</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-xl min-h-[44px] min-w-[44px] flex items-center justify-center">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 min-h-[44px] min-w-[44px] flex items-center justify-center"><XIcon className="w-5 h-5" /></button>
         </div>
 
         <input
@@ -223,7 +224,7 @@ export default function EditExpenseModal({
                 </div>
               ))}
               <div className={`text-xs mt-1 font-medium ${Math.abs(diff) < 0.01 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
-                {Math.abs(diff) < 0.01 ? "✓ Balanced" : `Remaining: ${baseSymbol}${diff.toFixed(2)}`}
+                {Math.abs(diff) < 0.01 ? <span className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> Balanced</span> : `Remaining: ${baseSymbol}${diff.toFixed(2)}`}
               </div>
             </div>
           )}

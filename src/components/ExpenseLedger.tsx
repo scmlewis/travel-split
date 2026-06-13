@@ -3,6 +3,7 @@ import type { Expense, Member } from "../types";
 import { formatDateShort } from "../types";
 import Avatar from "./Avatar";
 import { useToast } from "../hooks/useToast";
+import { PencilIcon, XIcon } from "./Icons";
 
 interface ExpenseLedgerProps {
   expenses: Expense[];
@@ -100,20 +101,20 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, onDelete,
                             <div className="flex items-center gap-1.5 shrink-0">
                               <button
                                 onClick={() => onEdit(exp)}
-                                className="text-sm px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors font-medium btn-press min-h-[36px]"
+                                className="text-sm px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors font-medium btn-press min-h-[36px] flex items-center gap-1"
                                 title="Edit expense"
                               >
-                                ✎
+                                <PencilIcon className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => {
                                   onDelete(exp.id);
                                   addToast(`Deleted "${exp.title}"`, "info");
                                 }}
-                                className="text-sm px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium btn-press min-h-[36px]"
+                                className="text-sm px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors font-medium btn-press min-h-[36px] flex items-center gap-1"
                                 title="Delete expense"
                               >
-                                ✕
+                                <XIcon className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </div>

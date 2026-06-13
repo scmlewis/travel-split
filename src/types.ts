@@ -45,20 +45,64 @@ export interface MemberBalance {
   net: number;
 }
 
-export type CurrencyCode = "HKD" | "JPY" | "EUR" | "TWD";
+export type CurrencyCode =
+  | "USD" | "EUR" | "GBP" | "JPY" | "CNY" | "KRW" | "TWD" | "HKD"
+  | "SGD" | "AUD" | "NZD" | "CAD" | "CHF"
+  | "THB" | "MYR" | "IDR" | "PHP" | "VND"
+  | "INR" | "AED" | "SAR" | "ZAR" | "MXN" | "BRL";
 
 export const CURRENCY_MAP: Record<CurrencyCode, { symbol: string; label: string }> = {
-  HKD: { symbol: "HK$", label: "Hong Kong Dollar" },
-  JPY: { symbol: "¥", label: "Japanese Yen" },
+  USD: { symbol: "$", label: "US Dollar" },
   EUR: { symbol: "€", label: "Euro" },
+  GBP: { symbol: "£", label: "British Pound" },
+  JPY: { symbol: "¥", label: "Japanese Yen" },
+  CNY: { symbol: "¥", label: "Chinese Yuan" },
+  KRW: { symbol: "₩", label: "Korean Won" },
   TWD: { symbol: "NT$", label: "Taiwan Dollar" },
+  HKD: { symbol: "HK$", label: "Hong Kong Dollar" },
+  SGD: { symbol: "S$", label: "Singapore Dollar" },
+  AUD: { symbol: "A$", label: "Australian Dollar" },
+  NZD: { symbol: "NZ$", label: "New Zealand Dollar" },
+  CAD: { symbol: "C$", label: "Canadian Dollar" },
+  CHF: { symbol: "Fr", label: "Swiss Franc" },
+  THB: { symbol: "฿", label: "Thai Baht" },
+  MYR: { symbol: "RM", label: "Malaysian Ringgit" },
+  IDR: { symbol: "Rp", label: "Indonesian Rupiah" },
+  PHP: { symbol: "₱", label: "Philippine Peso" },
+  VND: { symbol: "₫", label: "Vietnamese Dong" },
+  INR: { symbol: "₹", label: "Indian Rupee" },
+  AED: { symbol: "د.إ", label: "UAE Dirham" },
+  SAR: { symbol: "﷼", label: "Saudi Riyal" },
+  ZAR: { symbol: "R", label: "South African Rand" },
+  MXN: { symbol: "Mex$", label: "Mexican Peso" },
+  BRL: { symbol: "R$", label: "Brazilian Real" },
 };
 
 export const DEFAULT_EXCHANGE_RATES: Record<CurrencyCode, number> = {
-  HKD: 1,
-  JPY: 0.052,
+  USD: 7.8,
   EUR: 8.5,
+  GBP: 9.9,
+  JPY: 0.052,
+  CNY: 1.08,
+  KRW: 0.0057,
   TWD: 0.24,
+  HKD: 1,
+  SGD: 5.8,
+  AUD: 5.1,
+  NZD: 4.7,
+  CAD: 5.7,
+  CHF: 8.8,
+  THB: 0.22,
+  MYR: 1.7,
+  IDR: 0.00048,
+  PHP: 0.14,
+  VND: 0.00031,
+  INR: 0.093,
+  AED: 2.12,
+  SAR: 2.08,
+  ZAR: 0.43,
+  MXN: 0.46,
+  BRL: 1.4,
 };
 
 export function generateId(): string {

@@ -1,6 +1,7 @@
 import type { Member, Settlement } from "../types";
 import Avatar from "./Avatar";
 import { useToast } from "../hooks/useToast";
+import { DollarIcon, CheckIcon } from "./Icons";
 
 interface SettlementBoardProps {
   members: Member[];
@@ -103,7 +104,9 @@ export default function SettlementBoard({
       <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
         {settlements.length === 0 ? (
           <div className="text-center py-12 px-4 animate-fadeIn">
-            <div className="text-5xl mb-3">💰</div>
+            <div className="flex justify-center mb-3 text-slate-300 dark:text-slate-600">
+              <DollarIcon className="w-12 h-12" />
+            </div>
             <div className="text-lg font-medium text-slate-600 dark:text-slate-300 mb-1">All settled up</div>
             <div className="text-sm text-slate-400 dark:text-slate-500">Add expenses to see who owes whom</div>
           </div>
@@ -175,7 +178,7 @@ export default function SettlementBoard({
                             <span className="text-slate-300 dark:text-slate-600 shrink-0">→</span>
                             {to && <Avatar name={to.name} size="sm" />}
                             <span className="text-slate-500 dark:text-slate-400 line-through text-sm truncate">{to?.name ?? "?"}</span>
-                            <span className="text-emerald-500 dark:text-emerald-400 text-sm shrink-0">✓</span>
+                            <CheckIcon className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="font-mono tabular-nums text-slate-400 dark:text-slate-500 line-through text-sm">

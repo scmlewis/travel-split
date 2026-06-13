@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Member } from "../types";
 import { useToast } from "../hooks/useToast";
 import Avatar from "./Avatar";
+import { XIcon } from "./Icons";
 
 interface MemberPanelProps {
   members: Member[];
@@ -47,10 +48,10 @@ export default function MemberPanel({ members, onAdd, onRemove }: MemberPanelPro
               <span className="pl-0.5">{m.name}</span>
               <button
                 onClick={() => handleRemove(m)}
-                className="text-slate-400 dark:text-slate-500 hover:text-red-500 transition-colors min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-base"
+                className="text-slate-400 dark:text-slate-500 hover:text-red-500 transition-colors min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
                 aria-label={`Remove ${m.name}`}
               >
-                ✕
+                <XIcon className="w-3.5 h-3.5" />
               </button>
             </span>
           ))}

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useRef } from "react";
 import type { ReactNode } from "react";
+import { CheckIcon, XIcon, InfoIcon } from "../components/Icons";
 
 interface Toast {
   id: string;
@@ -78,14 +79,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             error: "bg-red-600 dark:bg-red-500",
             info: "bg-indigo-600 dark:bg-indigo-500",
           };
-          const icons = { success: "✓", error: "✕", info: "ℹ" };
+          const icons = { success: <CheckIcon className="w-4 h-4" />, error: <XIcon className="w-4 h-4" />, info: <InfoIcon className="w-4 h-4" /> };
           return (
             <div
               key={toast.id}
               className={`pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-lg shadow-lg text-white text-sm font-medium ${colors[toast.type]} animate-slideInRight cursor-pointer`}
               onClick={() => removeToast(toast.id)}
             >
-              <span className="text-base">{icons[toast.type]}</span>
+              {icons[toast.type]}
               {toast.message}
             </div>
           );

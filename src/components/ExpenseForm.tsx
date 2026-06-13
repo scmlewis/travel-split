@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Member, CurrencyCode, OmitExpenseId } from "../types";
 import { CURRENCY_MAP, todayString } from "../types";
 import { useToast } from "../hooks/useToast";
+import { CheckIcon } from "./Icons";
 
 interface ExpenseFormProps {
   members: Member[];
@@ -202,7 +203,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
               </div>
             ))}
             <div className={`text-xs mt-1 font-medium ${Math.abs(diff) < 0.01 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
-              {Math.abs(diff) < 0.01 ? "✓ Balanced" : `Remaining: ${baseSymbol}${diff.toFixed(2)}`}
+              {Math.abs(diff) < 0.01 ? <span className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> Balanced</span> : `Remaining: ${baseSymbol}${diff.toFixed(2)}`}
             </div>
           </div>
         )}

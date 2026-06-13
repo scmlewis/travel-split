@@ -8,6 +8,7 @@ import { useToast } from "./hooks/useToast";
 import { calculateBalances, simplifyDebts } from "./debtSolver";
 import TripList from "./components/TripList";
 import ThemeToggle from "./components/ThemeToggle";
+import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon } from "./components/Icons";
 import SummaryCards from "./components/SummaryCards";
 import MemberPanel from "./components/MemberPanel";
 import ExpenseForm from "./components/ExpenseForm";
@@ -239,25 +240,28 @@ export default function App() {
         <div className="px-4 py-3 flex items-center gap-2">
           <button
             onClick={handleBackToTrips}
-            className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors text-lg min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+            className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
             title="Back to trips"
           >
-            ←
+            <ArrowLeftIcon className="w-5 h-5" />
           </button>
-          <span className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 truncate">🧳 {currentTrip.name}</span>
+          <span className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 truncate flex items-center gap-1.5">
+            <SuitcaseIcon className="w-5 h-5 shrink-0" />
+            {currentTrip.name}
+          </span>
           <div className="ml-auto flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowForm(!showForm)}
               className="bg-indigo-600 dark:bg-indigo-500 text-white text-sm px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors btn-press min-h-[44px]"
             >
-              {showForm ? "✕" : "+"}
+              {showForm ? <XIcon className="w-5 h-5" /> : <PlusIcon className="w-5 h-5" />}
             </button>
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center text-xl"
+                className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
-                ⋮
+                <MoreIcon className="w-5 h-5" />
               </button>
               {showMenu && (
                 <div className="absolute right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-2 min-w-[200px] z-50 animate-scaleIn">
@@ -268,28 +272,32 @@ export default function App() {
                   <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
                   <button
                     onClick={() => { refreshRates(); addToast("Refreshing exchange rates...", "info"); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
                   >
-                    ↻ Refresh FX Rates
+                    <RefreshIcon className="w-4 h-4" />
+                    Refresh FX Rates
                   </button>
                   <button
                     onClick={() => { handleExport(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
                   >
-                    📤 Export Data
+                    <UploadIcon className="w-4 h-4" />
+                    Export Data
                   </button>
                   <button
                     onClick={() => { fileInputRef.current?.click(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
                   >
-                    📥 Import Data
+                    <DownloadIcon className="w-4 h-4" />
+                    Import Data
                   </button>
                   <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
                   <button
                     onClick={() => { handleReset(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium min-h-[44px] flex items-center"
+                    className="w-full text-left px-4 py-3 text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium min-h-[44px] flex items-center gap-2"
                   >
-                    🗑️ Reset Trip
+                    <TrashIcon className="w-4 h-4" />
+                    Reset Trip
                   </button>
                 </div>
               )}
