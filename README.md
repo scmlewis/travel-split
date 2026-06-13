@@ -2,6 +2,8 @@
 
 A lightweight, high-density PWA for splitting travel expenses among groups. Built with React, TypeScript, and Tailwind CSS.
 
+**[Live Demo](https://scmlewis.github.io/travel-split/)**
+
 ## Features
 
 - **Multi-trip management** — Create and switch between multiple trips
