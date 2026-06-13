@@ -42,7 +42,7 @@ export function useExchangeRates(baseCurrency: CurrencyCode) {
         if (data.result === "success" && data.rates) {
           const validatedRates: Record<string, number> = {};
           let validCount = 0;
-          for (const [code, rate] of Object.entries(data.rates)) {
+          for (const [code, rate] of Object.entries(data.rates) as [string, number][]) {
             if (isValidRate(rate)) {
               validatedRates[code] = rate;
               validCount++;
@@ -64,7 +64,7 @@ export function useExchangeRates(baseCurrency: CurrencyCode) {
       if (data.result === "success" && data.rates) {
         const validatedRates: Record<string, number> = {};
         let validCount = 0;
-        for (const [code, rate] of Object.entries(data.rates)) {
+        for (const [code, rate] of Object.entries(data.rates) as [string, number][]) {
           if (isValidRate(rate)) {
             validatedRates[code] = rate;
             validCount++;
