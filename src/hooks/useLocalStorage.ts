@@ -1,0 +1,22 @@
+import { useState, useEffect, useCallback } from "react";
+
+export function useLocalStorage<T>(key: string, fallback: T) {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? (JSON.parse(raw) as T) : fallback;
+    } catch {
+      return fallback;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  const updateValue = useCallback((next: T | ((prev: T) => T)) => {
+    setValue(next);
+  }, []);
+
+  return [value, updateValue] as const;
+}
