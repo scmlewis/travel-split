@@ -9,6 +9,7 @@
   --accent: #e07a3a;
   --accent-hover: #c96a2e;
   --surface: #f5f0eb;
+  --surface-gradient: linear-gradient(135deg, #f5f0eb 0%, #ede5dc 50%, #e8ddd3 100%);
   --surface-elevated: #ffffff;
   --text-primary: #1a1615;
   --text-secondary: #6b5e57;
@@ -23,6 +24,7 @@
   --accent: #f0944d;
   --accent-hover: #e07a3a;
   --surface: #141210;
+  --surface-gradient: linear-gradient(135deg, #141210 0%, #1a1715 50%, #1e1b18 100%);
   --surface-elevated: #1e1b19;
   --text-primary: #f2ece8;
   --text-secondary: #a89d96;
@@ -35,7 +37,8 @@ body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
-  background: var(--surface);
+  background: var(--surface-gradient);
+  background-attachment: fixed;
   color: var(--text-primary);
 }
 
