@@ -142,6 +142,20 @@ input[type="number"] {
   animation: slideInUp 0.3s ease-out both;
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
 .transition-row {
   transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
