@@ -234,7 +234,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--surface)" }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
       <header className="glass-elevated sticky top-0 z-10" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-5 py-4 flex items-center gap-2">
