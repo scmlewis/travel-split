@@ -339,6 +339,9 @@ export default function App() {
         </aside>
 
         <main className="flex-1 min-w-0 p-6 space-y-6 relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
+          <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 blur-3xl animate-float" style={{ background: "var(--accent)" }} />
+          <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl animate-float-delayed" style={{ background: "var(--accent)" }} />
+          <div className="absolute top-[20%] left-[10%] w-[200px] h-[200px] rounded-full opacity-5 blur-2xl animate-float" style={{ background: "var(--accent)" }} />
           <SummaryCards
             expenses={currentTrip.expenses}
             members={currentTrip.members}
