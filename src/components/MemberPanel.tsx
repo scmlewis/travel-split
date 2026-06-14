@@ -30,6 +30,7 @@ export default function MemberPanel({ members, onAdd, onRemove }: MemberPanelPro
   };
 
   const handleRemove = (m: Member) => {
+    if (!window.confirm(`Remove "${m.name}" from this trip? Their expenses will remain in the ledger.`)) return;
     onRemove(m.id);
     addToast(`${m.name} removed`, "info");
   };

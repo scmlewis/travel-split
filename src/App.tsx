@@ -237,7 +237,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen relative" style={{ background: "var(--surface-gradient)" }}>
+    <div className="min-h-screen relative mx-auto max-w-7xl" style={{ background: "var(--surface-gradient)" }}>
       <header className="glass-elevated sticky top-0 z-30" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-5 py-4 flex items-center gap-2">
