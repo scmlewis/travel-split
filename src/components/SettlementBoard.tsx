@@ -24,6 +24,7 @@ export default function SettlementBoard({
   const unpaid = settlements.filter((s) => !paidSettlements[`${s.from}|${s.to}`]);
   const paid = settlements.filter((s) => paidSettlements[`${s.from}|${s.to}`]);
 
+  const unpaidTotal = unpaid.reduce((sum, s) => sum + s.amount, 0);
   const maxAmount = Math.max(...settlements.map((s) => s.amount), 1);
 
   return (
@@ -33,83 +34,99 @@ export default function SettlementBoard({
         Settlement Board
       </h2>
 
-      {settlements.length > 0 && (
-        <div className="glass-card p-5 mb-4">
-          <div className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
-            Balance Overview
+      {settlements.length === 0 ? (
+        <div className="glass-card text-center py-12 px-4 animate-fadeIn">
+          <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
+            <DollarIcon className="w-12 h-12" />
           </div>
-          <div className="space-y-3">
-            {members.map((m) => {
-              const settlementTo = unpaid.find((s) => s.to === m.id);
-              const settlementFrom = unpaid.find((s) => s.from === m.id);
-              const net = settlementTo ? settlementTo.amount : settlementFrom ? -settlementFrom.amount : 0;
-              const pct = maxAmount > 0 ? (Math.abs(net) / maxAmount) * 100 : 0;
-              return (
-                <div key={m.id}>
-                  <div className="hidden sm:flex items-center gap-3 text-sm">
-                    <Avatar name={m.name} size="md" />
-                    <span className="w-16 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
-                    <div className="flex-1 h-5 rounded-full overflow-hidden relative" style={{ background: "var(--border)" }}>
-                      {net > 0 && (
-                        <div
-                          className="absolute top-0 h-full bg-emerald-400 dark:bg-emerald-500 rounded-full balance-bar opacity-60"
-                          style={{ width: `${pct / 2}%`, left: "50%" }}
-                        />
-                      )}
-                      {net < 0 && (
-                        <div
-                          className="absolute top-0 h-full bg-red-400 dark:bg-red-500 rounded-full balance-bar opacity-60"
-                          style={{ width: `${pct / 2}%`, right: "50%" }}
-                        />
-                      )}
-                      <div className="absolute left-1/2 top-0 w-px h-full" style={{ background: "var(--text-muted)" }} />
-                    </div>
-                    <span className={`w-28 text-right tabular-nums font-mono font-semibold text-sm ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
-                      {net >= 0 ? "+" : ""}{baseSymbol}{Math.abs(net).toFixed(2)}
-                    </span>
+          <div className="text-lg font-medium mb-1" style={{ color: "var(--text-secondary)" }}>All settled up</div>
+          <div className="text-sm" style={{ color: "var(--text-muted)" }}>Add expenses to see who owes whom</div>
+        </div>
+      ) : (
+        <>
+          {unpaid.length > 0 && (
+            <div className="glass-card p-4 mb-4 animate-fadeIn">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-wider mb-0.5" style={{ color: "var(--text-muted)" }}>
+                    {unpaid.length} payment{unpaid.length !== 1 ? "s" : ""} needed to settle all
                   </div>
-                  <div className="sm:hidden">
-                    <div className="flex items-center gap-2.5 mb-1.5">
-                      <Avatar name={m.name} size="sm" />
-                      <span className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{m.name}</span>
-                      <span className={`ml-auto text-sm tabular-nums font-mono font-semibold ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
+                  <div className="text-xl font-bold tabular-nums font-mono" style={{ color: "var(--accent)" }}>
+                    {baseSymbol}{unpaidTotal.toFixed(2)}
+                  </div>
+                </div>
+                <div className="text-right text-xs" style={{ color: "var(--text-muted)" }}>
+                  <div>{paid.length > 0 ? `${paid.length} already settled` : "minimum transactions"}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="glass-card p-5 mb-4">
+            <div className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
+              Balance Overview
+            </div>
+            <div className="space-y-3">
+              {members.map((m) => {
+                const settlementTo = unpaid.find((s) => s.to === m.id);
+                const settlementFrom = unpaid.find((s) => s.from === m.id);
+                const net = settlementTo ? settlementTo.amount : settlementFrom ? -settlementFrom.amount : 0;
+                const pct = maxAmount > 0 ? (Math.abs(net) / maxAmount) * 100 : 0;
+                return (
+                  <div key={m.id}>
+                    <div className="hidden sm:flex items-center gap-3 text-sm">
+                      <Avatar name={m.name} size="md" />
+                      <span className="w-16 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                      <div className="flex-1 h-5 rounded-full overflow-hidden relative" style={{ background: "var(--border)" }}>
+                        {net > 0 && (
+                          <div
+                            className="absolute top-0 h-full bg-emerald-400 dark:bg-emerald-500 rounded-full balance-bar opacity-60"
+                            style={{ width: `${pct / 2}%`, left: "50%" }}
+                          />
+                        )}
+                        {net < 0 && (
+                          <div
+                            className="absolute top-0 h-full bg-red-400 dark:bg-red-500 rounded-full balance-bar opacity-60"
+                            style={{ width: `${pct / 2}%`, right: "50%" }}
+                          />
+                        )}
+                        <div className="absolute left-1/2 top-0 w-px h-full" style={{ background: "var(--text-muted)" }} />
+                      </div>
+                      <span className={`w-28 text-right tabular-nums font-mono font-semibold text-sm ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
                         {net >= 0 ? "+" : ""}{baseSymbol}{Math.abs(net).toFixed(2)}
                       </span>
                     </div>
-                    <div className="h-3 rounded-full overflow-hidden relative ml-8" style={{ background: "var(--border)" }}>
-                      {net > 0 && (
-                        <div
-                          className="absolute top-0 h-full bg-emerald-400 dark:bg-emerald-500 rounded-full balance-bar opacity-60"
-                          style={{ width: `${pct / 2}%`, left: "50%" }}
-                        />
-                      )}
-                      {net < 0 && (
-                        <div
-                          className="absolute top-0 h-full bg-red-400 dark:bg-red-500 rounded-full balance-bar opacity-60"
-                          style={{ width: `${pct / 2}%`, right: "50%" }}
-                        />
-                      )}
-                      <div className="absolute left-1/2 top-0 w-px h-full" style={{ background: "var(--text-muted)" }} />
+                    <div className="sm:hidden">
+                      <div className="flex items-center gap-2.5 mb-1.5">
+                        <Avatar name={m.name} size="sm" />
+                        <span className="text-sm font-medium truncate" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                        <span className={`ml-auto text-sm tabular-nums font-mono font-semibold ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
+                          {net >= 0 ? "+" : ""}{baseSymbol}{Math.abs(net).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="h-3 rounded-full overflow-hidden relative ml-8" style={{ background: "var(--border)" }}>
+                        {net > 0 && (
+                          <div
+                            className="absolute top-0 h-full bg-emerald-400 dark:bg-emerald-500 rounded-full balance-bar opacity-60"
+                            style={{ width: `${pct / 2}%`, left: "50%" }}
+                          />
+                        )}
+                        {net < 0 && (
+                          <div
+                            className="absolute top-0 h-full bg-red-400 dark:bg-red-500 rounded-full balance-bar opacity-60"
+                            style={{ width: `${pct / 2}%`, right: "50%" }}
+                          />
+                        )}
+                        <div className="absolute left-1/2 top-0 w-px h-full" style={{ background: "var(--text-muted)" }} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <div className="glass-card overflow-hidden">
-        {settlements.length === 0 ? (
-          <div className="text-center py-12 px-4 animate-fadeIn">
-            <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
-              <DollarIcon className="w-12 h-12" />
+                );
+              })}
             </div>
-            <div className="text-lg font-medium mb-1" style={{ color: "var(--text-secondary)" }}>All settled up</div>
-            <div className="text-sm" style={{ color: "var(--text-muted)" }}>Add expenses to see who owes whom</div>
           </div>
-        ) : (
-          <>
+
+          <div className="glass-card overflow-hidden">
             {unpaid.length > 0 && (
               <div style={{ borderColor: "var(--border)" }}>
                 {unpaid.map((s, idx) => {
@@ -199,9 +216,9 @@ export default function SettlementBoard({
                 </div>
               </div>
             )}
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }

@@ -236,8 +236,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
-      <header className="glass-elevated sticky top-0 z-10" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
+    <div className="min-h-screen relative" style={{ background: "var(--surface-gradient)" }}>
+      <header className="glass-elevated sticky top-0 z-30" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-5 py-4 flex items-center gap-2">
           <button
@@ -268,7 +268,7 @@ export default function App() {
                 <MoreIcon className="w-5 h-5" />
               </button>
               {showMenu && (
-                <div className="absolute right-0 top-full mt-1 glass-elevated rounded-xl py-2 min-w-[200px] z-50 animate-scaleIn">
+                <div className="absolute right-0 top-full mt-1 glass-elevated rounded-xl py-2 min-w-[200px] z-50 animate-scaleIn shadow-xl">
                   <div className="px-4 py-2 flex items-center justify-between">
                     <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Theme</span>
                     <ThemeToggle theme={theme} onChange={setTheme} />
@@ -345,7 +345,7 @@ export default function App() {
           <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl animate-float-delayed" style={{ background: "var(--accent)" }} />
           <div className="absolute top-[20%] left-[10%] w-[200px] h-[200px] rounded-full opacity-5 blur-2xl animate-float" style={{ background: "var(--accent)" }} />
 
-          <div className="px-6 pt-4 relative z-10">
+          <div className="px-6 pt-4 relative z-20">
             <div className="flex gap-1 glass-card rounded-xl p-1">
               <button
                 onClick={() => setActiveTab("overview")}
@@ -364,7 +364,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="p-6 space-y-6 relative z-10">
+          <div className="p-6 space-y-6 relative z-20">
             {activeTab === "overview" ? (
               <>
                 <SummaryCards
@@ -376,6 +376,7 @@ export default function App() {
                   balances={balances}
                   members={currentTrip.members}
                   baseSymbol={sym}
+                  settlements={settlements}
                 />
                 <SettlementBoard
                   members={currentTrip.members}
