@@ -96,7 +96,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                 {trips.length} trip{trips.length !== 1 ? "s" : ""}
               </div>
             </div>
-            <div className="space-y-2 max-h-[320px] overflow-y-auto">
+            <div className="space-y-2 max-h-[320px] overflow-y-auto overflow-x-hidden custom-scrollbar">
               {trips.map((trip, idx) => {
                 const totalSpent = trip.expenses.reduce(
                   (sum, e) => sum + e.totalAmount * e.exchangeRate, 0,
