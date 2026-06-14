@@ -345,26 +345,7 @@ export default function App() {
           <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl animate-float-delayed" style={{ background: "var(--accent)" }} />
           <div className="absolute top-[20%] left-[10%] w-[200px] h-[200px] rounded-full opacity-5 blur-2xl animate-float" style={{ background: "var(--accent)" }} />
 
-          <div className="px-6 pt-4 relative z-20">
-            <div className="flex gap-1 glass-card rounded-xl p-1">
-              <button
-                onClick={() => setActiveTab("overview")}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-all min-h-[44px] ${activeTab === "overview" ? "tab-active" : "tab-inactive"}`}
-              >
-                <LayoutDashboardIcon className="w-4 h-4" />
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab("expenses")}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-all min-h-[44px] ${activeTab === "expenses" ? "tab-active" : "tab-inactive"}`}
-              >
-                <ListIcon className="w-4 h-4" />
-                Expenses
-              </button>
-            </div>
-          </div>
-
-          <div className="p-6 space-y-6 relative z-20">
+          <div className="p-6 pb-24 space-y-6 relative z-20">
             {activeTab === "overview" ? (
               <>
                 <SummaryCards
@@ -396,11 +377,30 @@ export default function App() {
               />
             )}
 
-            <footer className="text-[10px] text-center pb-4" style={{ color: "var(--text-muted)" }}>
+            <footer className="text-[10px] text-center" style={{ color: "var(--text-muted)" }}>
               Data saved to localStorage · Travel Split v2.0
             </footer>
           </div>
         </main>
+      </div>
+
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+        <div className="flex gap-1 glass-elevated rounded-2xl p-1.5 shadow-xl">
+          <button
+            onClick={() => setActiveTab("overview")}
+            className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm transition-all min-h-[44px] ${activeTab === "overview" ? "tab-active" : "tab-inactive"}`}
+          >
+            <LayoutDashboardIcon className="w-4 h-4" />
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveTab("expenses")}
+            className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm transition-all min-h-[44px] ${activeTab === "expenses" ? "tab-active" : "tab-inactive"}`}
+          >
+            <ListIcon className="w-4 h-4" />
+            Expenses
+          </button>
+        </div>
       </div>
 
       <input

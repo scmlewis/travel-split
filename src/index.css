@@ -239,18 +239,18 @@ input:focus, select:focus {
 }
 
 .tab-active {
-  color: var(--accent);
-  border-bottom: 2px solid var(--accent);
+  color: white;
+  background: var(--accent);
   font-weight: 600;
 }
 
 .tab-inactive {
   color: var(--text-muted);
-  border-bottom: 2px solid transparent;
   font-weight: 500;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .tab-inactive:hover {
   color: var(--text-secondary);
+  background: var(--border);
 }
