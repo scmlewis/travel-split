@@ -32,7 +32,7 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, onDelete,
 
   return (
     <section>
-      <h2 className="text-sm font-semibold uppercase tracking-wider mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+      <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
         <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
         Expense Ledger
       </h2>

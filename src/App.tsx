@@ -237,7 +237,7 @@ export default function App() {
     <div className="min-h-screen" style={{ background: "var(--surface)" }}>
       <header className="glass-elevated sticky top-0 z-10" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
         {/* Top row: back, name, +Expense, menu */}
-        <div className="px-4 py-3 flex items-center gap-2">
+        <div className="px-5 py-4 flex items-center gap-2">
           <button
             onClick={handleBackToTrips}
             className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
@@ -310,7 +310,7 @@ export default function App() {
           </div>
         </div>
         {/* Bottom row: meta info */}
-        <div className="hidden sm:flex px-4 pb-2 items-center gap-3 text-sm" style={{ color: "var(--text-muted)" }}>
+        <div className="hidden sm:flex px-5 pb-3 items-center gap-3 text-sm" style={{ color: "var(--text-muted)" }}>
           <span className="px-2.5 py-1 rounded-full font-mono text-xs" style={{ background: "var(--border)", color: "var(--text-secondary)" }}>
             {baseCurrency} {sym}
           </span>
@@ -321,7 +321,7 @@ export default function App() {
 
       <div className="flex flex-col lg:flex-row">
         <aside className="lg:w-[380px] shrink-0 glass-card" style={{ borderRadius: 0, borderLeft: "none", borderRight: "none", borderTop: "none" }}>
-          <div className="p-3 space-y-3">
+          <div className="p-5 space-y-4">
             <MemberPanel
               members={currentTrip.members}
               onAdd={handleAddMember}
@@ -338,7 +338,7 @@ export default function App() {
           </div>
         </aside>
 
-        <main className="flex-1 min-w-0 p-3 space-y-4">
+        <main className="flex-1 min-w-0 p-6 space-y-6">
           <SummaryCards
             expenses={currentTrip.expenses}
             members={currentTrip.members}
@@ -353,7 +353,7 @@ export default function App() {
           />
 
           <section>
-            <h2 className="text-sm font-semibold uppercase tracking-wider mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+            <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
               <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
               Net Balances
             </h2>

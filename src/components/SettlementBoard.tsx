@@ -28,13 +28,13 @@ export default function SettlementBoard({
 
   return (
     <section>
-      <h2 className="text-sm font-semibold uppercase tracking-wider mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+      <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
         <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
         Settlement Board
       </h2>
 
       {settlements.length > 0 && (
-        <div className="glass-card p-4 mb-3">
+        <div className="glass-card p-5 mb-4">
           <div className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
             Balance Overview
           </div>
