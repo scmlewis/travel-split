@@ -29,26 +29,26 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 w-full max-w-lg animate-scaleIn">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--surface)" }}>
+      <div className="glass-card p-8 w-full max-w-lg animate-scaleIn">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">🧳 Travel Split</h1>
+          <h1 className="text-3xl font-bold" style={{ color: "var(--text-primary)" }}>Travel Split</h1>
           <ThemeToggle theme={theme} onChange={onThemeChange} />
         </div>
-        <p className="text-sm text-slate-400 dark:text-slate-500 mb-6">Manage your trips and split expenses</p>
+        <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>Manage your trips and split expenses</p>
 
         <div className="space-y-3 mb-8">
-          <label className="block text-sm font-medium text-slate-600 dark:text-slate-300">New Trip</label>
+          <label className="block text-sm font-medium" style={{ color: "var(--text-secondary)" }}>New Trip</label>
           <input
-            className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-base bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-shadow min-h-[48px]"
+            className="w-full rounded-lg px-4 py-3 text-base transition-shadow min-h-[48px]"
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCreate()}
             placeholder="e.g. Japan 2026"
           />
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <select
-              className="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-base bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[48px]"
+              className="flex-1 min-w-0 rounded-lg px-4 py-3 text-base min-h-[48px]"
               value={currency}
               onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
             >
@@ -58,7 +58,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
             </select>
             <button
               onClick={handleCreate}
-              className="bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors btn-press min-h-[48px]"
+              className="gradient-accent text-white px-6 py-3 rounded-lg text-base font-semibold hover:opacity-90 transition-opacity btn-press min-h-[48px] shrink-0"
             >
               Create
             </button>
@@ -67,7 +67,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
 
         {trips.length > 0 && (
           <div>
-            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
+            <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>
               Your Trips ({trips.length})
             </div>
             <div className="space-y-2 max-h-[300px] overflow-y-auto">
@@ -79,13 +79,13 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                 return (
                   <div
                     key={trip.id}
-                    className="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-600 rounded-lg hover:border-indigo-300 dark:hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-all group cursor-pointer row-enter"
-                    style={{ animationDelay: `${idx * 50}ms` }}
+                    className="glass-card flex items-center justify-between p-4 transition-all group cursor-pointer row-enter"
+                    style={{ animationDelay: `${idx * 50}ms`, borderRadius: "12px" }}
                     onClick={() => onSelect(trip.id)}
                   >
                     <div className="min-w-0">
-                      <div className="text-base font-semibold text-slate-800 dark:text-slate-100 truncate">{trip.name}</div>
-                      <div className="text-sm text-slate-400 dark:text-slate-500 flex items-center gap-2 mt-0.5">
+                      <div className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>{trip.name}</div>
+                      <div className="text-sm flex items-center gap-2 mt-0.5" style={{ color: "var(--text-muted)" }}>
                         <span>{trip.members.length} members</span>
                         <span>·</span>
                         <span>{trip.expenses.length} expenses</span>
@@ -101,7 +101,8 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                           addToast(`Trip "${trip.name}" deleted`);
                         }
                       }}
-                      className="text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="hover:text-red-500 transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                      style={{ color: "var(--text-muted)" }}
                     >
                       <XIcon className="w-4 h-4" />
                     </button>
@@ -114,11 +115,11 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
 
         {trips.length === 0 && (
           <div className="text-center py-10">
-            <div className="flex justify-center mb-3 text-slate-300 dark:text-slate-600">
+            <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
               <GlobeIcon className="w-12 h-12" />
             </div>
-            <div className="text-base font-medium text-slate-600 dark:text-slate-300 mb-1">No trips yet</div>
-            <div className="text-sm text-slate-400 dark:text-slate-500">Create your first trip above to start splitting expenses!</div>
+            <div className="text-base font-medium mb-1" style={{ color: "var(--text-secondary)" }}>No trips yet</div>
+            <div className="text-sm" style={{ color: "var(--text-muted)" }}>Create your first trip above to start splitting expenses!</div>
           </div>
         )}
       </div>

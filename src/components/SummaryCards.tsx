@@ -11,10 +11,10 @@ export default function SummaryCards({ expenses, members, baseSymbol }: SummaryC
   const avgPerPerson = members.length > 0 ? totalSpent / members.length : 0;
 
   const cards = [
-    { label: "Total Spent", value: `${baseSymbol}${totalSpent.toFixed(2)}`, color: "text-slate-800 dark:text-slate-100" },
-    { label: "Per Person", value: `${baseSymbol}${avgPerPerson.toFixed(2)}`, color: "text-indigo-600 dark:text-indigo-400" },
-    { label: "Expenses", value: String(expenses.length), color: "text-slate-800 dark:text-slate-100" },
-    { label: "Members", value: String(members.length), color: "text-slate-800 dark:text-slate-100" },
+    { label: "Total Spent", value: `${baseSymbol}${totalSpent.toFixed(2)}` },
+    { label: "Per Person", value: `${baseSymbol}${avgPerPerson.toFixed(2)}` },
+    { label: "Expenses", value: String(expenses.length) },
+    { label: "Members", value: String(members.length) },
   ];
 
   return (
@@ -22,10 +22,10 @@ export default function SummaryCards({ expenses, members, baseSymbol }: SummaryC
       {cards.map((card) => (
         <div
           key={card.label}
-          className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 px-3 sm:px-4 py-3 animate-fadeIn"
+          className="glass-card px-3 sm:px-4 py-3 animate-fadeIn"
         >
-          <div className="text-xs sm:text-sm text-slate-400 dark:text-slate-500 uppercase tracking-wider font-medium">{card.label}</div>
-          <div className={`text-lg sm:text-2xl font-bold tabular-nums mt-1 ${card.color} truncate`}>{card.value}</div>
+          <div className="text-xs sm:text-sm uppercase tracking-wider font-medium" style={{ color: "var(--text-muted)" }}>{card.label}</div>
+          <div className="text-lg sm:text-2xl font-bold tabular-nums mt-1 truncate" style={{ color: "var(--text-primary)" }}>{card.value}</div>
         </div>
       ))}
     </div>

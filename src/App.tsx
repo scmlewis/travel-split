@@ -234,67 +234,72 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
-      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+    <div className="min-h-screen" style={{ background: "var(--surface)" }}>
+      <header className="glass-elevated sticky top-0 z-10" style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}>
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-4 py-3 flex items-center gap-2">
           <button
             onClick={handleBackToTrips}
-            className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+            className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+            style={{ color: "var(--text-muted)" }}
             title="Back to trips"
           >
             <ArrowLeftIcon className="w-5 h-5" />
           </button>
-          <span className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 truncate flex items-center gap-1.5">
+          <span className="text-lg sm:text-xl font-bold truncate flex items-center gap-1.5" style={{ color: "var(--text-primary)" }}>
             <SuitcaseIcon className="w-5 h-5 shrink-0" />
             {currentTrip.name}
           </span>
           <div className="ml-auto flex items-center gap-2 shrink-0">
             <button
               onClick={() => setShowForm(!showForm)}
-              className="bg-indigo-600 dark:bg-indigo-500 text-white text-sm px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors btn-press min-h-[44px]"
+              className="gradient-accent text-white text-sm px-3 sm:px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity btn-press min-h-[44px]"
             >
               {showForm ? <XIcon className="w-5 h-5" /> : <PlusIcon className="w-5 h-5" />}
             </button>
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center"
+                style={{ color: "var(--text-secondary)" }}
               >
                 <MoreIcon className="w-5 h-5" />
               </button>
               {showMenu && (
-                <div className="absolute right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-2 min-w-[200px] z-50 animate-scaleIn">
+                <div className="absolute right-0 top-full mt-1 glass-elevated rounded-xl py-2 min-w-[200px] z-50 animate-scaleIn">
                   <div className="px-4 py-2 flex items-center justify-between">
-                    <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Theme</span>
+                    <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Theme</span>
                     <ThemeToggle theme={theme} onChange={setTheme} />
                   </div>
-                  <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
+                  <div className="my-1" style={{ borderTop: "1px solid var(--border)" }} />
                   <button
                     onClick={() => { refreshRates(); addToast("Refreshing exchange rates...", "info"); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
+                    className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
+                    style={{ color: "var(--text-primary)" }}
                   >
                     <RefreshIcon className="w-4 h-4" />
                     Refresh FX Rates
                   </button>
                   <button
                     onClick={() => { handleExport(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
+                    className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
+                    style={{ color: "var(--text-primary)" }}
                   >
                     <UploadIcon className="w-4 h-4" />
                     Export Data
                   </button>
                   <button
                     onClick={() => { fileInputRef.current?.click(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium min-h-[44px] flex items-center gap-2"
+                    className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
+                    style={{ color: "var(--text-primary)" }}
                   >
                     <DownloadIcon className="w-4 h-4" />
                     Import Data
                   </button>
-                  <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
+                  <div className="my-1" style={{ borderTop: "1px solid var(--border)" }} />
                   <button
                     onClick={() => { handleReset(); setShowMenu(false); }}
-                    className="w-full text-left px-4 py-3 text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium min-h-[44px] flex items-center gap-2"
+                    className="w-full text-left px-4 py-3 text-sm text-red-500 hover:text-red-400 hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
                   >
                     <TrashIcon className="w-4 h-4" />
                     Reset Trip
@@ -304,9 +309,9 @@ export default function App() {
             </div>
           </div>
         </div>
-        {/* Bottom row: meta info (visible on desktop, hidden on mobile since it's in menu) */}
-        <div className="hidden sm:flex px-4 pb-2 items-center gap-3 text-sm text-slate-400 dark:text-slate-500">
-          <span className="bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2.5 py-1 rounded-full font-mono text-xs">
+        {/* Bottom row: meta info */}
+        <div className="hidden sm:flex px-4 pb-2 items-center gap-3 text-sm" style={{ color: "var(--text-muted)" }}>
+          <span className="px-2.5 py-1 rounded-full font-mono text-xs" style={{ background: "var(--border)", color: "var(--text-secondary)" }}>
             {baseCurrency} {sym}
           </span>
           <span>{currentTrip.members.length} members</span>
@@ -315,7 +320,7 @@ export default function App() {
       </header>
 
       <div className="flex flex-col lg:flex-row">
-        <aside className="lg:w-[380px] shrink-0 bg-white dark:bg-slate-800 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-700">
+        <aside className="lg:w-[380px] shrink-0 glass-card" style={{ borderRadius: 0, borderLeft: "none", borderRight: "none", borderTop: "none" }}>
           <div className="p-3 space-y-3">
             <MemberPanel
               members={currentTrip.members}
@@ -348,20 +353,20 @@ export default function App() {
           />
 
           <section>
-            <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-5 bg-amber-500 rounded-full" />
+            <h2 className="text-sm font-semibold uppercase tracking-wider mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+              <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
               Net Balances
             </h2>
-            <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="divide-y divide-slate-100 dark:divide-slate-700 max-h-[250px] overflow-y-auto">
+            <div className="glass-card overflow-hidden">
+              <div className="divide-y max-h-[250px] overflow-y-auto" style={{ borderColor: "var(--border)" }}>
                 {balances.length === 0 ? (
-                  <div className="text-center py-6 text-base text-slate-400 dark:text-slate-500">No data</div>
+                  <div className="text-center py-6 text-base" style={{ color: "var(--text-muted)" }}>No data</div>
                 ) : (
                   balances.map((b) => {
                     const member = currentTrip.members.find((m) => m.id === b.memberId);
                     return (
-                      <div key={b.memberId} className="flex items-center justify-between px-4 py-2.5 text-sm">
-                        <span className="text-slate-700 dark:text-slate-200 font-medium">{member?.name ?? "?"}</span>
+                      <div key={b.memberId} className="flex items-center justify-between px-4 py-2.5 text-sm" style={{ borderColor: "var(--border)" }}>
+                        <span className="font-medium" style={{ color: "var(--text-primary)" }}>{member?.name ?? "?"}</span>
                         <span className={`font-mono tabular-nums font-semibold ${b.net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
                           {b.net >= 0 ? "+" : ""}{sym}{b.net.toFixed(2)}
                         </span>
@@ -381,7 +386,7 @@ export default function App() {
             onTogglePaid={handleTogglePaid}
           />
 
-          <footer className="text-[10px] text-slate-400 dark:text-slate-500 text-center pb-4">
+          <footer className="text-[10px] text-center pb-4" style={{ color: "var(--text-muted)" }}>
             Data saved to localStorage · Travel Split v2.0
           </footer>
         </main>

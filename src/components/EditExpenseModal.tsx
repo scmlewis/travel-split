@@ -115,19 +115,19 @@ export default function EditExpenseModal({
     addToast(`Updated "${finalTitle}"`);
   };
 
-  const inputClass = "w-full border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px]";
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={onClose} />
-      <div className="relative bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md p-5 space-y-4 border border-slate-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+      <div className="relative glass-elevated rounded-xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Edit Expense</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 min-h-[44px] min-w-[44px] flex items-center justify-center"><XIcon className="w-5 h-5" /></button>
+          <h3 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Edit Expense</h3>
+          <button onClick={onClose} className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center" style={{ color: "var(--text-muted)" }}>
+            <XIcon className="w-5 h-5" />
+          </button>
         </div>
 
         <input
-          className={inputClass}
+          className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
@@ -135,7 +135,7 @@ export default function EditExpenseModal({
 
         <div className="flex gap-2">
           <input
-            className="flex-1 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px]"
+            className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]"
             type="number"
             min="0"
             step="0.01"
@@ -144,7 +144,7 @@ export default function EditExpenseModal({
             placeholder="Amount"
           />
           <select
-            className="w-24 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px] font-medium"
+            className="w-24 rounded-lg px-3 py-2.5 text-sm min-h-[44px] font-medium"
             value={currency}
             onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}
           >
@@ -154,10 +154,10 @@ export default function EditExpenseModal({
           </select>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+        <div className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
           <span>Rate:</span>
           <input
-            className="w-28 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px] font-mono"
+            className="w-28 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono"
             type="number"
             min="0"
             step="0.001"
@@ -168,9 +168,9 @@ export default function EditExpenseModal({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-500 dark:text-slate-400">Date:</span>
+          <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Date:</span>
           <input
-            className="flex-1 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px]"
+            className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -178,7 +178,7 @@ export default function EditExpenseModal({
         </div>
 
         <select
-          className={inputClass}
+          className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]"
           value={payerId}
           onChange={(e) => setPayerId(e.target.value)}
         >
@@ -192,28 +192,30 @@ export default function EditExpenseModal({
           <div className="flex gap-2 mb-2">
             <button
               onClick={() => setSplitMode("equal")}
-              className={`text-sm px-4 py-2.5 rounded-lg transition-colors font-medium min-h-[44px] ${splitMode === "equal" ? "bg-indigo-600 dark:bg-indigo-500 text-white" : "bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-500"}`}
+              className={`text-sm px-4 py-2.5 rounded-lg transition-opacity font-medium min-h-[44px] ${splitMode === "equal" ? "gradient-accent text-white" : ""}`}
+              style={splitMode !== "equal" ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
             >
               Equal
             </button>
             <button
               onClick={() => setSplitMode("custom")}
-              className={`text-sm px-4 py-2.5 rounded-lg transition-colors font-medium min-h-[44px] ${splitMode === "custom" ? "bg-indigo-600 dark:bg-indigo-500 text-white" : "bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-500"}`}
+              className={`text-sm px-4 py-2.5 rounded-lg transition-opacity font-medium min-h-[44px] ${splitMode === "custom" ? "gradient-accent text-white" : ""}`}
+              style={splitMode !== "custom" ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
             >
               Custom
             </button>
           </div>
           {splitMode === "equal" ? (
-            <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+            <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
               Each pays {baseSymbol}{(amountNum / (members.length || 1)).toFixed(2)}
             </div>
           ) : (
             <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
               {members.map((m) => (
                 <div key={m.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-20 truncate text-slate-600 dark:text-slate-300 font-medium">{m.name}</span>
+                  <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
                   <input
-                    className="flex-1 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 min-h-[44px] font-mono"
+                    className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono"
                     type="number"
                     min="0"
                     step="0.01"
@@ -234,13 +236,14 @@ export default function EditExpenseModal({
           <button
             onClick={handleSubmit}
             disabled={splitMode === "custom" && Math.abs(diff) > 0.01}
-            className="flex-1 bg-indigo-600 dark:bg-indigo-500 text-white text-sm py-3 rounded-lg font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed btn-press min-h-[48px]"
+            className="flex-1 gradient-accent text-white text-sm py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed btn-press min-h-[48px]"
           >
             Save Changes
           </button>
           <button
             onClick={onClose}
-            className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 px-4 py-3 transition-colors font-medium min-h-[48px]"
+            className="text-sm hover:opacity-70 transition-opacity px-4 py-3 font-medium min-h-[48px]"
+            style={{ color: "var(--text-muted)" }}
           >
             Cancel
           </button>

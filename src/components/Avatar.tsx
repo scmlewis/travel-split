@@ -1,14 +1,14 @@
 const COLORS = [
-  "bg-indigo-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-rose-500",
-  "bg-cyan-500",
-  "bg-violet-500",
-  "bg-pink-500",
-  "bg-teal-500",
-  "bg-orange-500",
-  "bg-sky-500",
+  "#e07a3a",
+  "#d4622a",
+  "#c96a2e",
+  "#b85d3a",
+  "#a6683e",
+  "#8b6e4a",
+  "#6b7a5a",
+  "#4a8a6a",
+  "#3a7a8a",
+  "#4a6a9a",
 ];
 
 function hashName(name: string): number {
@@ -35,7 +35,8 @@ export default function Avatar({ name, size = "md" }: AvatarProps) {
 
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full text-white font-semibold shrink-0 ${color} ${sizes[size]}`}
+      className={`inline-flex items-center justify-center rounded-full text-white font-semibold shrink-0 ${sizes[size]}`}
+      style={{ background: color }}
       title={name}
     >
       {initial}
