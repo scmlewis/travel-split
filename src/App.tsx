@@ -6,9 +6,10 @@ import { useExchangeRates } from "./hooks/useExchangeRates";
 import { useTheme } from "./hooks/useTheme";
 import { useToast } from "./hooks/useToast";
 import { calculateBalances, simplifyDebts } from "./debtSolver";
+import { exportCSV, exportPDF } from "./exportUtils";
 import TripList from "./components/TripList";
 import ThemeToggle from "./components/ThemeToggle";
-import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon, LayoutDashboardIcon, ListIcon } from "./components/Icons";
+import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon, LayoutDashboardIcon, ListIcon, FileIcon } from "./components/Icons";
 import SummaryCards from "./components/SummaryCards";
 import MemberBalances from "./components/MemberBalances";
 import MemberPanel from "./components/MemberPanel";
@@ -288,7 +289,35 @@ export default function App() {
                     style={{ color: "var(--text-primary)" }}
                   >
                     <UploadIcon className="w-4 h-4" />
-                    Export Data
+                    Export JSON
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (currentTrip) {
+                        exportCSV(currentTrip.expenses, currentTrip.members, settlements, sym, currentTrip.name);
+                        addToast("CSV exported");
+                      }
+                      setShowMenu(false);
+                    }}
+                    className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    <FileIcon className="w-4 h-4" />
+                    Export CSV
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (currentTrip) {
+                        exportPDF(currentTrip.expenses, currentTrip.members, settlements, sym, currentTrip.name);
+                        addToast("Summary exported");
+                      }
+                      setShowMenu(false);
+                    }}
+                    className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    <DownloadIcon className="w-4 h-4" />
+                    Export Summary
                   </button>
                   <button
                     onClick={() => { fileInputRef.current?.click(); setShowMenu(false); }}

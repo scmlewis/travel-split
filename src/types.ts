@@ -3,9 +3,50 @@ export interface Member {
   name: string;
 }
 
+export type ExpenseCategory =
+  | "food"
+  | "transport"
+  | "accommodation"
+  | "activities"
+  | "shopping"
+  | "utilities"
+  | "other";
+
+export const EXPENSE_CATEGORIES: Record<ExpenseCategory, { label: string; emoji: string }> = {
+  food: { label: "Food & Drinks", emoji: "" },
+  transport: { label: "Transport", emoji: "" },
+  accommodation: { label: "Accommodation", emoji: "" },
+  activities: { label: "Activities", emoji: "" },
+  shopping: { label: "Shopping", emoji: "" },
+  utilities: { label: "Utilities", emoji: "" },
+  other: { label: "Other", emoji: "" },
+};
+
+export type SplitType = "equal" | "exact" | "percentage" | "shares";
+
 export interface ExpenseShare {
   memberId: string;
   amount: number;
+  splitType?: SplitType;
+  splitValue?: number;
+}
+
+export interface ExpenseItem {
+  id: string;
+  title: string;
+  amount: number;
+  assignedTo: string[];
+}
+
+export interface ExpensePayer {
+  memberId: string;
+  amount: number;
+}
+
+export interface RecurringConfig {
+  enabled: boolean;
+  frequency: "weekly" | "monthly" | "yearly";
+  nextDate?: string;
 }
 
 export interface Expense {
@@ -18,6 +59,11 @@ export interface Expense {
   shares: ExpenseShare[];
   createdAt: number;
   date: string;
+  category?: ExpenseCategory;
+  items?: ExpenseItem[];
+  payers?: ExpensePayer[];
+  recurring?: RecurringConfig;
+  notes?: string;
 }
 
 export interface Group {
