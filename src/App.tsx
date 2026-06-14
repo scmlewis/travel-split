@@ -8,8 +8,9 @@ import { useToast } from "./hooks/useToast";
 import { calculateBalances, simplifyDebts } from "./debtSolver";
 import TripList from "./components/TripList";
 import ThemeToggle from "./components/ThemeToggle";
-import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon } from "./components/Icons";
+import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon, LayoutDashboardIcon, ListIcon } from "./components/Icons";
 import SummaryCards from "./components/SummaryCards";
+import MemberBalances from "./components/MemberBalances";
 import MemberPanel from "./components/MemberPanel";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseLedger from "./components/ExpenseLedger";
@@ -34,6 +35,7 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [activeTab, setActiveTab] = useState<"overview" | "expenses">("overview");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
@@ -338,60 +340,65 @@ export default function App() {
           </div>
         </aside>
 
-        <main className="flex-1 min-w-0 p-6 space-y-6 relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
+        <main className="flex-1 min-w-0 relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
           <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 blur-3xl animate-float" style={{ background: "var(--accent)" }} />
           <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl animate-float-delayed" style={{ background: "var(--accent)" }} />
           <div className="absolute top-[20%] left-[10%] w-[200px] h-[200px] rounded-full opacity-5 blur-2xl animate-float" style={{ background: "var(--accent)" }} />
-          <SummaryCards
-            expenses={currentTrip.expenses}
-            members={currentTrip.members}
-            baseSymbol={sym}
-          />
-          <ExpenseLedger
-            expenses={currentTrip.expenses}
-            members={currentTrip.members}
-            baseSymbol={sym}
-            onDelete={handleDeleteExpense}
-            onEdit={setEditingExpense}
-          />
 
-          <section>
-            <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-              <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
-              Net Balances
-            </h2>
-            <div className="glass-card rounded-2xl overflow-hidden">
-              <div className="divide-y max-h-[250px] overflow-y-auto custom-scrollbar" style={{ borderColor: "var(--border)" }}>
-                {balances.length === 0 ? (
-                  <div className="text-center py-6 text-base" style={{ color: "var(--text-muted)" }}>No data</div>
-                ) : (
-                  balances.map((b) => {
-                    const member = currentTrip.members.find((m) => m.id === b.memberId);
-                    return (
-                      <div key={b.memberId} className="flex items-center justify-between px-4 py-2.5 text-sm" style={{ borderColor: "var(--border)" }}>
-                        <span className="font-medium" style={{ color: "var(--text-primary)" }}>{member?.name ?? "?"}</span>
-                        <span className={`font-mono tabular-nums font-semibold ${b.net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
-                          {b.net >= 0 ? "+" : ""}{sym}{b.net.toFixed(2)}
-                        </span>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
+          <div className="px-6 pt-4 relative z-10">
+            <div className="flex gap-1 glass-card rounded-xl p-1">
+              <button
+                onClick={() => setActiveTab("overview")}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-all min-h-[44px] ${activeTab === "overview" ? "tab-active" : "tab-inactive"}`}
+              >
+                <LayoutDashboardIcon className="w-4 h-4" />
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveTab("expenses")}
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-all min-h-[44px] ${activeTab === "expenses" ? "tab-active" : "tab-inactive"}`}
+              >
+                <ListIcon className="w-4 h-4" />
+                Expenses
+              </button>
             </div>
-          </section>
+          </div>
 
-          <SettlementBoard
-            members={currentTrip.members}
-            settlements={settlements}
-            baseSymbol={sym}
-            paidSettlements={currentTrip.paidSettlements}
-            onTogglePaid={handleTogglePaid}
-          />
+          <div className="p-6 space-y-6 relative z-10">
+            {activeTab === "overview" ? (
+              <>
+                <SummaryCards
+                  expenses={currentTrip.expenses}
+                  members={currentTrip.members}
+                  baseSymbol={sym}
+                />
+                <MemberBalances
+                  balances={balances}
+                  members={currentTrip.members}
+                  baseSymbol={sym}
+                />
+                <SettlementBoard
+                  members={currentTrip.members}
+                  settlements={settlements}
+                  baseSymbol={sym}
+                  paidSettlements={currentTrip.paidSettlements}
+                  onTogglePaid={handleTogglePaid}
+                />
+              </>
+            ) : (
+              <ExpenseLedger
+                expenses={currentTrip.expenses}
+                members={currentTrip.members}
+                baseSymbol={sym}
+                onDelete={handleDeleteExpense}
+                onEdit={setEditingExpense}
+              />
+            )}
 
-          <footer className="text-[10px] text-center pb-4" style={{ color: "var(--text-muted)" }}>
-            Data saved to localStorage · Travel Split v2.0
-          </footer>
+            <footer className="text-[10px] text-center pb-4" style={{ color: "var(--text-muted)" }}>
+              Data saved to localStorage · Travel Split v2.0
+            </footer>
+          </div>
         </main>
       </div>
 
