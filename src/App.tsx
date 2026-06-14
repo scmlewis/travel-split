@@ -338,7 +338,7 @@ export default function App() {
           </div>
         </aside>
 
-        <main className="flex-1 min-w-0 p-6 space-y-6">
+        <main className="flex-1 min-w-0 p-6 space-y-6 relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
           <SummaryCards
             expenses={currentTrip.expenses}
             members={currentTrip.members}
@@ -357,8 +357,8 @@ export default function App() {
               <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
               Net Balances
             </h2>
-            <div className="glass-card overflow-hidden">
-              <div className="divide-y max-h-[250px] overflow-y-auto" style={{ borderColor: "var(--border)" }}>
+            <div className="glass-card rounded-2xl overflow-hidden">
+              <div className="divide-y max-h-[250px] overflow-y-auto custom-scrollbar" style={{ borderColor: "var(--border)" }}>
                 {balances.length === 0 ? (
                   <div className="text-center py-6 text-base" style={{ color: "var(--text-muted)" }}>No data</div>
                 ) : (
