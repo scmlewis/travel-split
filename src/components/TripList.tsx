@@ -29,12 +29,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{ background: "var(--surface-gradient)" }}>
-      {/* Decorative orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 blur-3xl animate-float" style={{ background: "var(--accent)" }} />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 blur-3xl animate-float-delayed" style={{ background: "var(--accent)" }} />
-      <div className="absolute top-[20%] left-[10%] w-[200px] h-[200px] rounded-full opacity-5 blur-2xl animate-float" style={{ background: "var(--accent)" }} />
-
+    <div className="min-h-screen flex items-center justify-center p-4 relative" style={{ background: "var(--surface)" }}>
       <div className="w-full max-w-lg animate-scaleIn relative z-10">
         {/* Header section */}
         <div className="text-center mb-8">
@@ -48,7 +43,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         </div>
 
         {/* Main card */}
-        <div className="glass-elevated p-8 rounded-2xl">
+        <div className="card-elevated p-8 rounded-2xl">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Start a Trip</h2>
@@ -105,7 +100,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                 return (
                   <div
                     key={trip.id}
-                    className="glass-card flex items-center justify-between p-4 transition-all group cursor-pointer row-enter hover:scale-[1.01]"
+                    className="card flex items-center justify-between p-4 transition-all group cursor-pointer row-enter hover:scale-[1.01]"
                     style={{ animationDelay: `${idx * 50}ms`, borderRadius: "16px" }}
                     onClick={() => onSelect(trip.id)}
                   >
@@ -147,7 +142,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         {/* Empty state */}
         {trips.length === 0 && (
           <div className="mt-8 text-center">
-            <div className="glass-card p-8 rounded-2xl">
+            <div className="card p-8 rounded-2xl">
               <div className="flex justify-center mb-4">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "var(--border)" }}>
                   <GlobeIcon className="w-7 h-7" style={{ color: "var(--accent)" }} />

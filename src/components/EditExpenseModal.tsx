@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import type { Expense, Member, CurrencyCode, ExpenseShare, SplitType, ExpenseCategory } from "../types";
-import { CURRENCY_MAP, EXPENSE_CATEGORIES } from "../types";
+import { useState } from "react";
+import type { Expense, Member, CurrencyCode, SplitType } from "../types";
+import type { ExpenseShare } from "../types";
+import { CURRENCY_MAP, getCategoryLabel } from "../types";
 import { useToast } from "../hooks/useToast";
 import { XIcon, CheckIcon } from "./Icons";
 
@@ -8,12 +9,12 @@ interface EditExpenseModalProps {
   expense: Expense;
   members: Member[];
   baseSymbol: string;
-  exchangeRates: Record<CurrencyCode, number>;
+  allCategories: string[];
   onSave: (updated: Expense) => void;
   onClose: () => void;
 }
 
-export default function EditExpenseModal({ expense, members, baseSymbol, exchangeRates, onSave, onClose }: EditExpenseModalProps) {
+export default function EditExpenseModal({ expense, members, baseSymbol, allCategories, onSave, onClose }: EditExpenseModalProps) {
   const { addToast } = useToast();
   const [title, setTitle] = useState(expense.title);
   const [amount, setAmount] = useState(String(expense.totalAmount));
@@ -21,144 +22,194 @@ export default function EditExpenseModal({ expense, members, baseSymbol, exchang
   const [rate, setRate] = useState(String(expense.exchangeRate));
   const [payerId, setPayerId] = useState(expense.payerId);
   const [date, setDate] = useState(expense.date);
-  const [category, setCategory] = useState<ExpenseCategory>(expense.category || "other");
+  const [categories, setCategories] = useState<string[]>(expense.categories || []);
   const [notes, setNotes] = useState(expense.notes || "");
   const [splitType, setSplitType] = useState<SplitType>(expense.shares[0]?.splitType || "equal");
-  const [customShares, setCustomShares] = useState<Record<string, string>>(() => {
+  const [exactAmounts, setExactAmounts] = useState<Record<string, string>>(() => {
     const map: Record<string, string> = {};
     for (const s of expense.shares) map[s.memberId] = String(s.amount);
     return map;
   });
+  const [percentages, setPercentages] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    for (const s of expense.shares) map[s.memberId] = String(s.splitValue ?? 0);
+    return map;
+  });
+  const [shareCount, setShareCount] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    for (const s of expense.shares) map[s.memberId] = "1";
+    return map;
+  });
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
+  const toggleCategory = (cat: string) => {
+    setCategories((prev) => prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]);
+  };
 
-  const amountNum = parseFloat(amount) || 0;
-  const rateNum = parseFloat(rate) || 1;
-  const currentSharesSum = Object.values(customShares).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
-  const diff = amountNum - currentSharesSum;
+  const numAmount = parseFloat(amount) || 0;
 
-  const handleCurrencyChange = (c: CurrencyCode) => { setCurrency(c); setRate(String(exchangeRates[c])); };
-
-  const handleSubmit = () => {
-    const finalTitle = title.trim();
-    if (!finalTitle) { addToast("Title cannot be empty", "error"); return; }
-    if (amountNum <= 0) { addToast("Amount must be greater than 0", "error"); return; }
-    if (!payerId) { addToast("Please select who paid", "error"); return; }
+  const handleSave = () => {
+    if (!title.trim()) { addToast("Title is required", "error"); return; }
+    if (isNaN(numAmount) || numAmount <= 0) { addToast("Invalid amount", "error"); return; }
+    const numRate = parseFloat(rate);
+    if (isNaN(numRate) || numRate <= 0) { addToast("Invalid exchange rate", "error"); return; }
+    if (!date) { addToast("Date is required", "error"); return; }
 
     let shares: ExpenseShare[];
     if (splitType === "equal") {
-      const perPerson = amountNum / members.length;
-      shares = members.map((m) => ({ memberId: m.id, amount: Math.round(perPerson * 100) / 100, splitType: "equal" }));
-      const error = amountNum - shares.reduce((s, sh) => s + sh.amount, 0);
-      if (Math.abs(error) > 0.01) shares[shares.length - 1].amount += error;
+      const per = numAmount / members.length;
+      shares = members.map((m) => ({ memberId: m.id, amount: per, splitType: "equal" }));
+    } else if (splitType === "exact") {
+      const sum = members.reduce((s, m) => s + parseFloat(exactAmounts[m.id] || "0"), 0);
+      if (Math.abs(sum - numAmount) > 0.01) { addToast(`Amounts total ${sum.toFixed(2)}, must equal ${numAmount.toFixed(2)}`, "error"); return; }
+      shares = members.map((m) => ({ memberId: m.id, amount: parseFloat(exactAmounts[m.id] || "0"), splitType: "exact" }));
+    } else if (splitType === "percentage") {
+      const sum = members.reduce((s, m) => s + parseFloat(percentages[m.id] || "0"), 0);
+      if (Math.abs(sum - 100) > 0.1) { addToast(`Percentages total ${sum.toFixed(1)}%, must equal 100%`, "error"); return; }
+      shares = members.map((m) => {
+        const pct = parseFloat(percentages[m.id] || "0");
+        return { memberId: m.id, amount: (pct / 100) * numAmount, splitValue: pct, splitType: "percentage" };
+      });
     } else {
-      if (Math.abs(diff) > 0.01) { addToast("Shares must sum exactly to total", "error"); return; }
-      shares = members
-        .filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0)
-        .map((m) => ({ memberId: m.id, amount: parseFloat(customShares[m.id]!), splitType }));
+      const totalShares = members.reduce((s, m) => s + parseFloat(shareCount[m.id] || "1"), 0);
+      shares = members.map((m) => {
+        const sc = parseFloat(shareCount[m.id] || "1");
+        return { memberId: m.id, amount: (sc / totalShares) * numAmount, splitType: "shares" };
+      });
     }
 
-    onSave({ ...expense, title: finalTitle, totalAmount: amountNum, currency, exchangeRate: rateNum, payerId, shares, date, category, notes: notes.trim() || undefined });
-    addToast(`Updated "${finalTitle}"`);
+    onSave({ ...expense, title: title.trim(), totalAmount: numAmount, currency, exchangeRate: numRate, payerId, date, shares, categories: categories.length > 0 ? categories : undefined, notes: notes.trim() || undefined });
+    addToast("Expense updated", "success");
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={onClose} />
-      <div className="relative glass-elevated rounded-xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Edit Expense</h3>
-          <button onClick={onClose} className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center" style={{ color: "var(--text-muted)" }}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Edit expense">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="relative w-full max-w-lg rounded-xl p-4 max-h-[85vh] overflow-y-auto animate-scaleIn card-elevated">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>Edit Expense</h3>
+          <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors min-w-[32px] min-h-[32px]" style={{ background: "var(--surface)" }} aria-label="Close">
             <XIcon className="w-5 h-5" />
           </button>
         </div>
 
-        <input className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-
-        <div className="flex gap-2">
-          <input className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]" type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" />
-          <select className="w-24 rounded-lg px-3 py-2.5 text-sm min-h-[44px] font-medium" value={currency} onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}>
-            {(Object.keys(CURRENCY_MAP) as CurrencyCode[]).map((c) => (<option key={c} value={c}>{c}</option>))}
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
-          <span>Rate:</span>
-          <input className="w-28 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.001" value={rate} onChange={(e) => setRate(e.target.value)} />
-          <span className="font-medium text-sm">= {baseSymbol}{(amountNum * rateNum).toFixed(2)}</span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Date:</span>
-          <input className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-        </div>
-
-        <select className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]" value={payerId} onChange={(e) => setPayerId(e.target.value)}>
-          <option value="">Who paid?</option>
-          {members.map((m) => (<option key={m.id} value={m.id}>{m.name}</option>))}
-        </select>
-
-        <div>
-          <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Category</label>
-          <div className="flex flex-wrap gap-1.5">
-            {(Object.entries(EXPENSE_CATEGORIES) as [ExpenseCategory, { label: string; emoji: string }][]).map(([key, info]) => (
-              <button key={key} onClick={() => setCategory(key)}
-                className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${category === key ? "gradient-accent text-white font-semibold" : ""}`}
-                style={category !== key ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
-                {info.label}
-              </button>
-            ))}
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Title *</label>
+            <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
-        </div>
 
-        <div>
-          <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Notes</label>
-          <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" />
-        </div>
-
-        <div>
-          <div className="flex gap-1.5 mb-2">
-            {(["equal", "exact", "percentage", "shares"] as SplitType[]).map((st) => (
-              <button key={st} onClick={() => setSplitType(st)}
-                className={`text-xs px-3 py-2 rounded-lg transition-all min-h-[36px] capitalize ${splitType === st ? "gradient-accent text-white font-semibold" : ""}`}
-                style={splitType !== st ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
-                {st}
-              </button>
-            ))}
-          </div>
-          {splitType === "equal" ? (
-            <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-              Each pays {baseSymbol}{(amountNum / (members.length || 1)).toFixed(2)}
+          <div className="grid grid-cols-[140px_1fr] gap-2">
+            <div>
+              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Amount *</label>
+              <input className="w-full rounded-lg px-3 py-2 text-sm tabular-nums min-h-[44px]" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" inputMode="decimal" />
             </div>
-          ) : (
-            <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
+            <div>
+              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Currency</label>
+              <select className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={currency} onChange={(e) => { const v = e.target.value as CurrencyCode; setCurrency(v); setRate(String(1)); }}>
+                {Object.keys(CURRENCY_MAP).map((k) => <option key={k} value={k}>{k}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-[1fr_140px] gap-2">
+            <div>
+              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Date *</label>
+              <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Rate to {baseSymbol}</label>
+              <input className="w-full rounded-lg px-3 py-2 text-sm tabular-nums min-h-[44px]" value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Paid by *</label>
+            <div className="flex gap-2">
               {members.map((m) => (
-                <div key={m.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
-                  <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
-                    value={customShares[m.id] ?? ""} onChange={(e) => setCustomShares({ ...customShares, [m.id]: e.target.value })}
-                    placeholder={splitType === "percentage" ? "%" : splitType === "shares" ? "shares" : "amount"} />
+                <button key={m.id} onClick={() => setPayerId(m.id)}
+                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${payerId === m.id ? "text-white shadow-lg shadow-orange-500/25" : ""}`}
+                  style={{ background: payerId === m.id ? "var(--accent)" : "var(--border)", color: payerId === m.id ? "white" : "var(--text-secondary)" }}>
+                  {m.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Categories</label>
+            <div className="flex flex-wrap gap-1.5">
+              {allCategories.map((cat) => (
+                <button key={cat} onClick={() => toggleCategory(cat)}
+                  className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${categories.includes(cat) ? "gradient-accent text-white font-semibold" : ""}`}
+                  style={!categories.includes(cat) ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
+                  {getCategoryLabel(cat)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Split type</label>
+            <div className="grid grid-cols-4 gap-1.5 rounded-lg p-1" style={{ background: "var(--surface)" }}>
+              {(["equal", "exact", "percentage", "shares"] as SplitType[]).map((st) => (
+                <button key={st} onClick={() => setSplitType(st)}
+                  className={`py-2 rounded-md text-xs font-medium capitalize transition-all ${splitType === st ? "text-white shadow" : ""}`}
+                  style={{ background: splitType === st ? "var(--accent)" : "transparent", color: splitType === st ? "white" : "var(--text-secondary)" }}>
+                  {st}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Split {splitType === "exact" ? "amounts" : splitType === "percentage" ? "percentages" : splitType === "shares" ? "shares" : "equally"} *</label>
+            <div className="rounded-xl p-3" style={{ background: "var(--surface)" }}>
+              {members.map((m) => (
+                <div key={m.id} className="flex items-center justify-between py-2 border-b last:border-b-0" style={{ borderColor: "var(--border)" }}>
+                  <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                  {splitType === "equal" ? (
+                    <span className="text-sm font-mono tabular-nums" style={{ color: "var(--text-secondary)" }}>
+                      {(numAmount / members.length).toFixed(2)} {baseSymbol}
+                    </span>
+                  ) : splitType === "exact" ? (
+                    <input className="w-24 rounded-lg px-3 py-2 text-sm text-right tabular-nums min-h-[36px]"
+                      value={exactAmounts[m.id] || ""} onChange={(e) => setExactAmounts((prev) => ({ ...prev, [m.id]: e.target.value }))}
+                      placeholder="0.00" inputMode="decimal" />
+                  ) : splitType === "percentage" ? (
+                    <div className="flex items-center gap-2">
+                      <input className="w-20 rounded-lg px-3 py-2 text-sm text-right tabular-nums min-h-[36px]"
+                        value={percentages[m.id] || ""} onChange={(e) => setPercentages((prev) => ({ ...prev, [m.id]: e.target.value }))}
+                        placeholder="0" inputMode="decimal" />
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>%</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <input className="w-20 rounded-lg px-3 py-2 text-sm text-right tabular-nums min-h-[36px]"
+                        value={shareCount[m.id] || ""} onChange={(e) => setShareCount((prev) => ({ ...prev, [m.id]: e.target.value }))}
+                        placeholder="1" inputMode="numeric" />
+                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>shares</span>
+                    </div>
+                  )}
                 </div>
               ))}
-              <div className={`text-xs mt-1 font-medium ${Math.abs(diff) < 0.01 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
-                {Math.abs(diff) < 0.01 ? <span className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> Balanced</span> : `Remaining: ${baseSymbol}${diff.toFixed(2)}`}
-              </div>
             </div>
-          )}
-        </div>
+          </div>
 
-        <div className="flex gap-3 pt-2">
-          <button onClick={handleSubmit} disabled={splitType !== "equal" && Math.abs(diff) > 0.01}
-            className="flex-1 gradient-accent text-white text-sm py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed btn-press min-h-[48px]">
-            Save Changes
-          </button>
-          <button onClick={onClose} className="text-sm hover:opacity-70 transition-opacity px-4 py-3 font-medium min-h-[48px]" style={{ color: "var(--text-muted)" }}>
-            Cancel
-          </button>
+          <div>
+            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Notes</label>
+            <textarea className="w-full rounded-lg px-3 py-2 text-sm resize-none" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes..." />
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <button onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium transition-opacity" style={{ background: "var(--border)", color: "var(--text-secondary)" }}>
+              Cancel
+            </button>
+            <button onClick={handleSave} className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white gradient-accent shadow-lg shadow-orange-500/25 transition-all btn-press min-h-[44px] flex items-center justify-center gap-2">
+              <CheckIcon className="w-4 h-4" />
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useRef } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import type { CurrencyCode } from "../types";
 import { DEFAULT_EXCHANGE_RATES } from "../types";
@@ -14,6 +14,11 @@ function isValidRate(rate: number): boolean {
 
 export function useExchangeRates(baseCurrency: CurrencyCode) {
   const [cached, setCached] = useLocalStorage<CachedRates | null>("exchange-rates-cache", null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const rates = useMemo(() => {
     if (!cached || !cached.usdRates) return DEFAULT_EXCHANGE_RATES;
@@ -39,6 +44,7 @@ export function useExchangeRates(baseCurrency: CurrencyCode) {
     fetch("https://open.er-api.com/v6/latest/USD", { signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
+        if (!mountedRef.current) return;
         if (data.result === "success" && data.rates) {
           const validatedRates: Record<string, number> = {};
           let validCount = 0;
@@ -59,8 +65,10 @@ export function useExchangeRates(baseCurrency: CurrencyCode) {
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch("https://open.er-api.com/v6/latest/USD");
+      const controller = new AbortController();
+      const res = await fetch("https://open.er-api.com/v6/latest/USD", { signal: controller.signal });
       const data = await res.json();
+      if (!mountedRef.current) return;
       if (data.result === "success" && data.rates) {
         const validatedRates: Record<string, number> = {};
         let validCount = 0;

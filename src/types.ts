@@ -3,24 +3,19 @@ export interface Member {
   name: string;
 }
 
-export type ExpenseCategory =
-  | "food"
-  | "transport"
-  | "accommodation"
-  | "activities"
-  | "shopping"
-  | "utilities"
-  | "other";
+export type BuiltInCategory = "food" | "transport" | "accommodation" | "activities" | "shopping" | "utilities" | "other";
 
-export const EXPENSE_CATEGORIES: Record<ExpenseCategory, { label: string; emoji: string }> = {
-  food: { label: "Food & Drinks", emoji: "" },
-  transport: { label: "Transport", emoji: "" },
-  accommodation: { label: "Accommodation", emoji: "" },
-  activities: { label: "Activities", emoji: "" },
-  shopping: { label: "Shopping", emoji: "" },
-  utilities: { label: "Utilities", emoji: "" },
-  other: { label: "Other", emoji: "" },
+export const BUILT_IN_CATEGORIES: Record<BuiltInCategory, { label: string }> = {
+  food: { label: "Food & Drinks" },
+  transport: { label: "Transport" },
+  accommodation: { label: "Accommodation" },
+  activities: { label: "Activities" },
+  shopping: { label: "Shopping" },
+  utilities: { label: "Utilities" },
+  other: { label: "Other" },
 };
+
+export const DEFAULT_CATEGORY_LIST = Object.keys(BUILT_IN_CATEGORIES) as string[];
 
 export type SplitType = "equal" | "exact" | "percentage" | "shares";
 
@@ -59,10 +54,34 @@ export interface Expense {
   shares: ExpenseShare[];
   createdAt: number;
   date: string;
-  category?: ExpenseCategory;
+  categories?: string[];
   items?: ExpenseItem[];
   payers?: ExpensePayer[];
   recurring?: RecurringConfig;
+  notes?: string;
+}
+
+export interface SettlementPayment {
+  paid: boolean;
+  paidDate?: string;
+  paidAmount?: number;
+  history: PaymentEntry[];
+}
+
+export interface PaymentEntry {
+  date: string;
+  amount: number;
+  note?: string;
+}
+
+export interface ExpenseTemplate {
+  id: string;
+  name: string;
+  title: string;
+  totalAmount: number;
+  currency: CurrencyCode;
+  categories?: string[];
+  splitType: SplitType;
   notes?: string;
 }
 
@@ -72,12 +91,15 @@ export interface Group {
   members: Member[];
   expenses: Expense[];
   baseCurrency: CurrencyCode;
-  paidSettlements: Record<string, boolean>;
+  paidSettlements: Record<string, boolean | SettlementPayment>;
+  customCategories?: string[];
+  budget?: number;
 }
 
 export interface AppState {
   trips: Group[];
   currentTripId: string | null;
+  templates?: ExpenseTemplate[];
 }
 
 export interface Settlement {
@@ -164,4 +186,9 @@ export function todayString(): string {
 export function formatDateShort(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00");
   return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+}
+
+export function getCategoryLabel(cat: string): string {
+  if (cat in BUILT_IN_CATEGORIES) return BUILT_IN_CATEGORIES[cat as BuiltInCategory].label;
+  return cat;
 }

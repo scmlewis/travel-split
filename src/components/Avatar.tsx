@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 const COLORS = [
   "#e07a3a",
   "#d4622a",
@@ -24,7 +26,7 @@ interface AvatarProps {
   size?: "sm" | "md" | "lg";
 }
 
-export default function Avatar({ name, size = "md" }: AvatarProps) {
+export default memo(function Avatar({ name, size = "md" }: AvatarProps) {
   const initial = name.charAt(0).toUpperCase();
   const color = COLORS[hashName(name) % COLORS.length];
   const sizes = {
@@ -42,4 +44,4 @@ export default function Avatar({ name, size = "md" }: AvatarProps) {
       {initial}
     </span>
   );
-}
+});

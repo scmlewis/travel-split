@@ -6,7 +6,7 @@ const fromCents = (cents: number): number => cents / 100;
 
 export function calculateBalances(expenses: Expense[], members: Member[]): MemberBalance[] {
   if (members.length === 0) return [];
-  
+
   const balanceMap = new Map<string, number>();
   for (const m of members) balanceMap.set(m.id, 0);
 
@@ -32,10 +32,11 @@ export function calculateBalances(expenses: Expense[], members: Member[]): Membe
 export function simplifyDebts(
   expenses: Expense[],
   members: Member[],
+  precomputedBalances?: MemberBalance[],
 ): Settlement[] {
   if (members.length === 0) return [];
-  
-  const balances = calculateBalances(expenses, members);
+
+  const balances = precomputedBalances ?? calculateBalances(expenses, members);
 
   const creditors: { memberId: string; amount: number }[] = [];
   const debtors: { memberId: string; amount: number }[] = [];

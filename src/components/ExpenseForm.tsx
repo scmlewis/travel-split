@@ -1,6 +1,6 @@
-import { useState } from "react";
-import type { Member, CurrencyCode, OmitExpenseId, ExpenseCategory, SplitType, ExpenseItem } from "../types";
-import { CURRENCY_MAP, EXPENSE_CATEGORIES, todayString, generateId } from "../types";
+import { useState, useMemo } from "react";
+import type { Member, CurrencyCode, OmitExpenseId, SplitType, ExpenseItem } from "../types";
+import { CURRENCY_MAP, getCategoryLabel, todayString, generateId } from "../types";
 import { useToast } from "../hooks/useToast";
 import { CheckIcon, RepeatIcon } from "./Icons";
 
@@ -8,18 +8,19 @@ interface ExpenseFormProps {
   members: Member[];
   baseSymbol: string;
   exchangeRates: Record<CurrencyCode, number>;
+  allCategories: string[];
   onAdd: (expense: OmitExpenseId) => void;
 }
 
-export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd }: ExpenseFormProps) {
+export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCategories, onAdd }: ExpenseFormProps) {
   const { addToast } = useToast();
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<CurrencyCode>("HKD");
-  const [rate, setRate] = useState(String(exchangeRates.HKD));
+  const [rate, setRate] = useState(() => String(exchangeRates.HKD));
   const [payerId, setPayerId] = useState("");
   const [date, setDate] = useState(todayString());
-  const [category, setCategory] = useState<ExpenseCategory>("other");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [splitType, setSplitType] = useState<SplitType>("equal");
   const [customShares, setCustomShares] = useState<Record<string, string>>({});
@@ -32,38 +33,33 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [expenseCreatedAt] = useState(() => Date.now());
 
-  const handleCurrencyChange = (c: CurrencyCode) => {
-    setCurrency(c);
-    setRate(String(exchangeRates[c]));
+  const handleCurrencyChange = (c: CurrencyCode) => { setCurrency(c); setRate(String(exchangeRates[c])); };
+
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) => prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]);
   };
 
   const amountNum = parseFloat(amount) || 0;
   const rateNum = parseFloat(rate) || 1;
 
-  const currentSharesSum = Object.values(customShares).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
+  const currentSharesSum = useMemo(() => Object.values(customShares).reduce((sum, val) => sum + (parseFloat(val) || 0), 0), [customShares]);
   const diff = amountNum - currentSharesSum;
 
-  const currentPayersSum = Object.values(payers).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
+  const currentPayersSum = useMemo(() => Object.values(payers).reduce((sum, val) => sum + (parseFloat(val) || 0), 0), [payers]);
   const payerDiff = amountNum - currentPayersSum;
 
-  const handleAddItem = () => {
-    setItems([...items, { id: generateId(), title: "", amount: 0, assignedTo: [] }]);
-  };
+  const handleAddItem = () => { setItems([...items, { id: generateId(), title: "", amount: 0, assignedTo: [] }]); };
 
   const handleUpdateItem = (id: string, field: keyof ExpenseItem, value: ExpenseItem[keyof ExpenseItem]) => {
     setItems(items.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
   };
 
-  const handleRemoveItem = (id: string) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
+  const handleRemoveItem = (id: string) => { setItems(items.filter((item) => item.id !== id)); };
 
   const toggleItemMember = (itemId: string, memberId: string) => {
     setItems(items.map((item) => {
       if (item.id !== itemId) return item;
-      const assigned = item.assignedTo.includes(memberId)
-        ? item.assignedTo.filter((id) => id !== memberId)
-        : [...item.assignedTo, memberId];
+      const assigned = item.assignedTo.includes(memberId) ? item.assignedTo.filter((id) => id !== memberId) : [...item.assignedTo, memberId];
       return { ...item, assignedTo: assigned };
     }));
   };
@@ -75,13 +71,9 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
     for (const item of items) {
       if (item.assignedTo.length === 0 || item.amount <= 0) continue;
       const perPerson = item.amount / item.assignedTo.length;
-      for (const memberId of item.assignedTo) {
-        shareMap[memberId] = (shareMap[memberId] || 0) + perPerson;
-      }
+      for (const memberId of item.assignedTo) shareMap[memberId] = (shareMap[memberId] || 0) + perPerson;
     }
-    return Object.entries(shareMap)
-      .filter(([, v]) => v > 0.01)
-      .map(([memberId, amount]) => ({ memberId, amount: Math.round(amount * 100) / 100 }));
+    return Object.entries(shareMap).filter(([, v]) => v > 0.01).map(([memberId, amount]) => ({ memberId, amount: Math.round(amount * 100) / 100 }));
   };
 
   const handleSubmit = () => {
@@ -103,52 +95,34 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
       if (Math.abs(error) > 0.01) shares[shares.length - 1].amount += error;
     } else if (splitType === "exact") {
       if (Math.abs(diff) > 0.01) { addToast("Shares must sum to total", "error"); return; }
-      shares = members
-        .filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0)
-        .map((m) => ({ memberId: m.id, amount: parseFloat(customShares[m.id]!), splitType: "exact", splitValue: parseFloat(customShares[m.id]!) }));
+      shares = members.filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0).map((m) => ({ memberId: m.id, amount: parseFloat(customShares[m.id]!), splitType: "exact", splitValue: parseFloat(customShares[m.id]!) }));
     } else if (splitType === "percentage") {
       const totalPct = Object.values(customShares).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
       if (Math.abs(totalPct - 100) > 0.5) { addToast("Percentages must total 100%", "error"); return; }
-      shares = members
-        .filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0)
-        .map((m) => {
-          const pct = parseFloat(customShares[m.id]!) || 0;
-          return { memberId: m.id, amount: Math.round(amountNum * pct / 100 * 100) / 100, splitType: "percentage" as SplitType, splitValue: pct };
-        });
+      shares = members.filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0).map((m) => {
+        const pct = parseFloat(customShares[m.id]!) || 0;
+        return { memberId: m.id, amount: Math.round(amountNum * pct / 100 * 100) / 100, splitType: "percentage" as SplitType, splitValue: pct };
+      });
     } else {
       const totalShares = Object.values(customShares).reduce((sum, val) => sum + (parseFloat(val) || 0), 0);
       if (totalShares <= 0) { addToast("Add shares for at least one member", "error"); return; }
-      shares = members
-        .filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0)
-        .map((m) => {
-          const sh = parseFloat(customShares[m.id]!) || 0;
-          return { memberId: m.id, amount: Math.round(amountNum * sh / totalShares * 100) / 100, splitType: "shares" as SplitType, splitValue: sh };
-        });
+      shares = members.filter((m) => (parseFloat(customShares[m.id] ?? "") || 0) > 0).map((m) => {
+        const sh = parseFloat(customShares[m.id]!) || 0;
+        return { memberId: m.id, amount: Math.round(amountNum * sh / totalShares * 100) / 100, splitType: "shares" as SplitType, splitValue: sh };
+      });
     }
 
     let finalPayerId = payerId;
     let payersData = undefined;
     if (useMultiPayer && Object.keys(payers).length > 0) {
       const payerEntries = Object.entries(payers).filter(([, v]) => (parseFloat(v) || 0) > 0);
-      if (payerEntries.length > 0) {
-        finalPayerId = payerEntries[0][0];
-        payersData = payerEntries.map(([memberId, amt]) => ({ memberId, amount: parseFloat(amt) }));
-      }
+      if (payerEntries.length > 0) { finalPayerId = payerEntries[0][0]; payersData = payerEntries.map(([memberId, amt]) => ({ memberId, amount: parseFloat(amt) })); }
     }
 
     onAdd({
-      title: finalTitle,
-      totalAmount: amountNum,
-      currency,
-      exchangeRate: rateNum,
-      payerId: finalPayerId,
-      shares,
-      createdAt: expenseCreatedAt,
-      date,
-      category,
-      notes: notes.trim() || undefined,
-      items: useItems && items.length > 0 ? items : undefined,
-      payers: payersData,
+      title: finalTitle, totalAmount: amountNum, currency, exchangeRate: rateNum, payerId: finalPayerId, shares, createdAt: expenseCreatedAt, date,
+      categories: selectedCategories.length > 0 ? selectedCategories : undefined,
+      notes: notes.trim() || undefined, items: useItems && items.length > 0 ? items : undefined, payers: payersData,
       recurring: recurringEnabled ? { enabled: true, frequency: recurringFreq } : undefined,
     });
 
@@ -158,14 +132,15 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
 
   const resetForm = () => {
     setTitle(""); setAmount(""); setCurrency("HKD"); setRate(String(exchangeRates.HKD));
-    setPayerId(""); setDate(todayString()); setCategory("other"); setNotes("");
+    setPayerId(""); setDate(todayString()); setSelectedCategories([]); setNotes("");
     setSplitType("equal"); setCustomShares({}); setPayers({}); setUseMultiPayer(false);
-    setItems([]); setUseItems(false); setRecurringEnabled(false); setRecurringFreq("monthly");
-    setShowAdvanced(false);
+    setItems([]); setUseItems(false); setRecurringEnabled(false); setRecurringFreq("monthly"); setShowAdvanced(false);
   };
 
+  const inactiveBtn = { background: "var(--border)", color: "var(--text-secondary)" };
+
   return (
-    <div className="glass-card p-4 space-y-3">
+    <div className="card p-4 space-y-3">
       <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Add Expense</div>
 
       <div>
@@ -199,16 +174,19 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Category</label>
+        <label className="block text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Categories</label>
         <div className="flex flex-wrap gap-1.5">
-          {(Object.entries(EXPENSE_CATEGORIES) as [ExpenseCategory, { label: string; emoji: string }][]).map(([key, info]) => (
-            <button key={key} onClick={() => setCategory(key)}
-              className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${category === key ? "gradient-accent text-white font-semibold" : ""}`}
-              style={category !== key ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
-              {info.label}
+          {allCategories.map((cat) => (
+            <button key={cat} onClick={() => toggleCategory(cat)}
+              className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${selectedCategories.includes(cat) ? "gradient-accent text-white font-semibold" : ""}`}
+              style={!selectedCategories.includes(cat) ? inactiveBtn : undefined}>
+              {getCategoryLabel(cat)}
             </button>
           ))}
         </div>
+        {selectedCategories.length > 1 && (
+          <div className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>{selectedCategories.length} categories selected</div>
+        )}
       </div>
 
       <div>
@@ -216,7 +194,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
           {(["equal", "exact", "percentage", "shares"] as SplitType[]).map((st) => (
             <button key={st} onClick={() => { setSplitType(st); setUseItems(false); }}
               className={`text-xs px-3 py-2 rounded-lg transition-all min-h-[36px] capitalize ${splitType === st && !useItems ? "gradient-accent text-white font-semibold" : ""}`}
-              style={splitType !== st || useItems ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
+              style={splitType !== st || useItems ? inactiveBtn : undefined}>
               {st}
             </button>
           ))}
@@ -235,11 +213,9 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
                   <div key={m.id} className="flex items-center gap-2 text-sm">
                     <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
                     <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
-                      value={customShares[m.id] ?? ""} onChange={(e) => setCustomShares({ ...customShares, [m.id]: e.target.value })}
+                      value={customShares[m.id] ?? ""} onChange={(e) => setCustomShares((prev) => ({ ...prev, [m.id]: e.target.value }))}
                       placeholder={splitType === "percentage" ? "%" : splitType === "shares" ? "shares" : "amount"} />
-                    <span className="text-xs w-8" style={{ color: "var(--text-muted)" }}>
-                      {splitType === "percentage" ? "%" : splitType === "shares" ? "sh" : baseSymbol}
-                    </span>
+                    <span className="text-xs w-8" style={{ color: "var(--text-muted)" }}>{splitType === "percentage" ? "%" : splitType === "shares" ? "sh" : baseSymbol}</span>
                   </div>
                 ))}
                 {splitType === "percentage" && (
@@ -279,7 +255,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
             <button onClick={() => setUseMultiPayer(!useMultiPayer)}
               className={`w-10 h-5 rounded-full transition-colors relative ${useMultiPayer ? "bg-[var(--accent)]" : ""}`}
               style={!useMultiPayer ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useMultiPayer ? "left-5.5 translate-x-0" : "left-0.5"}`} />
+              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useMultiPayer ? "left-5.5" : "left-0.5"}`} />
             </button>
           </div>
           {useMultiPayer && (
@@ -288,7 +264,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
                 <div key={m.id} className="flex items-center gap-2 text-sm">
                   <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
                   <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
-                    value={payers[m.id] ?? ""} onChange={(e) => setPayers({ ...payers, [m.id]: e.target.value })} placeholder="0" />
+                    value={payers[m.id] ?? ""} onChange={(e) => setPayers((prev) => ({ ...prev, [m.id]: e.target.value }))} placeholder="0" />
                 </div>
               ))}
               <div className={`text-xs font-medium ${Math.abs(payerDiff) < 0.01 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
@@ -302,7 +278,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
             <button onClick={() => { setUseItems(!useItems); if (!useItems) handleAddItem(); }}
               className={`w-10 h-5 rounded-full transition-colors relative ${useItems ? "bg-[var(--accent)]" : ""}`}
               style={!useItems ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useItems ? "left-5.5 translate-x-0" : "left-0.5"}`} />
+              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useItems ? "left-5.5" : "left-0.5"}`} />
             </button>
           </div>
           {useItems && (
@@ -318,27 +294,23 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
                     {members.map((m) => (
                       <button key={m.id} onClick={() => toggleItemMember(item.id, m.id)}
                         className={`text-[10px] px-2 py-1 rounded-md transition-all ${item.assignedTo.includes(m.id) ? "gradient-accent text-white" : ""}`}
-                        style={!item.assignedTo.includes(m.id) ? { background: "var(--border)", color: "var(--text-muted)" } : undefined}>
+                        style={!item.assignedTo.includes(m.id) ? inactiveBtn : undefined}>
                         {m.name}
                       </button>
                     ))}
                   </div>
                 </div>
               ))}
-              <button onClick={handleAddItem} className="text-xs font-medium w-full py-2 rounded-lg" style={{ background: "var(--border)", color: "var(--accent)" }}>
-                + Add item
-              </button>
+              <button onClick={handleAddItem} className="text-xs font-medium w-full py-2 rounded-lg" style={{ background: "var(--border)", color: "var(--accent)" }}>+ Add item</button>
             </div>
           )}
 
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--text-secondary)" }}>
-              <RepeatIcon className="w-3.5 h-3.5" /> Recurring
-            </span>
+            <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--text-secondary)" }}><RepeatIcon className="w-3.5 h-3.5" /> Recurring</span>
             <button onClick={() => setRecurringEnabled(!recurringEnabled)}
               className={`w-10 h-5 rounded-full transition-colors relative ${recurringEnabled ? "bg-[var(--accent)]" : ""}`}
               style={!recurringEnabled ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${recurringEnabled ? "left-5.5 translate-x-0" : "left-0.5"}`} />
+              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${recurringEnabled ? "left-5.5" : "left-0.5"}`} />
             </button>
           </div>
           {recurringEnabled && (
@@ -346,7 +318,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, onAdd 
               {(["weekly", "monthly", "yearly"] as const).map((f) => (
                 <button key={f} onClick={() => setRecurringFreq(f)}
                   className={`text-xs px-3 py-2 rounded-lg flex-1 capitalize min-h-[36px] ${recurringFreq === f ? "gradient-accent text-white font-semibold" : ""}`}
-                  style={recurringFreq !== f ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
+                  style={recurringFreq !== f ? inactiveBtn : undefined}>
                   {f}
                 </button>
               ))}

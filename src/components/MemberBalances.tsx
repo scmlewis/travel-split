@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { MemberBalance, Member, Settlement } from "../types";
 import Avatar from "./Avatar";
 import { ClipboardIcon } from "./Icons";
@@ -10,7 +11,23 @@ interface MemberBalancesProps {
 }
 
 export default function MemberBalances({ balances, members, baseSymbol, settlements }: MemberBalancesProps) {
-  const memberMap = new Map(members.map((m) => [m.id, m]));
+  const memberMap = useMemo(() => new Map(members.map((m) => [m.id, m])), [members]);
+
+  const settlementMap = useMemo(() => {
+    const map = new Map<string, { owes: Settlement[]; owedBy: Settlement[] }>();
+    for (const s of settlements) {
+      if (!map.has(s.from)) map.set(s.from, { owes: [], owedBy: [] });
+      if (!map.has(s.to)) map.set(s.to, { owes: [], owedBy: [] });
+      map.get(s.from)!.owes.push(s);
+      map.get(s.to)!.owedBy.push(s);
+    }
+    return map;
+  }, [settlements]);
+
+  const maxAbs = useMemo(
+    () => Math.max(...balances.map((b) => Math.abs(b.net)), 1),
+    [balances],
+  );
 
   if (balances.length === 0) {
     return (
@@ -19,7 +36,7 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
           <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
           Member Balances
         </h2>
-        <div className="glass-card text-center py-10 px-4 animate-fadeIn">
+        <div className="card text-center py-10 px-4 animate-fadeIn">
           <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
             <ClipboardIcon className="w-10 h-10" />
           </div>
@@ -29,8 +46,6 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
       </section>
     );
   }
-
-  const maxAbs = Math.max(...balances.map((b) => Math.abs(b.net)), 1);
 
   return (
     <section>
@@ -49,11 +64,10 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
             const isNegative = b.net < -0.01;
             const isSettled = !isPositive && !isNegative;
 
-            const owes = settlements.filter((s) => s.from === b.memberId);
-            const owedBy = settlements.filter((s) => s.to === b.memberId);
+            const { owes, owedBy } = settlementMap.get(b.memberId) ?? { owes: [], owedBy: [] };
 
             return (
-              <div key={b.memberId} className="glass-card px-4 py-3.5 animate-fadeIn">
+              <div key={b.memberId} className="card px-4 py-3.5 animate-fadeIn">
                 <div className="flex items-center gap-3 mb-2">
                   <Avatar name={member?.name ?? "?"} size="md" />
                   <div className="min-w-0 flex-1">
@@ -68,20 +82,13 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
                     {isSettled ? `${baseSymbol}0.00` : `${isPositive ? "+" : ""}${baseSymbol}${Math.abs(b.net).toFixed(2)}`}
                   </span>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden relative mb-2.5" style={{ background: "var(--border)" }}>
+                <div className="h-2 rounded-full overflow-hidden mb-2.5" style={{ background: "var(--border)" }}>
                   {isPositive && (
-                    <div
-                      className="absolute top-0 h-full bg-emerald-400 dark:bg-emerald-500 rounded-full balance-bar opacity-60"
-                      style={{ width: `${pct / 2}%`, left: "50%" }}
-                    />
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "#34d399" }} />
                   )}
                   {isNegative && (
-                    <div
-                      className="absolute top-0 h-full bg-red-400 dark:text-red-500 rounded-full balance-bar opacity-60"
-                      style={{ width: `${pct / 2}%`, right: "50%" }}
-                    />
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "#f87171" }} />
                   )}
-                  <div className="absolute left-1/2 top-0 w-px h-full" style={{ background: "var(--text-muted)" }} />
                 </div>
                 {(owes.length > 0 || owedBy.length > 0) && (
                   <div className="space-y-1.5 pt-1" style={{ borderTop: "1px solid var(--border)" }}>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useCallback, useRef, useMemo, useEffect } from "react";
 import type { ReactNode } from "react";
 import { CheckIcon, XIcon, InfoIcon } from "../components/Icons";
 
@@ -19,6 +19,16 @@ const ToastContext = createContext<{ addToast: (message: string, type?: Toast["t
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const longPressTimers = useRef<Map<string, number>>(new Map());
+  const dismissTimers = useRef<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    const timers = dismissTimers.current;
+    const lpTimers = longPressTimers.current;
+    return () => {
+      timers.forEach((id) => clearTimeout(id));
+      lpTimers.forEach((id) => clearTimeout(id));
+    };
+  }, []);
 
   const addToast = useCallback((message: string, type: Toast["type"] = "success", action?: () => void) => {
     const id = Math.random().toString(36).slice(2);
@@ -28,7 +38,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const startLongPress = () => {
       if (longPressTimers.current.has(id)) return;
       const timer = window.setTimeout(() => {
-        setToasts((prev) => prev.map((t) => 
+        setToasts((prev) => prev.map((t) =>
           t.id === id ? { ...t, type: "info", message: `${t.message} (Press to keep)` } : t
         ));
         longPressTimers.current.delete(id);
@@ -50,12 +60,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const handleClick = () => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
       longPressTimers.current.delete(id);
+      const dt = dismissTimers.current.get(id);
+      if (dt) { clearTimeout(dt); dismissTimers.current.delete(id); }
     };
 
-    setTimeout(() => {
+    const dismissTimer = window.setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
       longPressTimers.current.delete(id);
+      dismissTimers.current.delete(id);
     }, 3000);
+    dismissTimers.current.set(id, dismissTimer);
 
     return { id, startLongPress, endLongPress, handleClick };
   }, []);
@@ -67,10 +81,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       window.clearTimeout(timer);
       longPressTimers.current.delete(id);
     }
+    const dt = dismissTimers.current.get(id);
+    if (dt) { clearTimeout(dt); dismissTimers.current.delete(id); }
   }, []);
 
+  const contextValue = useMemo(() => ({ addToast }), [addToast]);
+
   return (
-    <ToastContext.Provider value={{ addToast }}>
+    <ToastContext.Provider value={contextValue}>
       {children}
       <div className="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none">
         {toasts.map((toast) => {

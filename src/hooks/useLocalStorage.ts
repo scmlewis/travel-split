@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 export function useLocalStorage<T>(key: string, fallback: T) {
   const [value, setValue] = useState<T>(() => {
@@ -10,8 +10,16 @@ export function useLocalStorage<T>(key: string, fallback: T) {
     }
   });
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      localStorage.setItem(key, JSON.stringify(value));
+    }, 300);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, [key, value]);
 
   const updateValue = useCallback((next: T | ((prev: T) => T)) => {

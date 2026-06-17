@@ -1,5 +1,5 @@
 import type { Expense, Member, Settlement } from "./types";
-import { EXPENSE_CATEGORIES } from "./types";
+import { getCategoryLabel } from "./types";
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -19,11 +19,11 @@ export function exportCSV(expenses: Expense[], members: Member[], settlements: S
     .map((e) => {
       const payer = memberMap.get(e.payerId);
       const baseAmt = (e.totalAmount * e.exchangeRate).toFixed(2);
-      const cat = e.category ? EXPENSE_CATEGORIES[e.category]?.label : "";
+      const cats = e.categories?.map((c) => getCategoryLabel(c)).join("; ") || "";
       return [
         e.date,
         e.title,
-        cat,
+        cats,
         payer?.name ?? "?",
         baseAmt,
         e.totalAmount.toFixed(2),
@@ -78,8 +78,9 @@ export function exportPDF(expenses: Expense[], members: Member[], settlements: S
   for (const e of sorted) {
     const payer = memberMap.get(e.payerId);
     const baseAmt = (e.totalAmount * e.exchangeRate).toFixed(2);
-    const cat = e.category ? `[${EXPENSE_CATEGORIES[e.category]?.label}] ` : "";
-    lines.push(`${e.date}  ${cat}${e.title}  ${baseSymbol}${baseAmt}  (${payer?.name ?? "?"} paid)`);
+    const catLabels = e.categories?.map((c) => getCategoryLabel(c)) || [];
+    const catStr = catLabels.length > 0 ? `[${catLabels.join(", ")}] ` : "";
+    lines.push(`${e.date}  ${catStr}${e.title}  ${baseSymbol}${baseAmt}  (${payer?.name ?? "?"} paid)`);
     if (e.notes) lines.push(`  Notes: ${e.notes}`);
   }
 
