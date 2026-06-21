@@ -34,27 +34,27 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         {/* Header section */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: "var(--accent)" }}>
-              <SuitcaseIcon className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: "var(--md-sys-color-primary-container)" }}>
+              <SuitcaseIcon className="w-8 h-8" style={{ color: "var(--md-sys-color-on-primary-container)" }} />
             </div>
           </div>
-          <h1 className="text-4xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Travel Split</h1>
-          <p className="text-base" style={{ color: "var(--text-secondary)" }}>Split expenses effortlessly with friends</p>
+          <h1 className="text-4xl font-bold mb-2" style={{ color: "var(--md-sys-color-on-surface)" }}>Travel Split</h1>
+          <p className="text-base" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split expenses effortlessly with friends</p>
         </div>
 
         {/* Main card */}
-        <div className="card-elevated p-8 rounded-2xl">
+        <div className="card-elevated p-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Start a Trip</h2>
-              <p className="text-sm" style={{ color: "var(--text-muted)" }}>Create a new trip to begin splitting</p>
+              <h2 className="text-lg font-semibold" style={{ color: "var(--md-sys-color-on-surface)" }}>Start a Trip</h2>
+              <p className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Create a new trip to begin splitting</p>
             </div>
             <ThemeToggle theme={theme} onChange={onThemeChange} />
           </div>
 
           <div className="space-y-4">
             <input
-              className="w-full rounded-xl px-4 py-3.5 text-base transition-shadow min-h-[52px]"
+              className="w-full px-4 py-3.5 text-base transition-shadow min-h-[52px]"
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleCreate()}
@@ -62,7 +62,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
             />
             <div className="flex flex-col sm:flex-row gap-3">
               <select
-                className="flex-1 min-w-0 rounded-xl px-4 py-3.5 text-base min-h-[52px]"
+                className="flex-1 min-w-0 px-4 py-3.5 text-base min-h-[52px]"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
               >
@@ -72,7 +72,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
               </select>
               <button
                 onClick={handleCreate}
-                className="gradient-accent text-white px-8 py-3.5 rounded-xl text-base font-semibold hover:opacity-90 transition-all btn-press min-h-[52px] shrink-0 shadow-lg shadow-orange-500/20"
+                className="gradient-accent px-8 py-3.5 text-base font-semibold btn-press min-h-[52px] shrink-0"
               >
                 Create
               </button>
@@ -84,10 +84,10 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         {trips.length > 0 && (
           <div className="mt-6">
             <div className="flex items-center justify-between mb-3 px-1">
-              <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
+              <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                 Recent Trips
               </div>
-              <div className="text-xs" style={{ color: "var(--text-muted)" }}>
+              <div className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                 {trips.length} trip{trips.length !== 1 ? "s" : ""}
               </div>
             </div>
@@ -101,21 +101,21 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                   <div
                     key={trip.id}
                     className="card flex items-center justify-between p-4 transition-all group cursor-pointer row-enter hover:scale-[1.01]"
-                    style={{ animationDelay: `${idx * 50}ms`, borderRadius: "16px" }}
+                    style={{ animationDelay: `${idx * 50}ms`, borderRadius: "var(--md-sys-shape-large)" }}
                     onClick={() => onSelect(trip.id)}
                   >
                     <div className="min-w-0 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--border)" }}>
-                        <SuitcaseIcon className="w-5 h-5" style={{ color: "var(--accent)" }} />
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
+                        <SuitcaseIcon className="w-5 h-5" style={{ color: "var(--md-sys-color-primary)" }} />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>{trip.name}</div>
-                        <div className="text-sm flex items-center gap-2 mt-0.5" style={{ color: "var(--text-muted)" }}>
+                        <div className="text-base font-semibold truncate" style={{ color: "var(--md-sys-color-on-surface)" }}>{trip.name}</div>
+                        <div className="text-sm flex items-center gap-2 mt-0.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                           <span>{trip.members.length} members</span>
                           <span>·</span>
                           <span>{trip.expenses.length} expenses</span>
                           <span>·</span>
-                          <span className="font-medium" style={{ color: "var(--accent)" }}>{sym}{totalSpent.toFixed(2)}</span>
+                          <span className="font-medium" style={{ color: "var(--md-sys-color-primary)" }}>{sym}{totalSpent.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -127,8 +127,8 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                           addToast(`Trip "${trip.name}" deleted`);
                         }
                       }}
-                      className="hover:text-red-500 transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
-                      style={{ color: "var(--text-muted)" }}
+                      className="transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                      style={{ color: "var(--md-sys-color-on-surface-variant)" }}
                     >
                       <XIcon className="w-4 h-4" />
                     </button>
@@ -142,14 +142,14 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         {/* Empty state */}
         {trips.length === 0 && (
           <div className="mt-8 text-center">
-            <div className="card p-8 rounded-2xl">
+            <div className="card-elevated p-8">
               <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "var(--border)" }}>
-                  <GlobeIcon className="w-7 h-7" style={{ color: "var(--accent)" }} />
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
+                  <GlobeIcon className="w-7 h-7" style={{ color: "var(--md-sys-color-primary)" }} />
                 </div>
               </div>
-              <div className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Ready to explore?</div>
-              <div className="text-sm" style={{ color: "var(--text-muted)" }}>Create your first trip and start splitting expenses with ease</div>
+              <div className="text-lg font-semibold mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>Ready to explore?</div>
+              <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Create your first trip and start splitting expenses with ease</div>
             </div>
           </div>
         )}

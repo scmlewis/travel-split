@@ -137,14 +137,14 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
     setItems([]); setUseItems(false); setRecurringEnabled(false); setRecurringFreq("monthly"); setShowAdvanced(false);
   };
 
-  const inactiveBtn = { background: "var(--border)", color: "var(--text-secondary)" };
+  const inactiveBtn = { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" };
 
   return (
-    <div className="card p-4 space-y-3">
-      <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Add Expense</div>
+    <div className="card-elevated p-4 space-y-3">
+      <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add Expense</div>
 
       <div>
-        <label htmlFor="expense-title" className="block text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Title</label>
+        <label htmlFor="expense-title" className="block text-sm font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Title</label>
         <input id="expense-title" className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Hotel, Dinner" />
       </div>
 
@@ -155,14 +155,14 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
         </select>
       </div>
 
-      <div className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+      <div className="flex items-center gap-2 text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
         <span>Rate:</span>
         <input className="w-28 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.001" value={rate} onChange={(e) => setRate(e.target.value)} />
         <span className="font-medium text-sm">= {baseSymbol}{(amountNum * rateNum).toFixed(2)}</span>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Date:</span>
+        <span className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Date:</span>
         <input className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </div>
 
@@ -174,7 +174,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Categories</label>
+        <label className="block text-sm font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Categories</label>
         <div className="flex flex-wrap gap-1.5">
           {allCategories.map((cat) => (
             <button key={cat} onClick={() => toggleCategory(cat)}
@@ -185,7 +185,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
           ))}
         </div>
         {selectedCategories.length > 1 && (
-          <div className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>{selectedCategories.length} categories selected</div>
+          <div className="text-xs mt-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{selectedCategories.length} categories selected</div>
         )}
       </div>
 
@@ -203,7 +203,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
         {!useItems && (
           <>
             {splitType === "equal" && (
-              <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
+              <div className="text-sm font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                 Each pays {baseSymbol}{(amountNum / (members.length || 1)).toFixed(2)}
               </div>
             )}
@@ -211,11 +211,11 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
               <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
                 {members.map((m) => (
                   <div key={m.id} className="flex items-center gap-2 text-sm">
-                    <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                    <span className="w-20 truncate font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
                     <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
                       value={customShares[m.id] ?? ""} onChange={(e) => setCustomShares((prev) => ({ ...prev, [m.id]: e.target.value }))}
                       placeholder={splitType === "percentage" ? "%" : splitType === "shares" ? "shares" : "amount"} />
-                    <span className="text-xs w-8" style={{ color: "var(--text-muted)" }}>{splitType === "percentage" ? "%" : splitType === "shares" ? "sh" : baseSymbol}</span>
+                    <span className="text-xs w-8" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{splitType === "percentage" ? "%" : splitType === "shares" ? "sh" : baseSymbol}</span>
                   </div>
                 ))}
                 {splitType === "percentage" && (
@@ -229,7 +229,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
                   </div>
                 )}
                 {splitType === "shares" && (
-                  <div className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>
+                  <div className="text-xs font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     Total: {Object.values(customShares).reduce((s, v) => s + (parseFloat(v) || 0), 0).toFixed(0)} shares
                   </div>
                 )}
@@ -239,30 +239,29 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
         )}
       </div>
 
-      <button onClick={() => setShowAdvanced(!showAdvanced)} className="text-xs font-medium w-full text-left py-1" style={{ color: "var(--accent)" }}>
+      <button onClick={() => setShowAdvanced(!showAdvanced)} className="text-xs font-medium w-full text-left py-1" style={{ color: "var(--md-sys-color-primary)" }}>
         {showAdvanced ? "- Hide advanced" : "+ Show advanced"}
       </button>
 
       {showAdvanced && (
-        <div className="space-y-3 pt-1" style={{ borderTop: "1px solid var(--border)" }}>
+        <div className="space-y-3 pt-1" style={{ borderTop: "1px solid var(--md-sys-color-outline-variant)" }}>
           <div>
-            <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>Notes</label>
+            <label className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Notes</label>
             <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" />
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>Multiple payers</span>
+            <span className="text-xs font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Multiple payers</span>
             <button onClick={() => setUseMultiPayer(!useMultiPayer)}
-              className={`w-10 h-5 rounded-full transition-colors relative ${useMultiPayer ? "bg-[var(--accent)]" : ""}`}
-              style={!useMultiPayer ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useMultiPayer ? "left-5.5" : "left-0.5"}`} />
-            </button>
+              className={`md-switch ${useMultiPayer ? "md-switch-on" : ""}`}
+              aria-label="Toggle multiple payers"
+            />
           </div>
           {useMultiPayer && (
             <div className="space-y-1.5">
               {members.map((m) => (
                 <div key={m.id} className="flex items-center gap-2 text-sm">
-                  <span className="w-20 truncate font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                  <span className="w-20 truncate font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
                   <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
                     value={payers[m.id] ?? ""} onChange={(e) => setPayers((prev) => ({ ...prev, [m.id]: e.target.value }))} placeholder="0" />
                 </div>
@@ -274,17 +273,16 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
           )}
 
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>Item-level split</span>
+            <span className="text-xs font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Item-level split</span>
             <button onClick={() => { setUseItems(!useItems); if (!useItems) handleAddItem(); }}
-              className={`w-10 h-5 rounded-full transition-colors relative ${useItems ? "bg-[var(--accent)]" : ""}`}
-              style={!useItems ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${useItems ? "left-5.5" : "left-0.5"}`} />
-            </button>
+              className={`md-switch ${useItems ? "md-switch-on" : ""}`}
+              aria-label="Toggle item-level split"
+            />
           </div>
           {useItems && (
             <div className="space-y-2">
               {items.map((item) => (
-                <div key={item.id} className="p-2 rounded-lg" style={{ background: "var(--surface-elevated)" }}>
+                <div key={item.id} className="p-2 rounded-lg" style={{ background: "var(--md-sys-color-surface-container)" }}>
                   <div className="flex gap-2 mb-1.5">
                     <input className="flex-1 rounded-lg px-3 py-1.5 text-sm" value={item.title} onChange={(e) => handleUpdateItem(item.id, "title", e.target.value)} placeholder="Item name" />
                     <input className="w-20 rounded-lg px-2 py-1.5 text-sm font-mono" type="number" min="0" step="0.01" value={item.amount || ""} onChange={(e) => handleUpdateItem(item.id, "amount", parseFloat(e.target.value) || 0)} placeholder="0" />
@@ -301,17 +299,16 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
                   </div>
                 </div>
               ))}
-              <button onClick={handleAddItem} className="text-xs font-medium w-full py-2 rounded-lg" style={{ background: "var(--border)", color: "var(--accent)" }}>+ Add item</button>
+              <button onClick={handleAddItem} className="text-xs font-medium w-full py-2 rounded-lg" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }}>+ Add item</button>
             </div>
           )}
 
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--text-secondary)" }}><RepeatIcon className="w-3.5 h-3.5" /> Recurring</span>
+            <span className="text-xs font-medium flex items-center gap-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}><RepeatIcon className="w-3.5 h-3.5" /> Recurring</span>
             <button onClick={() => setRecurringEnabled(!recurringEnabled)}
-              className={`w-10 h-5 rounded-full transition-colors relative ${recurringEnabled ? "bg-[var(--accent)]" : ""}`}
-              style={!recurringEnabled ? { background: "var(--border)" } : undefined}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${recurringEnabled ? "left-5.5" : "left-0.5"}`} />
-            </button>
+              className={`md-switch ${recurringEnabled ? "md-switch-on" : ""}`}
+              aria-label="Toggle recurring"
+            />
           </div>
           {recurringEnabled && (
             <div className="flex gap-1.5">
@@ -328,7 +325,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
       )}
 
       <button onClick={handleSubmit}
-        className="w-full gradient-accent text-white text-sm py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed btn-press min-h-[48px]"
+        className="w-full gradient-accent text-sm py-3 rounded-lg font-semibold btn-press min-h-[48px] disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={splitType !== "equal" && !useItems && Math.abs(diff) > 0.01}>
         Add Expense
       </button>

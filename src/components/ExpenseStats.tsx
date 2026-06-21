@@ -16,13 +16,13 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
   if (stats.expenseCount === 0) {
     return (
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-          <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
+        <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+          <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
           Statistics
         </h2>
-        <div className="card text-center py-12 px-4 animate-fadeIn">
-          <div className="text-lg font-medium mb-1" style={{ color: "var(--text-secondary)" }}>No data yet</div>
-          <div className="text-sm" style={{ color: "var(--text-muted)" }}>Add expenses to see statistics</div>
+        <div className="card-elevated text-center py-12 px-4 animate-fadeIn">
+          <div className="text-lg font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>No data yet</div>
+          <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add expenses to see statistics</div>
         </div>
       </section>
     );
@@ -35,8 +35,8 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
   return (
     <section className="space-y-4">
-      <h2 className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
+      <h2 className="text-xs font-semibold uppercase tracking-wider flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
         Statistics
       </h2>
 
@@ -57,17 +57,17 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
       {/* Largest / Smallest expense */}
       {stats.largestExpense && (
-        <div className="card p-4 animate-fadeIn">
+        <div className="card-elevated p-4 animate-fadeIn">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--text-muted)" }}>Largest Expense</div>
-              <div className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{stats.largestExpense.title}</div>
-              <div className="text-xs" style={{ color: "var(--text-muted)" }}>
+              <div className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Largest Expense</div>
+              <div className="text-base font-bold" style={{ color: "var(--md-sys-color-on-surface)" }}>{stats.largestExpense.title}</div>
+              <div className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                 {stats.largestExpense.date} · {memberMap.get(stats.largestExpense.payerId)?.name ?? "?"}
               </div>
             </div>
             <div className="text-right">
-              <div className="text-lg font-bold font-mono tabular-nums" style={{ color: "var(--accent)" }}>
+              <div className="text-lg font-bold font-mono tabular-nums" style={{ color: "var(--md-sys-color-primary)" }}>
                 {baseSymbol}{(stats.largestExpense.totalAmount * stats.largestExpense.exchangeRate).toFixed(2)}
               </div>
             </div>
@@ -77,8 +77,8 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
       {/* Spending by day */}
       {stats.spendingByDay.length > 1 && (
-        <div className="card p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Spending by Day</div>
+        <div className="card-elevated p-4 animate-fadeIn">
+          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Day</div>
           <div className="flex items-end gap-1 h-32">
             {stats.spendingByDay.map((d) => (
               <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
@@ -87,7 +87,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
                   style={{ height: `${(d.total / maxDay) * 100}%`, minHeight: "2px", opacity: 0.8 }}
                   title={`${d.date}: ${baseSymbol}${d.total.toFixed(2)}`}
                 />
-                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--text-muted)" }}>
+                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                   {d.date.slice(5)}
                 </div>
               </div>
@@ -98,8 +98,8 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
       {/* Spending by week */}
       {stats.spendingByWeek.length > 1 && (
-        <div className="card p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Spending by Week</div>
+        <div className="card-elevated p-4 animate-fadeIn">
+          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Week</div>
           <div className="flex items-end gap-2 h-32">
             {stats.spendingByWeek.map((w) => (
               <div key={w.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
@@ -108,7 +108,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
                   style={{ height: `${(w.total / maxWeek) * 100}%`, minHeight: "2px", opacity: 0.8 }}
                   title={`Week of ${w.date}: ${baseSymbol}${w.total.toFixed(2)}`}
                 />
-                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--text-muted)" }}>
+                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                   {w.date.slice(5)}
                 </div>
               </div>
@@ -118,8 +118,8 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       )}
 
       {/* Per-member spending */}
-      <div className="card p-4 animate-fadeIn">
-        <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Spending by Member</div>
+      <div className="card-elevated p-4 animate-fadeIn">
+        <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Member</div>
         <div className="space-y-3">
           {stats.memberSpending
             .slice()
@@ -131,14 +131,14 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
                   <div className="flex items-center justify-between text-sm mb-1">
                     <div className="flex items-center gap-2">
                       <Avatar name={member?.name ?? "?"} size="sm" />
-                      <span style={{ color: "var(--text-primary)" }}>{member?.name ?? "?"}</span>
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>{ms.expenseCount} expenses</span>
+                      <span style={{ color: "var(--md-sys-color-on-surface)" }}>{member?.name ?? "?"}</span>
+                      <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{ms.expenseCount} expenses</span>
                     </div>
-                    <span className="font-mono tabular-nums font-semibold" style={{ color: "var(--text-primary)" }}>
+                    <span className="font-mono tabular-nums font-semibold" style={{ color: "var(--md-sys-color-on-surface)" }}>
                       {baseSymbol}{ms.totalPaid.toFixed(2)}
                     </span>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--md-sys-color-outline-variant)" }}>
                     <div
                       className="h-full rounded-full gradient-accent transition-all duration-500"
                       style={{ width: `${(ms.totalPaid / maxMemberPaid) * 100}%` }}
@@ -152,24 +152,24 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
       {/* Category breakdown */}
       {stats.categoryBreakdown.length > 0 && (
-        <div className="card p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>By Category</div>
+        <div className="card-elevated p-4 animate-fadeIn">
+          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Category</div>
           <div className="space-y-3">
             {stats.categoryBreakdown.map((cat, idx) => (
               <div key={cat.category} className="transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms` }}>
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span style={{ color: "var(--text-primary)" }}>{getCategoryLabel(cat.category)}</span>
+                  <span style={{ color: "var(--md-sys-color-on-surface)" }}>{getCategoryLabel(cat.category)}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>{cat.count}x</span>
-                    <span className="font-mono tabular-nums font-semibold" style={{ color: "var(--text-primary)" }}>
+                    <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{cat.count}x</span>
+                    <span className="font-mono tabular-nums font-semibold" style={{ color: "var(--md-sys-color-on-surface)" }}>
                       {baseSymbol}{cat.total.toFixed(2)}
                     </span>
-                    <span className="text-xs w-10 text-right" style={{ color: "var(--text-muted)" }}>
+                    <span className="text-xs w-10 text-right" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                       {cat.percentage.toFixed(0)}%
                     </span>
                   </div>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
+                <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--md-sys-color-outline-variant)" }}>
                   <div
                     className="h-full rounded-full gradient-accent transition-all duration-500"
                     style={{ width: `${(cat.total / maxCat) * 100}%` }}
@@ -181,45 +181,23 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
         </div>
       )}
 
-      {/* Split type distribution */}
-      <div className="card p-4 animate-fadeIn">
-        <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>Split Types Used</div>
-        <div className="grid grid-cols-4 gap-2">
-          {(["equal", "exact", "percentage", "shares"] as const).map((st) => {
-            const count = stats.splitTypeDistribution[st];
-            const pct = stats.expenseCount > 0 ? (count / stats.expenseCount) * 100 : 0;
-            return (
-              <div key={st} className="text-center row-enter" style={{ animationDelay: `${(["equal", "exact", "percentage", "shares"].indexOf(st)) * 50}ms` }}>
-                <div className="text-lg font-bold font-mono" style={{ color: count > 0 ? "var(--accent)" : "var(--text-muted)" }}>
-                  {count}
-                </div>
-                <div className="text-[10px] capitalize" style={{ color: "var(--text-muted)" }}>{st}</div>
-                <div className="h-1.5 rounded-full mt-1 overflow-hidden" style={{ background: "var(--border)" }}>
-                  <div className="h-full rounded-full gradient-accent" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Currency breakdown */}
       {stats.currencyBreakdown.length > 1 && (
-        <div className="card p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--text-muted)" }}>By Currency</div>
+        <div className="card-elevated p-4 animate-fadeIn">
+          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Currency</div>
           <div className="space-y-2">
             {stats.currencyBreakdown.map((cb, idx) => (
-              <div key={cb.currency} className="flex items-center justify-between text-sm py-1 transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms`, borderBottom: "1px solid var(--border)" }}>
+              <div key={cb.currency} className="flex items-center justify-between text-sm py-1 transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms`, borderBottom: "1px solid var(--md-sys-color-outline-variant)" }}>
                 <div>
-                  <span className="font-medium" style={{ color: "var(--text-primary)" }}>{cb.currency}</span>
-                  <span className="text-xs ml-1" style={{ color: "var(--text-muted)" }}>{cb.count}x</span>
+                  <span className="font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{cb.currency}</span>
+                  <span className="text-xs ml-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{cb.count}x</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-mono tabular-nums" style={{ color: "var(--text-primary)" }}>
+                  <span className="font-mono tabular-nums" style={{ color: "var(--md-sys-color-on-surface)" }}>
                     {baseSymbol}{cb.totalConverted.toFixed(2)}
                   </span>
                   {cb.currency !== "HKD" && (
-                    <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                    <div className="text-[10px]" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                       ({cb.totalOriginal.toFixed(0)} {cb.currency})
                     </div>
                   )}
@@ -235,9 +213,9 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
 function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="card p-3 rounded-xl animate-fadeIn">
-      <div className="text-xs mb-1 truncate" style={{ color: "var(--text-muted)" }}>{label}</div>
-      <div className="text-base font-bold tabular-nums font-mono" style={{ color: accent ? "var(--accent)" : "var(--text-primary)" }}>
+    <div className="card-elevated p-3 animate-fadeIn">
+      <div className="text-xs mb-1 truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{label}</div>
+      <div className="text-base font-bold tabular-nums font-mono" style={{ color: accent ? "var(--md-sys-color-primary)" : "var(--md-sys-color-on-surface)" }}>
         {value}
       </div>
     </div>

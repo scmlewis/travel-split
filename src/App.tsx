@@ -11,7 +11,6 @@ import TripList from "./components/TripList";
 import ThemeToggle from "./components/ThemeToggle";
 import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, TrashIcon, SuitcaseIcon, PlusIcon, LayoutDashboardIcon, ListIcon, FileIcon, PencilIcon, UndoIcon, RedoIcon, BarChartIcon, UsersIcon, BookmarkIcon, TargetIcon, SettingsIcon } from "./components/Icons";
 import SummaryCards from "./components/SummaryCards";
-import MemberBalances from "./components/MemberBalances";
 import MemberPanel from "./components/MemberPanel";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseLedger from "./components/ExpenseLedger";
@@ -103,7 +102,7 @@ export default function App() {
     () => [...DEFAULT_CATEGORY_LIST, ...(currentTrip?.customCategories ?? [])],
     [currentTrip?.customCategories],
   );
-  const { rates: exchangeRates, refresh: refreshRates, lastUpdated } = useExchangeRates(baseCurrency);
+  const { rates: exchangeRates, refresh: refreshRates } = useExchangeRates(baseCurrency);
 
   const balances = useMemo(
     () => (currentTrip ? calculateBalances(currentTrip.expenses, currentTrip.members) : []),
@@ -412,13 +411,13 @@ export default function App() {
   return (
     <div className="min-h-screen relative">
       <div className="max-w-7xl mx-auto">
-        <header className="sticky top-0 z-30 border-b" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
+        <header className="sticky top-0 z-30 border-b" style={{ borderColor: "var(--md-sys-color-outline-variant)", background: "var(--md-sys-color-surface)" }}>
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-5 py-4 flex items-center gap-2">
           <button
             onClick={handleBackToTrips}
             className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: "var(--md-sys-color-on-surface-variant)" }}
             title="Back to trips"
           >
             <ArrowLeftIcon className="w-5 h-5" />
@@ -426,7 +425,7 @@ export default function App() {
           {editingTripName ? (
             <input
               className="flex-1 min-w-0 text-lg sm:text-xl font-bold rounded-lg px-2 py-1 min-h-[44px]"
-              style={{ background: "var(--surface)", color: "var(--text-primary)" }}
+              style={{ background: "var(--md-sys-color-surface)", color: "var(--md-sys-color-on-surface)" }}
               value={tripNameInput}
               onChange={(e) => setTripNameInput(e.target.value)}
               onBlur={handleRenameTrip}
@@ -437,7 +436,7 @@ export default function App() {
             <button
               onClick={() => { setTripNameInput(currentTrip.name); setEditingTripName(true); }}
               className="text-lg sm:text-xl font-bold truncate flex items-center gap-1.5 hover:opacity-70 transition-opacity min-h-[44px]"
-              style={{ color: "var(--text-primary)" }}
+              style={{ color: "var(--md-sys-color-on-surface)" }}
               title="Click to rename trip"
             >
               <SuitcaseIcon className="w-5 h-5 shrink-0" />
@@ -450,7 +449,7 @@ export default function App() {
               onClick={undo}
               disabled={!canUndo}
               className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-opacity disabled:opacity-30"
-              style={{ color: "var(--text-secondary)" }}
+              style={{ color: "var(--md-sys-color-on-surface-variant)" }}
               title="Undo (Ctrl+Z)"
               aria-label="Undo"
             >
@@ -460,7 +459,7 @@ export default function App() {
               onClick={redo}
               disabled={!canRedo}
               className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg transition-opacity disabled:opacity-30"
-              style={{ color: "var(--text-secondary)" }}
+              style={{ color: "var(--md-sys-color-on-surface-variant)" }}
               title="Redo (Ctrl+Shift+Z)"
               aria-label="Redo"
             >
@@ -468,7 +467,7 @@ export default function App() {
             </button>
             <button
               onClick={() => setShowForm(!showForm)}
-              className="gradient-accent text-white text-sm px-3 sm:px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity btn-press min-h-[44px]"
+              className="gradient-accent text-sm px-3 sm:px-4 py-2 rounded-lg font-semibold btn-press min-h-[44px]"
               aria-label={showForm ? "Close expense form" : "Add expense"}
             >
               {showForm ? <XIcon className="w-5 h-5" /> : <PlusIcon className="w-5 h-5" />}
@@ -477,7 +476,7 @@ export default function App() {
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center"
-                style={{ color: "var(--text-secondary)" }}
+                style={{ color: "var(--md-sys-color-on-surface-variant)" }}
                 aria-label="Menu"
               >
                 <MoreIcon className="w-5 h-5" />
@@ -485,14 +484,14 @@ export default function App() {
               {showMenu && (
                 <div className="absolute right-0 top-full mt-1 card-elevated rounded-xl py-2 min-w-[200px] z-50 animate-scaleIn shadow-xl">
                   <div className="px-4 py-2 flex items-center justify-between">
-                    <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Theme</span>
+                    <span className="text-sm font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Theme</span>
                     <ThemeToggle theme={theme} onChange={setTheme} />
                   </div>
-                  <div className="my-1" style={{ borderTop: "1px solid var(--border)" }} />
+                  <div className="my-1" style={{ borderTop: "1px solid var(--md-sys-color-outline-variant)" }} />
                   <button
                     onClick={() => { refreshRates(); addToast("Refreshing exchange rates...", "info"); setShowMenu(false); }}
                     className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
-                    style={{ color: "var(--text-primary)" }}
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
                   >
                     <RefreshIcon className="w-4 h-4" />
                     Refresh FX Rates
@@ -500,7 +499,7 @@ export default function App() {
                   <button
                     onClick={() => { handleExport(); setShowMenu(false); }}
                     className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
-                    style={{ color: "var(--text-primary)" }}
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
                   >
                     <UploadIcon className="w-4 h-4" />
                     Export JSON
@@ -508,7 +507,7 @@ export default function App() {
                   <button
                     onClick={handleCloseMenuExportCSV}
                     className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
-                    style={{ color: "var(--text-primary)" }}
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
                   >
                     <FileIcon className="w-4 h-4" />
                     Export CSV
@@ -516,7 +515,7 @@ export default function App() {
                   <button
                     onClick={handleCloseMenuExportSummary}
                     className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
-                    style={{ color: "var(--text-primary)" }}
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
                   >
                     <DownloadIcon className="w-4 h-4" />
                     Export Summary
@@ -524,12 +523,12 @@ export default function App() {
                   <button
                     onClick={() => { fileInputRef.current?.click(); setShowMenu(false); }}
                     className="w-full text-left px-4 py-3 text-sm hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
-                    style={{ color: "var(--text-primary)" }}
+                    style={{ color: "var(--md-sys-color-on-surface)" }}
                   >
                     <DownloadIcon className="w-4 h-4" />
                     Import Data
                   </button>
-                  <div className="my-1" style={{ borderTop: "1px solid var(--border)" }} />
+                  <div className="my-1" style={{ borderTop: "1px solid var(--md-sys-color-outline-variant)" }} />
                   <button
                     onClick={() => { handleReset(); setShowMenu(false); }}
                     className="w-full text-left px-4 py-3 text-sm text-red-500 hover:text-red-400 hover:opacity-80 transition-opacity font-medium min-h-[44px] flex items-center gap-2"
@@ -542,20 +541,12 @@ export default function App() {
             </div>
           </div>
         </div>
-        {/* Bottom row: meta info */}
-        <div className="hidden sm:flex px-5 pb-3 items-center gap-3 text-sm" style={{ color: "var(--text-muted)" }}>
-          <span className="px-2.5 py-1 rounded-full font-mono text-xs" style={{ background: "var(--border)", color: "var(--text-secondary)" }}>
-            {baseCurrency} {sym}
-          </span>
-          <span>{currentTrip.members.length} members</span>
-          {lastUpdated && <span className="text-xs">Updated {new Date(lastUpdated).toLocaleTimeString()}</span>}
-        </div>
       </header>
 
       <main className="relative overflow-hidden">
         <div className="p-6 pb-24 space-y-6 relative z-20" role="tabpanel">
             {showForm && (
-              <div className="card p-4 animate-fadeIn">
+              <div className="card-elevated p-4 animate-fadeIn">
                 <ExpenseForm
                   members={currentTrip.members}
                   baseSymbol={sym}
@@ -571,25 +562,16 @@ export default function App() {
                   expenses={currentTrip.expenses}
                   memberCount={currentTrip.members.length}
                   baseSymbol={sym}
-                  allCategories={allCategories}
                   budget={currentTrip.budget}
                   baseCurrency={baseCurrency}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <MemberBalances
-                    balances={balances}
-                    members={currentTrip.members}
-                    baseSymbol={sym}
-                    settlements={settlements}
-                  />
-                  <SettlementBoard
-                    members={currentTrip.members}
-                    settlements={settlements}
-                    baseSymbol={sym}
-                    paidSettlements={currentTrip.paidSettlements as Record<string, boolean | SettlementPayment>}
-                    onTogglePaid={handleTogglePaid}
-                  />
-                </div>
+                <SettlementBoard
+                  members={currentTrip.members}
+                  settlements={settlements}
+                  baseSymbol={sym}
+                  paidSettlements={currentTrip.paidSettlements as Record<string, boolean | SettlementPayment>}
+                  onTogglePaid={handleTogglePaid}
+                />
               </>
             ) : activeTab === "expenses" ? (
               <ExpenseLedger
@@ -608,11 +590,11 @@ export default function App() {
               />
             ) : (
               <div className="space-y-6">
-                <div className="card p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                    <UsersIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                <div className="card-elevated p-5">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    <UsersIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Members
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--border)", color: "var(--text-muted)" }}>{currentTrip.members.length}</span>
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{currentTrip.members.length}</span>
                   </h3>
                   <MemberPanel
                     members={currentTrip.members}
@@ -620,35 +602,35 @@ export default function App() {
                     onRemove={handleRemoveMember}
                   />
                 </div>
-                <div className="card p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                    <BookmarkIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                <div className="card-elevated p-5">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Categories
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--border)", color: "var(--text-muted)" }}>{allCategories.length}</span>
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{allCategories.length}</span>
                   </h3>
                   <CategoryManager
                     customCategories={currentTrip.customCategories ?? []}
                     onUpdate={handleUpdateCategories}
                   />
                 </div>
-                <div className="card p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                    <TargetIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                <div className="card-elevated p-5">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    <TargetIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Budget
                     {currentTrip.budget != null && currentTrip.budget > 0 && (
-                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--border)", color: "var(--accent)" }}>{sym}{currentTrip.budget.toFixed(0)}</span>
+                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }}>{sym}{currentTrip.budget.toFixed(0)}</span>
                     )}
                   </h3>
                   <div className="space-y-2">
                     {currentTrip.budget != null && currentTrip.budget > 0 ? (
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-mono font-bold" style={{ color: "var(--accent)" }}>
+                        <span className="text-sm font-mono font-bold" style={{ color: "var(--md-sys-color-primary)" }}>
                           {sym}{currentTrip.budget.toFixed(2)}
                         </span>
                         <button
                           onClick={() => handleSetBudget(undefined)}
                           className="text-xs px-2.5 py-1.5 rounded-lg"
-                          style={{ background: "var(--border)", color: "var(--text-muted)" }}
+                          style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
                           aria-label="Remove budget"
                         >
                           Clear
@@ -674,7 +656,7 @@ export default function App() {
                               input.value = "";
                             }
                           }}
-                          className="gradient-accent text-white text-sm px-3 py-2 rounded-lg font-semibold min-h-[40px]"
+                          className="gradient-accent text-sm px-3 py-2 rounded-lg font-semibold min-h-[40px]"
                           aria-label="Save budget"
                         >
                           Set
@@ -683,12 +665,12 @@ export default function App() {
                     )}
                   </div>
                 </div>
-                <div className="card p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                    <BookmarkIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                <div className="card-elevated p-5">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Templates
                     {templates.length > 0 && (
-                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--border)", color: "var(--text-muted)" }}>{templates.length}</span>
+                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{templates.length}</span>
                     )}
                   </h3>
                   <TemplateManager
@@ -702,7 +684,7 @@ export default function App() {
               </div>
             )}
 
-            <footer className="text-[10px] text-center" style={{ color: "var(--text-muted)" }}>
+            <footer className="text-[10px] text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
               Data saved to localStorage · Travel Split v2.0
             </footer>
           </div>

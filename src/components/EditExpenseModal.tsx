@@ -87,25 +87,25 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative w-full max-w-lg rounded-xl p-4 max-h-[85vh] overflow-y-auto animate-scaleIn card-elevated">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>Edit Expense</h3>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors min-w-[32px] min-h-[32px]" style={{ background: "var(--surface)" }} aria-label="Close">
+          <h3 className="text-lg font-bold" style={{ color: "var(--md-sys-color-on-surface)" }}>Edit Expense</h3>
+          <button onClick={onClose} className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors min-w-[32px] min-h-[32px]" style={{ background: "var(--md-sys-color-surface-container)" }} aria-label="Close">
             <XIcon className="w-5 h-5" />
           </button>
         </div>
 
         <div className="space-y-3">
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Title *</label>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Title *</label>
             <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
           <div className="grid grid-cols-[140px_1fr] gap-2">
             <div>
-              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Amount *</label>
+              <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Amount *</label>
               <input className="w-full rounded-lg px-3 py-2 text-sm tabular-nums min-h-[44px]" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" inputMode="decimal" />
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Currency</label>
+              <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Currency</label>
               <select className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" value={currency} onChange={(e) => { const v = e.target.value as CurrencyCode; setCurrency(v); setRate(String(1)); }}>
                 {Object.keys(CURRENCY_MAP).map((k) => <option key={k} value={k}>{k}</option>)}
               </select>
@@ -114,22 +114,22 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
 
           <div className="grid grid-cols-[1fr_140px] gap-2">
             <div>
-              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Date *</label>
+              <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Date *</label>
               <input className="w-full rounded-lg px-3 py-2 text-sm min-h-[44px]" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Rate to {baseSymbol}</label>
+              <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Rate to {baseSymbol}</label>
               <input className="w-full rounded-lg px-3 py-2 text-sm tabular-nums min-h-[44px]" value={rate} onChange={(e) => setRate(e.target.value)} inputMode="decimal" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Paid by *</label>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Paid by *</label>
             <div className="flex gap-2">
               {members.map((m) => (
                 <button key={m.id} onClick={() => setPayerId(m.id)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${payerId === m.id ? "text-white shadow-lg shadow-orange-500/25" : ""}`}
-                  style={{ background: payerId === m.id ? "var(--accent)" : "var(--border)", color: payerId === m.id ? "white" : "var(--text-secondary)" }}>
+                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${payerId === m.id ? "shadow-lg" : ""}`}
+                  style={{ background: payerId === m.id ? "var(--md-sys-color-primary-container)" : "var(--md-sys-color-surface-container-high)", color: payerId === m.id ? "var(--md-sys-color-on-primary-container)" : "var(--md-sys-color-on-surface-variant)" }}>
                   {m.name}
                 </button>
               ))}
@@ -137,12 +137,12 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
           </div>
 
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Categories</label>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Categories</label>
             <div className="flex flex-wrap gap-1.5">
               {allCategories.map((cat) => (
                 <button key={cat} onClick={() => toggleCategory(cat)}
                   className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${categories.includes(cat) ? "gradient-accent text-white font-semibold" : ""}`}
-                  style={!categories.includes(cat) ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}>
+                  style={!categories.includes(cat) ? { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" } : undefined}>
                   {getCategoryLabel(cat)}
                 </button>
               ))}
@@ -150,12 +150,12 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
           </div>
 
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Split type</label>
-            <div className="grid grid-cols-4 gap-1.5 rounded-lg p-1" style={{ background: "var(--surface)" }}>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split type</label>
+            <div className="grid grid-cols-4 gap-1.5 rounded-lg p-1" style={{ background: "var(--md-sys-color-surface-container)" }}>
               {(["equal", "exact", "percentage", "shares"] as SplitType[]).map((st) => (
                 <button key={st} onClick={() => setSplitType(st)}
-                  className={`py-2 rounded-md text-xs font-medium capitalize transition-all ${splitType === st ? "text-white shadow" : ""}`}
-                  style={{ background: splitType === st ? "var(--accent)" : "transparent", color: splitType === st ? "white" : "var(--text-secondary)" }}>
+                  className={`py-2 rounded-md text-xs font-medium capitalize transition-all ${splitType === st ? "shadow" : ""}`}
+                  style={{ background: splitType === st ? "var(--md-sys-color-primary-container)" : "transparent", color: splitType === st ? "var(--md-sys-color-on-primary-container)" : "var(--md-sys-color-on-surface-variant)" }}>
                   {st}
                 </button>
               ))}
@@ -163,13 +163,13 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
           </div>
 
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Split {splitType === "exact" ? "amounts" : splitType === "percentage" ? "percentages" : splitType === "shares" ? "shares" : "equally"} *</label>
-            <div className="rounded-xl p-3" style={{ background: "var(--surface)" }}>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split {splitType === "exact" ? "amounts" : splitType === "percentage" ? "percentages" : splitType === "shares" ? "shares" : "equally"} *</label>
+            <div className="rounded-xl p-3" style={{ background: "var(--md-sys-color-surface-container)" }}>
               {members.map((m) => (
-                <div key={m.id} className="flex items-center justify-between py-2 border-b last:border-b-0" style={{ borderColor: "var(--border)" }}>
-                  <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{m.name}</span>
+                <div key={m.id} className="flex items-center justify-between py-2 border-b last:border-b-0" style={{ borderColor: "var(--md-sys-color-outline-variant)" }}>
+                  <span className="text-sm font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
                   {splitType === "equal" ? (
-                    <span className="text-sm font-mono tabular-nums" style={{ color: "var(--text-secondary)" }}>
+                    <span className="text-sm font-mono tabular-nums" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                       {(numAmount / members.length).toFixed(2)} {baseSymbol}
                     </span>
                   ) : splitType === "exact" ? (
@@ -181,14 +181,14 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
                       <input className="w-20 rounded-lg px-3 py-2 text-sm text-right tabular-nums min-h-[36px]"
                         value={percentages[m.id] || ""} onChange={(e) => setPercentages((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         placeholder="0" inputMode="decimal" />
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>%</span>
+                      <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>%</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <input className="w-20 rounded-lg px-3 py-2 text-sm text-right tabular-nums min-h-[36px]"
                         value={shareCount[m.id] || ""} onChange={(e) => setShareCount((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         placeholder="1" inputMode="numeric" />
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>shares</span>
+                      <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>shares</span>
                     </div>
                   )}
                 </div>
@@ -197,15 +197,15 @@ export default function EditExpenseModal({ expense, members, baseSymbol, allCate
           </div>
 
           <div>
-            <label className="block text-xs mb-1" style={{ color: "var(--text-muted)" }}>Notes</label>
+            <label className="block text-xs mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Notes</label>
             <textarea className="w-full rounded-lg px-3 py-2 text-sm resize-none" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes..." />
           </div>
 
           <div className="flex gap-2 pt-2">
-            <button onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium transition-opacity" style={{ background: "var(--border)", color: "var(--text-secondary)" }}>
+            <button onClick={onClose} className="flex-1 py-2.5 rounded-lg text-sm font-medium transition-opacity" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>
               Cancel
             </button>
-            <button onClick={handleSave} className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white gradient-accent shadow-lg shadow-orange-500/25 transition-all btn-press min-h-[44px] flex items-center justify-center gap-2">
+            <button onClick={handleSave} className="flex-1 py-2.5 rounded-lg text-sm font-semibold gradient-accent btn-press min-h-[44px] flex items-center justify-center gap-2">
               <CheckIcon className="w-4 h-4" />
               Save
             </button>

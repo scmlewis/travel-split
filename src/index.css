@@ -18,49 +18,356 @@
   font-display: swap;
 }
 
+/* ============================================================
+   M3 TONAL PALETTES — Source: #c2410c
+   Generated via Material Color Utilities algorithm
+   ============================================================ */
 :root {
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --surface: #fafafa;
-  --surface-elevated: #ffffff;
-  --surface-subtle: #f4f4f5;
-  --text-primary: #09090b;
-  --text-secondary: #52525b;
-  --text-muted: #a1a1aa;
-  --border: #e4e4e7;
-  --input-border: #d4d4d8;
-  --ring: rgba(37, 99, 235, 0.15);
+  /* Primary (warm orange) */
+  --m3-primary-0: #000000;
+  --m3-primary-10: #3B0A00;
+  --m3-primary-20: #5E1700;
+  --m3-primary-25: #6F1F00;
+  --m3-primary-30: #812700;
+  --m3-primary-40: #A63700;
+  --m3-primary-50: #C44900;
+  --m3-primary-60: #E05D00;
+  --m3-primary-70: #FF7326;
+  --m3-primary-80: #FF9357;
+  --m3-primary-90: #FFB989;
+  --m3-primary-95: #FFD4BA;
+  --m3-primary-99: #FFF8F2;
+  --m3-primary-100: #FFFFFF;
+
+  /* Secondary (warm neutral-orange) */
+  --m3-secondary-0: #000000;
+  --m3-secondary-10: #2C1608;
+  --m3-secondary-20: #442A1A;
+  --m3-secondary-25: #513424;
+  --m3-secondary-30: #5E3E2E;
+  --m3-secondary-40: #795744;
+  --m3-secondary-50: #936E59;
+  --m3-secondary-60: #AE876F;
+  --m3-secondary-70: #C9A087;
+  --m3-secondary-80: #E5BAA1;
+  --m3-secondary-90: #FFD5BC;
+  --m3-secondary-95: #FFE8D5;
+  --m3-secondary-99: #FFF8F2;
+  --m3-secondary-100: #FFFFFF;
+
+  /* Tertiary (warm rose) */
+  --m3-tertiary-0: #000000;
+  --m3-tertiary-10: #271210;
+  --m3-tertiary-20: #3D2220;
+  --m3-tertiary-25: #4A2C2A;
+  --m3-tertiary-30: #573734;
+  --m3-tertiary-40: #714D49;
+  --m3-tertiary-50: #8B6460;
+  --m3-tertiary-60: #A67C78;
+  --m3-tertiary-70: #C19591;
+  --m3-tertiary-80: #DDB0AB;
+  --m3-tertiary-90: #F9CCC7;
+  --m3-tertiary-95: #FFE0DC;
+  --m3-tertiary-99: #FFF8F6;
+  --m3-tertiary-100: #FFFFFF;
+
+  /* Error */
+  --m3-error-0: #000000;
+  --m3-error-10: #410002;
+  --m3-error-20: #690005;
+  --m3-error-30: #93000A;
+  --m3-error-40: #BA1A1A;
+  --m3-error-50: #DE3730;
+  --m3-error-60: #FF5449;
+  --m3-error-70: #FF897D;
+  --m3-error-80: #FFB4AB;
+  --m3-error-90: #FFDAD6;
+  --m3-error-95: #FFEDEA;
+  --m3-error-99: #FFFBFF;
+  --m3-error-100: #FFFFFF;
+
+  /* Neutral */
+  --m3-neutral-0: #000000;
+  --m3-neutral-4: #0D0B09;
+  --m3-neutral-6: #131110;
+  --m3-neutral-10: #1C1A18;
+  --m3-neutral-12: #211F1D;
+  --m3-neutral-17: #2B2927;
+  --m3-neutral-20: #312F2D;
+  --m3-neutral-22: #353331;
+  --m3-neutral-24: #3A3836;
+  --m3-neutral-30: #494645;
+  --m3-neutral-40: #625E5C;
+  --m3-neutral-50: #7A7674;
+  --m3-neutral-60: #94908E;
+  --m3-neutral-70: #AEA9A7;
+  --m3-neutral-80: #C5C0BE;
+  --m3-neutral-87: #D8D3D1;
+  --m3-neutral-90: #E1DCDA;
+  --m3-neutral-92: #E6E1EF;
+  --m3-neutral-94: #EBE7E5;
+  --m3-neutral-95: #EDE9E7;
+  --m3-neutral-96: #F0ECEA;
+  --m3-neutral-98: #F6F1EF;
+  --m3-neutral-99: #F9F5F3;
+  --m3-neutral-100: #FFFFFF;
+
+  /* Neutral Variant */
+  --m3-neutral-variant-0: #000000;
+  --m3-neutral-variant-20: #322922;
+  --m3-neutral-variant-30: #4A3F37;
+  --m3-neutral-variant-40: #63584F;
+  --m3-neutral-variant-50: #7C7168;
+  --m3-neutral-variant-60: #968A81;
+  --m3-neutral-variant-70: #B0A49A;
+  --m3-neutral-variant-80: #CBBEB4;
+  --m3-neutral-variant-90: #E7D6CC;
+  --m3-neutral-variant-95: #F5E8DE;
+  --m3-neutral-variant-99: #FFF8F2;
+  --m3-neutral-variant-100: #FFFFFF;
+}
+
+/* ============================================================
+   M3 LIGHT SCHEME — Semantic Tokens
+   ============================================================ */
+:root {
+  /* Primary */
+  --md-sys-color-primary: var(--m3-primary-40);
+  --md-sys-color-on-primary: var(--m3-primary-100);
+  --md-sys-color-primary-container: var(--m3-primary-90);
+  --md-sys-color-on-primary-container: var(--m3-primary-10);
+
+  /* Secondary */
+  --md-sys-color-secondary: var(--m3-secondary-40);
+  --md-sys-color-on-secondary: var(--m3-secondary-100);
+  --md-sys-color-secondary-container: var(--m3-secondary-90);
+  --md-sys-color-on-secondary-container: var(--m3-secondary-10);
+
+  /* Tertiary */
+  --md-sys-color-tertiary: var(--m3-tertiary-40);
+  --md-sys-color-on-tertiary: var(--m3-tertiary-100);
+  --md-sys-color-tertiary-container: var(--m3-tertiary-90);
+  --md-sys-color-on-tertiary-container: var(--m3-tertiary-10);
+
+  /* Error */
+  --md-sys-color-error: var(--m3-error-40);
+  --md-sys-color-on-error: var(--m3-error-100);
+  --md-sys-color-error-container: var(--m3-error-90);
+  --md-sys-color-on-error-container: var(--m3-error-10);
+
+  /* Surface */
+  --md-sys-color-surface: var(--m3-neutral-98);
+  --md-sys-color-on-surface: var(--m3-neutral-10);
+  --md-sys-color-surface-variant: var(--m3-neutral-variant-90);
+  --md-sys-color-on-surface-variant: var(--m3-neutral-variant-30);
+  --md-sys-color-outline: var(--m3-neutral-variant-50);
+  --md-sys-color-outline-variant: var(--m3-neutral-variant-80);
+  --md-sys-color-inverse-surface: var(--m3-neutral-20);
+  --md-sys-color-inverse-on-surface: var(--m3-neutral-95);
+  --md-sys-color-inverse-primary: var(--m3-primary-80);
+  --md-sys-color-scrim: var(--m3-neutral-0);
+  --md-sys-color-shadow: var(--m3-neutral-0);
+
+  /* Surface Containers (M3 elevation system) */
+  --md-sys-color-surface-dim: var(--m3-neutral-87);
+  --md-sys-color-surface-bright: var(--m3-neutral-98);
+  --md-sys-color-surface-container-lowest: var(--m3-neutral-100);
+  --md-sys-color-surface-container-low: var(--m3-neutral-96);
+  --md-sys-color-surface-container: var(--m3-neutral-94);
+  --md-sys-color-surface-container-high: var(--m3-neutral-92);
+  --md-sys-color-surface-container-highest: var(--m3-neutral-90);
+
+  /* State Layer Opacities */
+  --md-sys-state-hover: 0.08;
+  --md-sys-state-focus: 0.12;
+  --md-sys-state-pressed: 0.12;
+  --md-sys-state-dragged: 0.16;
+}
+
+/* ============================================================
+   M3 DARK SCHEME — Semantic Tokens
+   ============================================================ */
+.dark {
+  /* Primary */
+  --md-sys-color-primary: var(--m3-primary-80);
+  --md-sys-color-on-primary: var(--m3-primary-20);
+  --md-sys-color-primary-container: var(--m3-primary-30);
+  --md-sys-color-on-primary-container: var(--m3-primary-90);
+
+  /* Secondary */
+  --md-sys-color-secondary: var(--m3-secondary-80);
+  --md-sys-color-on-secondary: var(--m3-secondary-20);
+  --md-sys-color-secondary-container: var(--m3-secondary-30);
+  --md-sys-color-on-secondary-container: var(--m3-secondary-90);
+
+  /* Tertiary */
+  --md-sys-color-tertiary: var(--m3-tertiary-80);
+  --md-sys-color-on-tertiary: var(--m3-tertiary-20);
+  --md-sys-color-tertiary-container: var(--m3-tertiary-30);
+  --md-sys-color-on-tertiary-container: var(--m3-tertiary-90);
+
+  /* Error */
+  --md-sys-color-error: var(--m3-error-80);
+  --md-sys-color-on-error: var(--m3-error-20);
+  --md-sys-color-error-container: var(--m3-error-30);
+  --md-sys-color-on-error-container: var(--m3-error-90);
+
+  /* Surface */
+  --md-sys-color-surface: var(--m3-neutral-6);
+  --md-sys-color-on-surface: var(--m3-neutral-90);
+  --md-sys-color-surface-variant: var(--m3-neutral-variant-30);
+  --md-sys-color-on-surface-variant: var(--m3-neutral-variant-80);
+  --md-sys-color-outline: var(--m3-neutral-variant-60);
+  --md-sys-color-outline-variant: var(--m3-neutral-variant-30);
+  --md-sys-color-inverse-surface: var(--m3-neutral-90);
+  --md-sys-color-inverse-on-surface: var(--m3-neutral-20);
+  --md-sys-color-inverse-primary: var(--m3-primary-40);
+  --md-sys-color-scrim: var(--m3-neutral-0);
+  --md-sys-color-shadow: var(--m3-neutral-0);
+
+  /* Surface Containers (M3 elevation system) */
+  --md-sys-color-surface-dim: var(--m3-neutral-6);
+  --md-sys-color-surface-bright: var(--m3-neutral-24);
+  --md-sys-color-surface-container-lowest: var(--m3-neutral-4);
+  --md-sys-color-surface-container-low: var(--m3-neutral-10);
+  --md-sys-color-surface-container: var(--m3-neutral-12);
+  --md-sys-color-surface-container-high: var(--m3-neutral-17);
+  --md-sys-color-surface-container-highest: var(--m3-neutral-22);
+
+  /* State Layer Opacities */
+  --md-sys-state-hover: 0.08;
+  --md-sys-state-focus: 0.12;
+  --md-sys-state-pressed: 0.12;
+  --md-sys-state-dragged: 0.16;
+}
+
+/* ============================================================
+   M3 SHAPE TOKENS
+   ============================================================ */
+:root {
+  --md-sys-shape-none: 0px;
+  --md-sys-shape-extra-small: 4px;
+  --md-sys-shape-small: 8px;
+  --md-sys-shape-medium: 12px;
+  --md-sys-shape-large: 16px;
+  --md-sys-shape-extra-large: 28px;
+  --md-sys-shape-full: 9999px;
+}
+
+/* ============================================================
+   M3 ELEVATION TOKENS (tinted shadows)
+   ============================================================ */
+:root {
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.1), 0 1px 3px 1px rgba(0,0,0,0.08);
+  --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.1), 0 2px 6px 2px rgba(0,0,0,0.08);
+  --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1);
+  --md-sys-elevation-4: 0 6px 10px 4px rgba(0,0,0,0.08), 0 2px 3px rgba(0,0,0,0.1);
+  --md-sys-elevation-5: 0 8px 12px 6px rgba(0,0,0,0.08), 0 4px 4px rgba(0,0,0,0.1);
 }
 
 .dark {
-  --accent: #60a5fa;
-  --accent-hover: #93bbfd;
-  --surface: #09090b;
-  --surface-elevated: #18181b;
-  --surface-subtle: #27272a;
-  --text-primary: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-muted: #52525b;
-  --border: #27272a;
-  --input-border: #3f3f46;
-  --ring: rgba(96, 165, 250, 0.15);
+  --md-sys-elevation-1: 0 1px 3px 1px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
+  --md-sys-elevation-2: 0 2px 6px 2px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
+  --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.4);
+  --md-sys-elevation-4: 0 6px 10px 4px rgba(0,0,0,0.25), 0 2px 3px rgba(0,0,0,0.4);
+  --md-sys-elevation-5: 0 8px 12px 6px rgba(0,0,0,0.25), 0 4px 4px rgba(0,0,0,0.4);
 }
 
+/* ============================================================
+   M3 TYPOGRAPHY SCALE (mapped to Geist)
+   ============================================================ */
+:root {
+  /* Display */
+  --md-sys-typescale-display-large: 500 3.5625rem/1.12 "Geist", sans-serif;
+  --md-sys-typescale-display-medium: 500 2.8125rem/1.16 "Geist", sans-serif;
+  --md-sys-typescale-display-small: 500 2.25rem/1.22 "Geist", sans-serif;
+
+  /* Headline */
+  --md-sys-typescale-headline-large: 500 2rem/1.25 "Geist", sans-serif;
+  --md-sys-typescale-headline-medium: 500 1.75rem/1.29 "Geist", sans-serif;
+  --md-sys-typescale-headline-small: 500 1.5rem/1.33 "Geist", sans-serif;
+
+  /* Title */
+  --md-sys-typescale-title-large: 500 1.375rem/1.27 "Geist", sans-serif;
+  --md-sys-typescale-title-medium: 600 1rem/1.5 "Geist", sans-serif;
+  --md-sys-typescale-title-small: 600 0.875rem/1.43 "Geist", sans-serif;
+
+  /* Body */
+  --md-sys-typescale-body-large: 400 1rem/1.5 "Geist", sans-serif;
+  --md-sys-typescale-body-medium: 400 0.875rem/1.43 "Geist", sans-serif;
+  --md-sys-typescale-body-small: 400 0.75rem/1.33 "Geist", sans-serif;
+
+  /* Label */
+  --md-sys-typescale-label-large: 600 0.875rem/1.43 "Geist", sans-serif;
+  --md-sys-typescale-label-medium: 600 0.75rem/1.33 "Geist", sans-serif;
+  --md-sys-typescale-label-small: 600 0.6875rem/1.45 "Geist", sans-serif;
+}
+
+/* ============================================================
+   M3 MOTION TOKENS
+   ============================================================ */
+:root {
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+}
+
+/* ============================================================
+   BACKWARD-COMPAT ALIASES
+   Old tokens → new M3 tokens (remove after full migration)
+   ============================================================ */
+:root {
+  --accent: var(--md-sys-color-primary);
+  --accent-hover: var(--m3-primary-30);
+  --surface: var(--md-sys-color-surface);
+  --surface-elevated: var(--md-sys-color-surface-container);
+  --surface-subtle: var(--md-sys-color-surface-container-low);
+  --text-primary: var(--md-sys-color-on-surface);
+  --text-secondary: var(--md-sys-color-on-surface-variant);
+  --text-muted: var(--md-sys-color-outline);
+  --border: var(--md-sys-color-outline-variant);
+  --input-border: var(--md-sys-color-outline);
+  --ring: rgba(166, 55, 0, 0.12);
+}
+
+.dark {
+  --accent-hover: var(--m3-primary-70);
+  --ring: rgba(255, 147, 87, 0.12);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
 html, body {
   margin: 0;
   padding: 0;
   font-family: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
-  background: var(--surface);
-  color: var(--text-primary);
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
   overflow-x: hidden;
   min-height: 100vh;
   min-height: 100dvh;
 }
 
 html {
-  background: var(--surface);
+  background: var(--md-sys-color-surface);
 }
 
 body {
@@ -78,28 +385,69 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+/* ============================================================
+   M3 CARD COMPONENTS
+   ============================================================ */
 .card {
-  background: var(--surface-elevated);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-medium);
 }
 
 .card-elevated {
-  background: var(--surface-elevated);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-medium);
+  box-shadow: var(--md-sys-elevation-1);
 }
 
+/* ============================================================
+   M3 BUTTON STYLES
+   ============================================================ */
 .gradient-accent {
-  background: var(--accent);
-  transition: background 0.15s ease;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  transition: background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
 .gradient-accent:hover {
-  background: var(--accent-hover);
+  background: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary));
 }
 
+/* ============================================================
+   M3 STATE LAYERS
+   ============================================================ */
+.state-layer {
+  position: relative;
+  overflow: hidden;
+}
+
+.state-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--md-sys-color-on-surface);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.state-layer:hover::before {
+  opacity: var(--md-sys-state-hover);
+}
+
+.state-layer:focus-visible::before {
+  opacity: var(--md-sys-state-focus);
+}
+
+.state-layer:active::before {
+  opacity: var(--md-sys-state-pressed);
+}
+
+/* ============================================================
+   ANIMATIONS (M3 motion curves)
+   ============================================================ */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -121,24 +469,27 @@ input[type="number"] {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out both;
+  animation: fadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .animate-slideInRight {
-  animation: slideInRight 0.3s ease-out both;
+  animation: slideInRight var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .animate-slideInUp {
-  animation: slideInUp 0.35s ease-out both;
+  animation: slideInUp var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .animate-scaleIn {
-  animation: scaleIn 0.2s ease-out both;
+  animation: scaleIn var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--text-muted) transparent;
+  scrollbar-color: var(--md-sys-color-outline) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -151,73 +502,283 @@ input[type="number"] {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--md-sys-color-outline-variant);
   border-radius: 3px;
-  transition: background 0.2s ease;
+  transition: background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--md-sys-color-outline);
 }
 
+/* ============================================================
+   ROW & TABLE STYLES
+   ============================================================ */
 .row-enter {
-  animation: slideInUp 0.3s ease-out both;
+  animation: slideInUp var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
 }
 
 .transition-row {
-  transition: background-color 0.15s ease;
+  transition: background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
 .transition-row:hover {
-  background-color: var(--surface-subtle);
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .transition-row:active {
   transform: scale(0.998);
 }
 
+/* ============================================================
+   BUTTON PRESS FEEDBACK
+   ============================================================ */
 .btn-press {
-  transition: transform 0.1s ease;
+  transition: transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 }
 
 .btn-press:active {
   transform: scale(0.96);
 }
 
+/* ============================================================
+   BALANCE BAR
+   ============================================================ */
 .balance-bar {
-  transition: width 0.5s ease-out;
+  transition: width var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
 input, select {
-  background: var(--surface-elevated) !important;
-  border: 1px solid var(--input-border) !important;
-  color: var(--text-primary) !important;
-  border-radius: 8px;
+  background: var(--md-sys-color-surface-container-highest) !important;
+  border: 1px solid var(--md-sys-color-outline) !important;
+  color: var(--md-sys-color-on-surface) !important;
+  border-radius: var(--md-sys-shape-extra-small);
 }
 
 input::placeholder {
-  color: var(--text-muted) !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
 }
 
 input:focus, select:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px var(--ring) !important;
+  border-color: var(--md-sys-color-primary) !important;
+  box-shadow: 0 0 0 2px var(--md-sys-color-primary-container) !important;
   outline: none;
 }
 
+/* ============================================================
+   TAB STYLES (Bottom Navigation)
+   ============================================================ */
 .tab-active {
-  color: white;
-  background: var(--accent);
+  color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-secondary-container);
   font-weight: 600;
 }
 
 .tab-inactive {
-  color: var(--text-muted);
+  color: var(--md-sys-color-on-surface-variant);
   font-weight: 500;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
 .tab-inactive:hover {
-  color: var(--text-secondary);
-  background: var(--surface-subtle);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface-container-high);
+}
+
+/* ============================================================
+   M3 SNACKBAR
+   ============================================================ */
+.md-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-extra-small);
+  padding: 14px 16px;
+  font: var(--md-sys-typescale-body-medium);
+  box-shadow: var(--md-sys-elevation-3);
+  z-index: 100;
+  max-width: min(560px, calc(100vw - 32px));
+  animation: snackbarIn var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
+.md-snackbar.md-snackbar-leaving {
+  animation: snackbarOut var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-accelerate) both;
+}
+
+@keyframes snackbarIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(100%); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes snackbarOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(100%); }
+}
+
+/* ============================================================
+   M3 DIALOG
+   ============================================================ */
+.md-dialog-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 200;
+  animation: fadeIn var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-standard-decelerate) both;
+}
+
+.md-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--md-sys-color-surface-container-high);
+  border-radius: var(--md-sys-shape-extra-large);
+  padding: 24px;
+  min-width: 280px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  box-shadow: var(--md-sys-elevation-3);
+  z-index: 201;
+  animation: scaleIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
+/* ============================================================
+   M3 CHIP STYLES
+   ============================================================ */
+.md-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: var(--md-sys-shape-small);
+  font: var(--md-sys-typescale-label-large);
+  cursor: pointer;
+  border: 1px solid var(--md-sys-color-outline);
+  color: var(--md-sys-color-on-surface-variant);
+  background: transparent;
+  transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  user-select: none;
+}
+
+.md-chip:hover {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+}
+
+.md-chip:active {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 12%, transparent);
+}
+
+.md-chip.md-chip-selected {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-color: transparent;
+}
+
+.md-chip.md-chip-selected:hover {
+  background: color-mix(in srgb, var(--md-sys-color-secondary-container) 92%, var(--md-sys-color-on-secondary-container));
+}
+
+/* ============================================================
+   M3 FAB (Floating Action Button)
+   ============================================================ */
+.md-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--md-sys-shape-large);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--md-sys-elevation-3);
+  transition: box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.md-fab:hover {
+  box-shadow: var(--md-sys-elevation-4);
+  background: color-mix(in srgb, var(--md-sys-color-primary-container) 92%, var(--md-sys-color-on-primary-container));
+}
+
+.md-fab:active {
+  box-shadow: var(--md-sys-elevation-3);
+}
+
+.md-fab.md-fab-extended {
+  width: auto;
+  padding: 0 20px;
+  gap: 12px;
+  border-radius: var(--md-sys-shape-large);
+}
+
+/* ============================================================
+   M3 SWITCH
+   ============================================================ */
+.md-switch {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-full);
+  background: var(--md-sys-color-surface-container-highest);
+  border: 2px solid var(--md-sys-color-outline);
+  cursor: pointer;
+  transition: all var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-standard);
+}
+
+.md-switch::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--md-sys-shape-full);
+  background: var(--md-sys-color-outline);
+  transition: all var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-standard);
+}
+
+.md-switch.md-switch-on {
+  background: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
+.md-switch.md-switch-on::after {
+  left: calc(100% - 22px);
+  width: 24px;
+  height: 24px;
+  background: var(--md-sys-color-on-primary);
+}
+
+/* ============================================================
+   M3 LINEAR PROGRESS
+   ============================================================ */
+.md-linear-progress {
+  width: 100%;
+  height: 4px;
+  border-radius: var(--md-sys-shape-full);
+  background: var(--md-sys-color-surface-container-highest);
+  overflow: hidden;
+}
+
+.md-linear-progress-fill {
+  height: 100%;
+  border-radius: var(--md-sys-shape-full);
+  background: var(--md-sys-color-primary);
+  transition: width var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.md-linear-progress-error .md-linear-progress-fill {
+  background: var(--md-sys-color-error);
 }

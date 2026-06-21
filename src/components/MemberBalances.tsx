@@ -32,16 +32,16 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
   if (balances.length === 0) {
     return (
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-          <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
+        <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+          <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
           Member Balances
         </h2>
-        <div className="card text-center py-10 px-4 animate-fadeIn">
-          <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
+        <div className="card-elevated text-center py-10 px-4 animate-fadeIn">
+          <div className="flex justify-center mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
             <ClipboardIcon className="w-10 h-10" />
           </div>
-          <div className="text-base font-medium mb-1" style={{ color: "var(--text-secondary)" }}>No balances yet</div>
-          <div className="text-sm" style={{ color: "var(--text-muted)" }}>Add expenses to see who owes what</div>
+          <div className="text-base font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>No balances yet</div>
+          <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add expenses to see who owes what</div>
         </div>
       </section>
     );
@@ -49,8 +49,8 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
 
   return (
     <section>
-      <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
+      <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
         Member Balances
       </h2>
       <div className="space-y-3">
@@ -67,14 +67,14 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
             const { owes, owedBy } = settlementMap.get(b.memberId) ?? { owes: [], owedBy: [] };
 
             return (
-              <div key={b.memberId} className="card px-4 py-3.5 animate-fadeIn">
+              <div key={b.memberId} className="card-elevated px-4 py-3.5 animate-fadeIn">
                 <div className="flex items-center gap-3 mb-2">
                   <Avatar name={member?.name ?? "?"} size="md" />
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
+                    <div className="text-sm font-semibold truncate" style={{ color: "var(--md-sys-color-on-surface)" }}>
                       {member?.name ?? "?"}
                     </div>
-                    <div className="text-xs" style={{ color: "var(--text-muted)" }}>
+                    <div className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                       {isSettled ? "settled" : isPositive ? "gets back" : "owes"}
                     </div>
                   </div>
@@ -82,22 +82,22 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
                     {isSettled ? `${baseSymbol}0.00` : `${isPositive ? "+" : ""}${baseSymbol}${Math.abs(b.net).toFixed(2)}`}
                   </span>
                 </div>
-                <div className="h-2 rounded-full overflow-hidden mb-2.5" style={{ background: "var(--border)" }}>
+                <div className="h-2 rounded-full overflow-hidden mb-2.5" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
                   {isPositive && (
-                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "#34d399" }} />
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-primary)" }} />
                   )}
                   {isNegative && (
-                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "#f87171" }} />
+                    <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-error)" }} />
                   )}
                 </div>
                 {(owes.length > 0 || owedBy.length > 0) && (
-                  <div className="space-y-1.5 pt-1" style={{ borderTop: "1px solid var(--border)" }}>
+                  <div className="space-y-1.5 pt-1" style={{ borderTop: "1px solid var(--md-sys-color-outline-variant)" }}>
                     {owes.map((s, i) => {
                       const to = memberMap.get(s.to);
                       return (
                         <div key={`owe-${i}`} className="flex items-center justify-between text-xs">
-                          <span style={{ color: "var(--text-muted)" }}>
-                            pays <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{to?.name ?? "?"}</span>
+                          <span style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                            pays <span className="font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{to?.name ?? "?"}</span>
                           </span>
                           <span className="font-mono tabular-nums font-semibold text-red-500 dark:text-red-400">
                             {baseSymbol}{s.amount.toFixed(2)}
@@ -109,8 +109,8 @@ export default function MemberBalances({ balances, members, baseSymbol, settleme
                       const from = memberMap.get(s.from);
                       return (
                         <div key={`owed-${i}`} className="flex items-center justify-between text-xs">
-                          <span style={{ color: "var(--text-muted)" }}>
-                            <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{from?.name ?? "?"}</span> pays them
+                          <span style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                            <span className="font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{from?.name ?? "?"}</span> pays them
                           </span>
                           <span className="font-mono tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
                             {baseSymbol}{s.amount.toFixed(2)}

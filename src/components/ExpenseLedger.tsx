@@ -80,15 +80,15 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
 
   return (
     <section>
-      <h2 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--accent)" }} />
+      <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
         Expense Ledger
       </h2>
 
       {expenses.length > 0 && (
-        <div className="card p-3 mb-3 space-y-2">
+        <div className="card-elevated p-3 mb-3 space-y-2">
           <div className="relative">
-            <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }} />
+            <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--md-sys-color-on-surface-variant)" }} />
             <input className="w-full rounded-lg pl-9 pr-3 py-2.5 text-sm min-h-[44px]" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search expenses..." aria-label="Search expenses" />
           </div>
 
@@ -96,7 +96,7 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
             <button
               onClick={() => { setSelectMode(!selectMode); setSelectedIds(new Set()); }}
               className={`text-xs px-2.5 py-1.5 rounded-lg transition-all min-h-[28px] flex items-center gap-1 ${selectMode ? "gradient-accent text-white font-semibold" : ""}`}
-              style={!selectMode ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
+              style={!selectMode ? { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" } : undefined}
               aria-label={selectMode ? "Cancel selection" : "Select expenses"}
             >
               <CheckSquareIcon className="w-3.5 h-3.5" />
@@ -115,17 +115,17 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-            <FilterIcon className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--text-muted)" }} />
+            <FilterIcon className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--md-sys-color-on-surface-variant)" }} />
             <button onClick={() => setFilterCategory("all")}
               className={`text-xs px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-all min-h-[28px] ${filterCategory === "all" && filterPayer === "all" ? "gradient-accent text-white font-semibold" : ""}`}
-              style={!(filterCategory === "all" && filterPayer === "all") ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
+              style={!(filterCategory === "all" && filterPayer === "all") ? { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" } : undefined}
               aria-label="Show all expenses">
               All
             </button>
             {allCategories.map((cat) => (
               <button key={cat} onClick={() => setFilterCategory(filterCategory === cat ? "all" : cat)}
                 className={`text-xs px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-all min-h-[28px] ${filterCategory === cat ? "gradient-accent text-white font-semibold" : ""}`}
-                style={filterCategory !== cat ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
+                style={filterCategory !== cat ? { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" } : undefined}
                 aria-label={`Filter by ${getCategoryLabel(cat)}`}>
                 {getCategoryLabel(cat)}
               </button>
@@ -133,11 +133,11 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-            <span className="text-[10px] shrink-0" style={{ color: "var(--text-muted)" }}>Paid by:</span>
+            <span className="text-[10px] shrink-0" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Paid by:</span>
             {members.map((m) => (
               <button key={m.id} onClick={() => setFilterPayer(filterPayer === m.id ? "all" : m.id)}
                 className={`text-xs px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-all min-h-[28px] ${filterPayer === m.id ? "gradient-accent text-white font-semibold" : ""}`}
-                style={filterPayer !== m.id ? { background: "var(--border)", color: "var(--text-secondary)" } : undefined}
+                style={filterPayer !== m.id ? { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" } : undefined}
                 aria-label={`Filter paid by ${m.name}`}>
                 {m.name}
               </button>
@@ -146,7 +146,7 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
 
           {hasFilters && (
             <button onClick={() => { setSearch(""); setFilterCategory("all"); setFilterPayer("all"); }}
-              className="text-xs font-medium w-full py-1 rounded-lg" style={{ color: "var(--accent)" }}
+              className="text-xs font-medium w-full py-1 rounded-lg" style={{ color: "var(--md-sys-color-primary)" }}
               aria-label="Clear all filters">
               Clear all filters
             </button>
@@ -154,21 +154,21 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
         </div>
       )}
 
-      <div className="card overflow-hidden">
+      <div className="card-elevated overflow-hidden">
         {expenses.length === 0 ? (
           <div className="text-center py-16 px-4 animate-fadeIn">
-            <div className="flex justify-center mb-3" style={{ color: "var(--text-muted)" }}>
+            <div className="flex justify-center mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
               <ClipboardIcon className="w-12 h-12" />
             </div>
-            <div className="text-base font-medium mb-1" style={{ color: "var(--text-secondary)" }}>No expenses yet</div>
-            <div className="text-sm" style={{ color: "var(--text-muted)" }}>
-              Tap the <span style={{ color: "var(--accent)" }} className="font-medium">+ Expense</span> button to add your first expense
+            <div className="text-base font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>No expenses yet</div>
+            <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+              Tap the <span style={{ color: "var(--md-sys-color-primary)" }} className="font-medium">+ Expense</span> button to add your first expense
             </div>
           </div>
         ) : filteredExpenses.length === 0 ? (
           <div className="text-center py-12 px-4 animate-fadeIn">
-            <div className="text-base font-medium mb-1" style={{ color: "var(--text-secondary)" }}>No matches</div>
-            <div className="text-sm" style={{ color: "var(--text-muted)" }}>Try a different search or filter</div>
+            <div className="text-base font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>No matches</div>
+            <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Try a different search or filter</div>
           </div>
         ) : (
           <div className="max-h-[600px] overflow-y-auto">
@@ -177,30 +177,30 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
               const dayTotal = exps.reduce((s, e) => s + e.totalAmount * e.exchangeRate, 0);
               return (
                 <Fragment key={date}>
-                  <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider sticky top-0 z-[5]" style={{ background: "var(--surface-elevated)", color: "var(--text-muted)", borderBottom: "1px solid var(--border)" }}>
+                  <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider sticky top-0 z-[5]" style={{ background: "var(--md-sys-color-surface-container)", color: "var(--md-sys-color-on-surface-variant)", borderBottom: "1px solid var(--md-sys-color-outline-variant)" }}>
                     {date === "unknown" ? "Unknown Date" : formatDateShort(date)}
                     <span className="ml-2 font-normal normal-case">
                       {exps.length} expense{exps.length !== 1 ? "s" : ""} · {baseSymbol}{dayTotal.toFixed(2)}
                     </span>
                   </div>
-                  <div style={{ borderColor: "var(--border)" }}>
+                  <div style={{ borderColor: "var(--md-sys-color-outline-variant)" }}>
                     {exps.map((exp, idx) => {
                       const payer = memberMap.get(exp.payerId);
                       const baseAmt = exp.totalAmount * exp.exchangeRate;
                       const cats = exp.categories || [];
                       return (
-                        <div key={exp.id} className="px-4 py-3 transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms`, borderBottom: "1px solid var(--border)" }}>
+                        <div key={exp.id} className="px-4 py-3 transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms`, borderBottom: "1px solid var(--md-sys-color-outline-variant)" }}>
                           <div className="flex items-start justify-between gap-2 mb-1.5">
                             <div className="min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>{exp.title}</span>
+                                <span className="text-base font-semibold truncate" style={{ color: "var(--md-sys-color-on-surface)" }}>{exp.title}</span>
                                 {cats.map((cat) => (
-                                  <span key={cat} className="text-[10px] px-1.5 py-0.5 rounded-md shrink-0" style={{ background: "var(--border)", color: "var(--text-muted)" }}>
+                                  <span key={cat} className="text-[10px] px-1.5 py-0.5 rounded-md shrink-0" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>
                                     {getCategoryLabel(cat)}
                                   </span>
                                 ))}
                                 {exp.recurring?.enabled && (
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md shrink-0" style={{ background: "var(--border)", color: "var(--accent)" }}>
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md shrink-0" style={{ background: "var(--md-sys-color-primary-container)", color: "var(--md-sys-color-on-primary-container)" }}>
                                     {exp.recurring.frequency}
                                   </span>
                                 )}
@@ -240,11 +240,11 @@ export default function ExpenseLedger({ expenses, members, baseSymbol, allCatego
                                 </button>
                               ) : (
                                 <>
-                                  <button onClick={() => onEdit(exp)} className="text-sm px-3 py-1.5 rounded-lg transition-opacity font-medium btn-press min-h-[36px] flex items-center gap-1" style={{ background: "var(--border)", color: "var(--accent)" }} title="Edit expense" aria-label={`Edit ${exp.title}`}>
+                                  <button onClick={() => onEdit(exp)} className="text-sm px-3 py-1.5 rounded-lg transition-opacity font-medium btn-press min-h-[36px] flex items-center gap-1" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }} title="Edit expense" aria-label={`Edit ${exp.title}`}>
                                     <PencilIcon className="w-3.5 h-3.5" />
                                   </button>
-                                  <button onClick={() => { onDelete(exp.id); addToast(`Deleted "${exp.title}"`, "info"); }}
-                                    className="text-sm px-3 py-1.5 rounded-lg text-red-500 hover:text-red-400 transition-opacity font-medium btn-press min-h-[36px] flex items-center gap-1" style={{ background: "var(--border)" }} title="Delete expense" aria-label={`Delete ${exp.title}`}>
+                                   <button onClick={() => { onDelete(exp.id); addToast(`Deleted "${exp.title}"`, "info"); }}
+                                    className="text-sm px-3 py-1.5 rounded-lg text-red-500 hover:text-red-400 transition-opacity font-medium btn-press min-h-[36px] flex items-center gap-1" style={{ background: "var(--md-sys-color-surface-container-high)" }} title="Delete expense" aria-label={`Delete ${exp.title}`}>
                                     <XIcon className="w-3.5 h-3.5" />
                                   </button>
                                 </>
