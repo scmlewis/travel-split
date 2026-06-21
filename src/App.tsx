@@ -53,6 +53,13 @@ export default function App() {
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
   const { addToast } = useToast();
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setHeaderScrolled(window.scrollY > 4);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!showMenu) return;
@@ -411,7 +418,15 @@ export default function App() {
   return (
     <div className="min-h-screen relative">
       <div className="max-w-7xl mx-auto">
-        <header className="sticky top-0 z-30 border-b" style={{ borderColor: "var(--md-sys-color-outline-variant)", background: "var(--md-sys-color-surface)" }}>
+        <header
+          className="sticky top-0 z-30 transition-shadow duration-200"
+          style={{
+            borderColor: "var(--md-sys-color-outline-variant)",
+            background: "var(--md-sys-color-surface)",
+            borderBottom: "1px solid var(--md-sys-color-outline-variant)",
+            boxShadow: headerScrolled ? "var(--md-sys-elevation-2)" : "none",
+          }}
+        >
         {/* Top row: back, name, +Expense, menu */}
         <div className="px-5 py-4 flex items-center gap-2">
           <button
@@ -589,9 +604,9 @@ export default function App() {
                 baseSymbol={sym}
               />
             ) : (
-              <div className="space-y-6">
-                <div className="card-elevated p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+              <div className="space-y-4">
+                <div className="card-elevated p-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <UsersIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Members
                     <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{currentTrip.members.length}</span>
@@ -602,8 +617,8 @@ export default function App() {
                     onRemove={handleRemoveMember}
                   />
                 </div>
-                <div className="card-elevated p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                <div className="card-elevated p-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Categories
                     <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{allCategories.length}</span>
@@ -613,60 +628,74 @@ export default function App() {
                     onUpdate={handleUpdateCategories}
                   />
                 </div>
-                <div className="card-elevated p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                    <TargetIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
-                    Budget
-                    {currentTrip.budget != null && currentTrip.budget > 0 && (
-                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }}>{sym}{currentTrip.budget.toFixed(0)}</span>
-                    )}
-                  </h3>
-                  <div className="space-y-2">
-                    {currentTrip.budget != null && currentTrip.budget > 0 ? (
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-mono font-bold" style={{ color: "var(--md-sys-color-primary)" }}>
-                          {sym}{currentTrip.budget.toFixed(2)}
-                        </span>
-                        <button
-                          onClick={() => handleSetBudget(undefined)}
-                          className="text-xs px-2.5 py-1.5 rounded-lg"
-                          style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
-                          aria-label="Remove budget"
-                        >
-                          Clear
-                        </button>
+                {(() => {
+                  const totalSpent = currentTrip.expenses.reduce((sum, e) => sum + e.totalAmount * e.exchangeRate, 0);
+                  const hasBudget = currentTrip.budget != null && currentTrip.budget > 0;
+                  return (
+                    <div className="card-elevated p-4">
+                      <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                        <TargetIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
+                        Budget
+                        {hasBudget && (
+                          <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }}>{sym}{currentTrip.budget!.toFixed(0)}</span>
+                        )}
+                      </h3>
+                      <div className="space-y-2">
+                        {hasBudget ? (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-mono font-bold" style={{ color: "var(--md-sys-color-primary)" }}>
+                                {sym}{totalSpent.toFixed(2)} / {sym}{currentTrip.budget!.toFixed(2)}
+                              </span>
+                              <button
+                                onClick={() => handleSetBudget(undefined)}
+                                className="text-xs px-2.5 py-1.5 rounded-lg"
+                                style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
+                                aria-label="Remove budget"
+                              >
+                                Clear
+                              </button>
+                            </div>
+                            <div className={`md-linear-progress ${totalSpent > currentTrip.budget! ? "md-linear-progress-error" : ""}`}>
+                              <div className="md-linear-progress-fill" style={{ width: `${Math.min((totalSpent / currentTrip.budget!) * 100, 100)}%` }} />
+                            </div>
+                            <div className="text-[10px] font-medium text-right" style={{ color: totalSpent > currentTrip.budget! ? "var(--md-sys-color-error)" : "var(--md-sys-color-primary)" }}>
+                              {totalSpent > currentTrip.budget! ? `Over by ${sym}${(totalSpent - currentTrip.budget!).toFixed(2)}` : `${sym}${(currentTrip.budget! - totalSpent).toFixed(2)} remaining`}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[36px] font-mono"
+                              placeholder={`Set budget in ${baseCurrency}`}
+                              id="budget-input-manage"
+                              aria-label="Set trip budget"
+                            />
+                            <button
+                              onClick={() => {
+                                const input = document.getElementById("budget-input-manage") as HTMLInputElement;
+                                const val = parseFloat(input?.value);
+                                if (val > 0) {
+                                  handleSetBudget(val);
+                                  input.value = "";
+                                }
+                              }}
+                              className="gradient-accent text-sm px-3 py-2 rounded-lg font-semibold min-h-[36px]"
+                              aria-label="Save budget"
+                            >
+                              Set
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[40px] font-mono"
-                          placeholder={`Set budget in ${baseCurrency}`}
-                          id="budget-input-manage"
-                          aria-label="Set trip budget"
-                        />
-                        <button
-                          onClick={() => {
-                            const input = document.getElementById("budget-input-manage") as HTMLInputElement;
-                            const val = parseFloat(input?.value);
-                            if (val > 0) {
-                              handleSetBudget(val);
-                              input.value = "";
-                            }
-                          }}
-                          className="gradient-accent text-sm px-3 py-2 rounded-lg font-semibold min-h-[40px]"
-                          aria-label="Save budget"
-                        >
-                          Set
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="card-elevated p-5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    </div>
+                  );
+                })()}
+                <div className="card-elevated p-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Templates
                     {templates.length > 0 && (
@@ -690,7 +719,7 @@ export default function App() {
           </div>
         </main>
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+      <div className="fixed left-1/2 -translate-x-1/2 z-40" style={{ bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}>
         <div className="flex gap-1 card-elevated rounded-2xl p-1.5 shadow-xl">
           <button
             onClick={() => setActiveTab("overview")}

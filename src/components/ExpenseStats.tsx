@@ -79,19 +79,27 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {stats.spendingByDay.length > 1 && (
         <div className="card-elevated p-4 animate-fadeIn">
           <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Day</div>
-          <div className="flex items-end gap-1 h-32">
-            {stats.spendingByDay.map((d) => (
-              <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
-                <div
-                  className="w-full rounded-t-md gradient-accent transition-all duration-300"
-                  style={{ height: `${(d.total / maxDay) * 100}%`, minHeight: "2px", opacity: 0.8 }}
-                  title={`${d.date}: ${baseSymbol}${d.total.toFixed(2)}`}
-                />
-                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                  {d.date.slice(5)}
+          <div className="relative h-32">
+            <div className="absolute inset-0 flex items-end gap-1" style={{ paddingBottom: "18px" }}>
+              {stats.spendingByDay.map((d) => (
+                <div key={d.date} className="flex-1 min-w-0 flex justify-center">
+                  <div
+                    className="w-full rounded-t-md gradient-accent transition-all duration-300"
+                    style={{ height: `${(d.total / maxDay) * 100}%`, minHeight: d.total > 0 ? "4px" : "0px", opacity: 0.8 }}
+                    title={`${d.date}: ${baseSymbol}${d.total.toFixed(2)}`}
+                  />
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="absolute bottom-0 inset-x-0 flex gap-1">
+              {stats.spendingByDay.map((d) => (
+                <div key={d.date} className="flex-1 min-w-0 text-center">
+                  <div className="text-[8px] truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    {d.date.slice(5)}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -100,19 +108,27 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {stats.spendingByWeek.length > 1 && (
         <div className="card-elevated p-4 animate-fadeIn">
           <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Week</div>
-          <div className="flex items-end gap-2 h-32">
-            {stats.spendingByWeek.map((w) => (
-              <div key={w.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
-                <div
-                  className="w-full rounded-t-md gradient-accent transition-all duration-300"
-                  style={{ height: `${(w.total / maxWeek) * 100}%`, minHeight: "2px", opacity: 0.8 }}
-                  title={`Week of ${w.date}: ${baseSymbol}${w.total.toFixed(2)}`}
-                />
-                <div className="text-[8px] truncate w-full text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                  {w.date.slice(5)}
+          <div className="relative h-32">
+            <div className="absolute inset-0 flex items-end gap-2" style={{ paddingBottom: "18px" }}>
+              {stats.spendingByWeek.map((w) => (
+                <div key={w.date} className="flex-1 min-w-0 flex justify-center">
+                  <div
+                    className="w-full rounded-t-md gradient-accent transition-all duration-300"
+                    style={{ height: `${(w.total / maxWeek) * 100}%`, minHeight: w.total > 0 ? "4px" : "0px", opacity: 0.8 }}
+                    title={`Week of ${w.date}: ${baseSymbol}${w.total.toFixed(2)}`}
+                  />
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="absolute bottom-0 inset-x-0 flex gap-2">
+              {stats.spendingByWeek.map((w) => (
+                <div key={w.date} className="flex-1 min-w-0 text-center">
+                  <div className="text-[8px] truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    {w.date.slice(5)}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

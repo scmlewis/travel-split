@@ -45,36 +45,50 @@ export default function TemplateManager({ templates, onUpdate, onApply, baseCurr
 
   return (
     <div>
-      <div className="flex items-center justify-end mb-3">
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="text-xs px-2.5 py-1.5 rounded-lg transition-all min-h-[28px] flex items-center gap-1"
-          style={{ background: "var(--border)", color: "var(--accent)" }}
-          aria-label={showForm ? "Close template form" : "Save new template"}
-        >
-          {showForm ? <XIcon className="w-3 h-3" /> : <PlusIcon className="w-3 h-3" />}
-          {showForm ? "Cancel" : "Save Current"}
-        </button>
-      </div>
+      {templates.length === 0 && !showForm ? (
+        <div className="flex items-center justify-between">
+          <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>No templates saved</span>
+          <button
+            onClick={() => setShowForm(true)}
+            className="text-xs px-2.5 py-1.5 rounded-lg transition-all min-h-[28px] flex items-center gap-1"
+            style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--accent)" }}
+            aria-label="Save new template"
+          >
+            <PlusIcon className="w-3 h-3" /> Save Current
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center justify-end mb-2">
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="text-xs px-2.5 py-1.5 rounded-lg transition-all min-h-[28px] flex items-center gap-1"
+            style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--accent)" }}
+            aria-label={showForm ? "Close template form" : "Save new template"}
+          >
+            {showForm ? <XIcon className="w-3 h-3" /> : <PlusIcon className="w-3 h-3" />}
+            {showForm ? "Cancel" : "Save Current"}
+          </button>
+        </div>
+      )}
 
       {showForm && (
-        <div className="space-y-2 mb-3 p-3 rounded-lg" style={{ background: "var(--surface-elevated)" }}>
+        <div className="space-y-2 mb-2 p-3 rounded-lg" style={{ background: "var(--surface-elevated)" }}>
           <input
-            className="w-full rounded-lg px-3 py-2 text-sm min-h-[40px]"
+            className="w-full rounded-lg px-3 py-2 text-sm min-h-[36px]"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Template name (e.g. 'Weekly Dinner')"
             aria-label="Template name"
           />
           <input
-            className="w-full rounded-lg px-3 py-2 text-sm min-h-[40px]"
+            className="w-full rounded-lg px-3 py-2 text-sm min-h-[36px]"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Expense title"
             aria-label="Default expense title"
           />
           <input
-            className="w-full rounded-lg px-3 py-2 text-sm min-h-[40px] font-mono"
+            className="w-full rounded-lg px-3 py-2 text-sm min-h-[36px] font-mono"
             type="number"
             min="0"
             step="0.01"
@@ -85,7 +99,7 @@ export default function TemplateManager({ templates, onUpdate, onApply, baseCurr
           />
           <button
             onClick={handleSave}
-            className="w-full gradient-accent text-white text-sm py-2 rounded-lg font-semibold btn-press min-h-[40px]"
+            className="w-full gradient-accent text-white text-sm py-2 rounded-lg font-semibold btn-press min-h-[36px]"
             disabled={!name.trim() || !title.trim()}
           >
             Save Template
@@ -93,12 +107,7 @@ export default function TemplateManager({ templates, onUpdate, onApply, baseCurr
         </div>
       )}
 
-      {templates.length === 0 ? (
-        <div className="text-center py-4">
-          <div className="text-xs" style={{ color: "var(--text-muted)" }}>No templates saved yet</div>
-          <div className="text-[10px] mt-1" style={{ color: "var(--text-muted)" }}>Save common expenses for quick re-entry</div>
-        </div>
-      ) : (
+      {templates.length > 0 && (
         <div className="space-y-1.5">
           {templates.map((t) => (
             <div key={t.id} className="flex items-center gap-2 py-1.5 px-2 rounded-lg transition-opacity hover:opacity-80" style={{ background: "var(--surface-elevated)" }}>

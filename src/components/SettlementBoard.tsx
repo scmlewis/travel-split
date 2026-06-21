@@ -163,8 +163,7 @@ export default function SettlementBoard({
                             onTogglePaid(s.from, s.to, new Date().toISOString().split("T")[0]);
                             addToast("Settlement marked as paid");
                           }}
-                          className="text-sm px-4 py-2 rounded-lg transition-opacity font-semibold btn-press min-h-[40px] shrink-0"
-                          style={{ background: "var(--md-sys-color-secondary-container)", color: "var(--md-sys-color-on-secondary-container)" }}
+                          className="text-sm px-4 py-2 rounded-lg font-semibold btn-press min-h-[40px] shrink-0 gradient-accent"
                           aria-label={`Mark settlement from ${from?.name} to ${to?.name} as paid`}
                         >
                           Mark Paid

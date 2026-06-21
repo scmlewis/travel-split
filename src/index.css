@@ -549,23 +549,27 @@ input[type="number"] {
 }
 
 /* ============================================================
-   FORM INPUTS
-   ============================================================ */
+    FORM INPUTS
+    ============================================================ */
 input, select {
-  background: var(--md-sys-color-surface-container-highest) !important;
-  border: 1px solid var(--md-sys-color-outline) !important;
-  color: var(--md-sys-color-on-surface) !important;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid var(--md-sys-color-outline);
+  color: var(--md-sys-color-on-surface);
   border-radius: var(--md-sys-shape-extra-small);
 }
 
 input::placeholder {
-  color: var(--md-sys-color-on-surface-variant) !important;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 input:focus, select:focus {
-  border-color: var(--md-sys-color-primary) !important;
-  box-shadow: 0 0 0 2px var(--md-sys-color-primary-container) !important;
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
   outline: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
 }
 
 /* ============================================================
