@@ -30,7 +30,7 @@ describe("App integration", () => {
 
   it("shows empty state when no trips exist", () => {
     renderApp();
-    expect(screen.getByText("Ready to explore?")).toBeInTheDocument();
+    expect(screen.getByText("Ready to go?")).toBeInTheDocument();
   });
 
   it("creates a trip and navigates to it", async () => {
@@ -103,7 +103,7 @@ describe("App integration", () => {
 
     // Fill the form
     await user.type(screen.getByPlaceholderText("e.g. Hotel, Dinner"), "Dinner");
-    const amountInput = screen.getByPlaceholderText("Amount");
+    const amountInput = screen.getByPlaceholderText("0.00");
     await user.type(amountInput, "200");
 
     // Select payer
@@ -115,7 +115,7 @@ describe("App integration", () => {
 
     // Should appear in expenses list
     expect(screen.getByText("Dinner")).toBeInTheDocument();
-    expect(screen.getByText("HK$200.00")).toBeInTheDocument();
+    expect(screen.getAllByText("HK$200.00").length).toBeGreaterThanOrEqual(1);
   });
 
   it("tabs switch correctly", async () => {
@@ -161,7 +161,7 @@ describe("App integration", () => {
     await user.click(deleteBtn);
 
     // Should be empty state again
-    expect(screen.getByText("Ready to explore?")).toBeInTheDocument();
+    expect(screen.getByText("Ready to go?")).toBeInTheDocument();
     vi.mocked(window.confirm).mockRestore();
   });
 });

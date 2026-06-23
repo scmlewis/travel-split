@@ -99,7 +99,7 @@ export default function TemplateManager({ templates, onUpdate, onApply, baseCurr
           />
           <button
             onClick={handleSave}
-            className="w-full gradient-accent text-white text-sm py-2 rounded-lg font-semibold btn-press min-h-[36px]"
+            className="w-full gradient-accent text-sm py-2 rounded-lg font-semibold btn-press min-h-[36px]"
             disabled={!name.trim() || !title.trim()}
           >
             Save Template

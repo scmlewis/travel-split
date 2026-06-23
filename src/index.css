@@ -19,56 +19,56 @@
 }
 
 /* ============================================================
-   M3 TONAL PALETTES — Source: #c2410c
-   Generated via Material Color Utilities algorithm
+   M3 TONAL PALETTES — Source: #0D7C6B (Teal)
+   Finance-grade palette: cool neutrals + teal accent
    ============================================================ */
 :root {
-  /* Primary (warm orange) */
+  /* Primary (teal - saturated) */
   --m3-primary-0: #000000;
-  --m3-primary-10: #3B0A00;
-  --m3-primary-20: #5E1700;
-  --m3-primary-25: #6F1F00;
-  --m3-primary-30: #812700;
-  --m3-primary-40: #A63700;
-  --m3-primary-50: #C44900;
-  --m3-primary-60: #E05D00;
-  --m3-primary-70: #FF7326;
-  --m3-primary-80: #FF9357;
-  --m3-primary-90: #FFB989;
-  --m3-primary-95: #FFD4BA;
-  --m3-primary-99: #FFF8F2;
+  --m3-primary-10: #002119;
+  --m3-primary-20: #00382D;
+  --m3-primary-25: #004538;
+  --m3-primary-30: #005243;
+  --m3-primary-40: #0A8A72;
+  --m3-primary-50: #1AA58A;
+  --m3-primary-60: #32C0A3;
+  --m3-primary-70: #56DBBA;
+  --m3-primary-80: #7CF4D2;
+  --m3-primary-90: #A6F4DE;
+  --m3-primary-95: #C0FAEC;
+  --m3-primary-99: #F1FFF9;
   --m3-primary-100: #FFFFFF;
 
-  /* Secondary (warm neutral-orange) */
+  /* Secondary (cool slate) */
   --m3-secondary-0: #000000;
-  --m3-secondary-10: #2C1608;
-  --m3-secondary-20: #442A1A;
-  --m3-secondary-25: #513424;
-  --m3-secondary-30: #5E3E2E;
-  --m3-secondary-40: #795744;
-  --m3-secondary-50: #936E59;
-  --m3-secondary-60: #AE876F;
-  --m3-secondary-70: #C9A087;
-  --m3-secondary-80: #E5BAA1;
-  --m3-secondary-90: #FFD5BC;
-  --m3-secondary-95: #FFE8D5;
-  --m3-secondary-99: #FFF8F2;
+  --m3-secondary-10: #0E1D2A;
+  --m3-secondary-20: #1E3142;
+  --m3-secondary-25: #263D50;
+  --m3-secondary-30: #2E4A5E;
+  --m3-secondary-40: #4A6579;
+  --m3-secondary-50: #627F94;
+  --m3-secondary-60: #7C99AF;
+  --m3-secondary-70: #96B3C9;
+  --m3-secondary-80: #B1CEE4;
+  --m3-secondary-90: #CCE8FF;
+  --m3-secondary-95: #DDF2FF;
+  --m3-secondary-99: #F8FBFF;
   --m3-secondary-100: #FFFFFF;
 
-  /* Tertiary (warm rose) */
+  /* Tertiary (indigo-blue) */
   --m3-tertiary-0: #000000;
-  --m3-tertiary-10: #271210;
-  --m3-tertiary-20: #3D2220;
-  --m3-tertiary-25: #4A2C2A;
-  --m3-tertiary-30: #573734;
-  --m3-tertiary-40: #714D49;
-  --m3-tertiary-50: #8B6460;
-  --m3-tertiary-60: #A67C78;
-  --m3-tertiary-70: #C19591;
-  --m3-tertiary-80: #DDB0AB;
-  --m3-tertiary-90: #F9CCC7;
-  --m3-tertiary-95: #FFE0DC;
-  --m3-tertiary-99: #FFF8F6;
+  --m3-tertiary-10: #111428;
+  --m3-tertiary-20: #232844;
+  --m3-tertiary-25: #2C3252;
+  --m3-tertiary-30: #363C60;
+  --m3-tertiary-40: #4D5580;
+  --m3-tertiary-50: #656E9A;
+  --m3-tertiary-60: #7E87B4;
+  --m3-tertiary-70: #98A0CE;
+  --m3-tertiary-80: #B2BAE9;
+  --m3-tertiary-90: #CCD4FF;
+  --m3-tertiary-95: #DDE3FF;
+  --m3-tertiary-99: #F7F7FF;
   --m3-tertiary-100: #FFFFFF;
 
   /* Error */
@@ -86,44 +86,44 @@
   --m3-error-99: #FFFBFF;
   --m3-error-100: #FFFFFF;
 
-  /* Neutral */
+  /* Neutral (true cool gray) */
   --m3-neutral-0: #000000;
-  --m3-neutral-4: #0D0B09;
-  --m3-neutral-6: #131110;
-  --m3-neutral-10: #1C1A18;
-  --m3-neutral-12: #211F1D;
-  --m3-neutral-17: #2B2927;
-  --m3-neutral-20: #312F2D;
-  --m3-neutral-22: #353331;
-  --m3-neutral-24: #3A3836;
-  --m3-neutral-30: #494645;
-  --m3-neutral-40: #625E5C;
-  --m3-neutral-50: #7A7674;
-  --m3-neutral-60: #94908E;
-  --m3-neutral-70: #AEA9A7;
-  --m3-neutral-80: #C5C0BE;
-  --m3-neutral-87: #D8D3D1;
-  --m3-neutral-90: #E1DCDA;
-  --m3-neutral-92: #E6E1EF;
-  --m3-neutral-94: #EBE7E5;
-  --m3-neutral-95: #EDE9E7;
-  --m3-neutral-96: #F0ECEA;
-  --m3-neutral-98: #F6F1EF;
-  --m3-neutral-99: #F9F5F3;
+  --m3-neutral-4: #090A0B;
+  --m3-neutral-6: #0F1112;
+  --m3-neutral-10: #191C1E;
+  --m3-neutral-12: #1E2022;
+  --m3-neutral-17: #272A2C;
+  --m3-neutral-20: #2E3033;
+  --m3-neutral-22: #333538;
+  --m3-neutral-24: #383A3D;
+  --m3-neutral-30: #43474B;
+  --m3-neutral-40: #5C6065;
+  --m3-neutral-50: #75797F;
+  --m3-neutral-60: #8F9399;
+  --m3-neutral-70: #AAADB3;
+  --m3-neutral-80: #C5C8CE;
+  --m3-neutral-87: #D9DBE0;
+  --m3-neutral-90: #E1E4E8;
+  --m3-neutral-92: #E8EAEF;
+  --m3-neutral-94: #EEF0F4;
+  --m3-neutral-95: #F1F3F7;
+  --m3-neutral-96: #F4F6FA;
+  --m3-neutral-98: #F9FAFC;
+  --m3-neutral-99: #FCFDFE;
   --m3-neutral-100: #FFFFFF;
 
-  /* Neutral Variant */
+  /* Neutral Variant (cool gray) */
   --m3-neutral-variant-0: #000000;
-  --m3-neutral-variant-20: #322922;
-  --m3-neutral-variant-30: #4A3F37;
-  --m3-neutral-variant-40: #63584F;
-  --m3-neutral-variant-50: #7C7168;
-  --m3-neutral-variant-60: #968A81;
-  --m3-neutral-variant-70: #B0A49A;
-  --m3-neutral-variant-80: #CBBEB4;
-  --m3-neutral-variant-90: #E7D6CC;
-  --m3-neutral-variant-95: #F5E8DE;
-  --m3-neutral-variant-99: #FFF8F2;
+  --m3-neutral-variant-20: #2B3135;
+  --m3-neutral-variant-30: #41474D;
+  --m3-neutral-variant-40: #595F66;
+  --m3-neutral-variant-50: #727880;
+  --m3-neutral-variant-60: #8C929A;
+  --m3-neutral-variant-70: #A6ABB4;
+  --m3-neutral-variant-80: #C1C6CF;
+  --m3-neutral-variant-90: #DDE2EB;
+  --m3-neutral-variant-95: #ECF0F9;
+  --m3-neutral-variant-99: #FDFCFF;
   --m3-neutral-variant-100: #FFFFFF;
 }
 
@@ -255,23 +255,23 @@
 }
 
 /* ============================================================
-   M3 ELEVATION TOKENS (tinted shadows)
+   M3 ELEVATION TOKENS (subtle, border-first)
    ============================================================ */
 :root {
   --md-sys-elevation-0: none;
-  --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.1), 0 1px 3px 1px rgba(0,0,0,0.08);
-  --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.1), 0 2px 6px 2px rgba(0,0,0,0.08);
-  --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.1);
-  --md-sys-elevation-4: 0 6px 10px 4px rgba(0,0,0,0.08), 0 2px 3px rgba(0,0,0,0.1);
-  --md-sys-elevation-5: 0 8px 12px 6px rgba(0,0,0,0.08), 0 4px 4px rgba(0,0,0,0.1);
+  --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.04);
+  --md-sys-elevation-2: 0 2px 4px rgba(0,0,0,0.06);
+  --md-sys-elevation-3: 0 4px 8px rgba(0,0,0,0.08);
+  --md-sys-elevation-4: 0 6px 12px rgba(0,0,0,0.1);
+  --md-sys-elevation-5: 0 8px 16px rgba(0,0,0,0.12);
 }
 
 .dark {
-  --md-sys-elevation-1: 0 1px 3px 1px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
-  --md-sys-elevation-2: 0 2px 6px 2px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
-  --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.4);
-  --md-sys-elevation-4: 0 6px 10px 4px rgba(0,0,0,0.25), 0 2px 3px rgba(0,0,0,0.4);
-  --md-sys-elevation-5: 0 8px 12px 6px rgba(0,0,0,0.25), 0 4px 4px rgba(0,0,0,0.4);
+  --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.2);
+  --md-sys-elevation-2: 0 2px 4px rgba(0,0,0,0.28);
+  --md-sys-elevation-3: 0 4px 8px rgba(0,0,0,0.35);
+  --md-sys-elevation-4: 0 6px 12px rgba(0,0,0,0.4);
+  --md-sys-elevation-5: 0 8px 16px rgba(0,0,0,0.45);
 }
 
 /* ============================================================
@@ -342,12 +342,12 @@
   --text-muted: var(--md-sys-color-outline);
   --border: var(--md-sys-color-outline-variant);
   --input-border: var(--md-sys-color-outline);
-  --ring: rgba(166, 55, 0, 0.12);
+  --ring: rgba(10, 138, 114, 0.15);
 }
 
 .dark {
   --accent-hover: var(--m3-primary-70);
-  --ring: rgba(255, 147, 87, 0.12);
+  --ring: rgba(124, 244, 210, 0.15);
 }
 
 /* ============================================================
@@ -386,7 +386,7 @@ input[type="number"] {
 }
 
 /* ============================================================
-   M3 CARD COMPONENTS
+   M3 CARD COMPONENTS (border-first, finance aesthetic)
    ============================================================ */
 .card {
   background: var(--md-sys-color-surface-container-low);
@@ -407,11 +407,17 @@ input[type="number"] {
 .gradient-accent {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
-  transition: background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  transition: background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  font-weight: 600;
 }
 
 .gradient-accent:hover {
-  background: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary));
+  background: color-mix(in srgb, var(--md-sys-color-primary) 88%, var(--md-sys-color-on-primary));
+}
+
+.gradient-accent:active {
+  transform: scale(0.97);
 }
 
 /* ============================================================
@@ -555,7 +561,7 @@ input, select {
   background: var(--md-sys-color-surface-container-highest);
   border: 1px solid var(--md-sys-color-outline);
   color: var(--md-sys-color-on-surface);
-  border-radius: var(--md-sys-shape-extra-small);
+  border-radius: var(--md-sys-shape-small);
 }
 
 input::placeholder {
@@ -569,15 +575,15 @@ input:focus, select:focus {
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
+  filter: invert(0.4) saturate(0.5);
 }
 
 /* ============================================================
    TAB STYLES (Bottom Navigation)
    ============================================================ */
 .tab-active {
-  color: var(--md-sys-color-on-secondary-container);
-  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-primary);
+  background: var(--md-sys-color-primary);
   font-weight: 600;
 }
 

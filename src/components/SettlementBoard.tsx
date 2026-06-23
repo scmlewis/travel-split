@@ -43,9 +43,8 @@ export default function SettlementBoard({
 
   return (
     <section>
-      <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
-        Settlement Board
+      <h2 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+        Settlements
       </h2>
 
       {settlements.length === 0 ? (
@@ -62,23 +61,23 @@ export default function SettlementBoard({
             <div className="card-elevated p-4 mb-4 animate-fadeIn">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs font-semibold uppercase tracking-wider mb-0.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                    {unpaid.length} payment{unpaid.length !== 1 ? "s" : ""} needed to settle all
+                  <div className="text-[11px] font-semibold uppercase tracking-wider mb-0.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                    {unpaid.length} payment{unpaid.length !== 1 ? "s" : ""} to settle
                   </div>
-                  <div className="text-xl font-bold tabular-nums font-mono" style={{ color: "var(--md-sys-color-primary)" }}>
+                  <div className="text-2xl font-bold tabular-nums font-mono tracking-tight" style={{ color: "var(--md-sys-color-primary)" }}>
                     {baseSymbol}{unpaidTotal.toFixed(2)}
                   </div>
                 </div>
                 <div className="text-right text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                  <div>{paid.length > 0 ? `${paid.length} already settled` : "minimum transactions"}</div>
+                  <div>{paid.length > 0 ? `${paid.length} settled` : "minimum needed"}</div>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="card-elevated p-5 mb-4">
-            <div className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-              Balance Overview
+          <div className="card-elevated p-4 mb-4">
+            <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+              Balances
             </div>
             <div className="space-y-3">
               {members.map((m) => {
@@ -91,15 +90,15 @@ export default function SettlementBoard({
                     <div className="hidden sm:flex items-center gap-3 text-sm">
                       <Avatar name={m.name} size="md" />
                       <span className="w-16 truncate font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
-                      <div className="flex-1 h-5 rounded-full overflow-hidden" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
+                      <div className="flex-1 h-5 rounded overflow-hidden" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
                         {net > 0 && (
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-primary)" }} />
+                          <div className="h-full rounded" style={{ width: `${pct}%`, background: "var(--md-sys-color-primary)" }} />
                         )}
                         {net < 0 && (
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-error)" }} />
+                          <div className="h-full rounded" style={{ width: `${pct}%`, background: "var(--md-sys-color-error)" }} />
                         )}
                       </div>
-                      <span className={`w-28 text-right tabular-nums font-mono font-semibold text-sm ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
+                      <span className={`w-28 text-right tabular-nums font-mono font-bold text-sm ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
                         {net >= 0 ? "+" : ""}{baseSymbol}{Math.abs(net).toFixed(2)}
                       </span>
                     </div>
@@ -107,16 +106,16 @@ export default function SettlementBoard({
                       <div className="flex items-center gap-2.5 mb-1.5">
                         <Avatar name={m.name} size="sm" />
                         <span className="text-sm font-medium truncate" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
-                        <span className={`ml-auto text-sm tabular-nums font-mono font-semibold ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
+                        <span className={`ml-auto text-sm tabular-nums font-mono font-bold ${net >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
                           {net >= 0 ? "+" : ""}{baseSymbol}{Math.abs(net).toFixed(2)}
                         </span>
                       </div>
-                      <div className="h-3 rounded-full overflow-hidden ml-8" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
+                      <div className="h-3 rounded overflow-hidden ml-8" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
                         {net > 0 && (
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-primary)" }} />
+                          <div className="h-full rounded" style={{ width: `${pct}%`, background: "var(--md-sys-color-primary)" }} />
                         )}
                         {net < 0 && (
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "var(--md-sys-color-error)" }} />
+                          <div className="h-full rounded" style={{ width: `${pct}%`, background: "var(--md-sys-color-error)" }} />
                         )}
                       </div>
                     </div>
@@ -128,7 +127,7 @@ export default function SettlementBoard({
 
           <div className="card-elevated overflow-hidden">
             {unpaid.length > 0 && (
-              <div style={{ borderColor: "var(--md-sys-color-outline-variant)" }}>
+              <div>
                 {unpaid.map((s, idx) => {
                   const from = memberMap.get(s.from);
                   const to = memberMap.get(s.to);
@@ -147,12 +146,12 @@ export default function SettlementBoard({
                           {to && <Avatar name={to.name} size="sm" />}
                           <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-sm truncate">{to?.name ?? "?"}</span>
                         </div>
-                        <span className="font-mono tabular-nums font-bold text-base shrink-0" style={{ color: "var(--md-sys-color-on-surface)" }}>
+                        <span className="font-mono tabular-nums font-bold text-lg shrink-0" style={{ color: "var(--md-sys-color-on-surface)" }}>
                           {baseSymbol}{s.amount.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
+                        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "var(--md-sys-color-surface-container-highest)" }}>
                           <div
                             className="h-full rounded-full balance-bar opacity-50"
                             style={{ width: `${pct}%`, background: "var(--md-sys-color-outline)" }}
@@ -163,7 +162,7 @@ export default function SettlementBoard({
                             onTogglePaid(s.from, s.to, new Date().toISOString().split("T")[0]);
                             addToast("Settlement marked as paid");
                           }}
-                          className="text-sm px-4 py-2 rounded-lg font-semibold btn-press min-h-[40px] shrink-0 gradient-accent"
+                          className="text-xs px-3 py-1.5 rounded-lg font-semibold btn-press min-h-[36px] shrink-0 gradient-accent"
                           aria-label={`Mark settlement from ${from?.name} to ${to?.name} as paid`}
                         >
                           Mark Paid
@@ -175,8 +174,8 @@ export default function SettlementBoard({
               </div>
             )}
             {paid.length > 0 && (
-              <div style={{ borderTop: "1px solid var(--md-sys-color-outline-variant)" }}>
-                <div className="px-4 py-2.5 text-sm font-semibold uppercase tracking-wider" style={{ background: "var(--md-sys-color-surface-container)", color: "var(--md-sys-color-on-surface-variant)" }}>
+              <div style={{ borderTop: unpaid.length > 0 ? "1px solid var(--md-sys-color-outline-variant)" : undefined }}>
+                <div className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider" style={{ background: "var(--md-sys-color-surface-container)", color: "var(--md-sys-color-on-surface-variant)" }}>
                   Settled ({paid.length})
                 </div>
                 <div>

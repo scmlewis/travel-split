@@ -16,8 +16,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
   if (stats.expenseCount === 0) {
     return (
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-          <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
+        <h2 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
           Statistics
         </h2>
         <div className="card-elevated text-center py-12 px-4 animate-fadeIn">
@@ -35,8 +34,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xs font-semibold uppercase tracking-wider flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-        <span className="w-1.5 h-5 rounded-full" style={{ background: "var(--md-sys-color-primary)" }} />
+      <h2 className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
         Statistics
       </h2>
 
@@ -45,13 +43,13 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
         <StatCard label="Total Spent" value={`${baseSymbol}${stats.totalSpent.toFixed(2)}`} accent />
         <StatCard label="Avg Expense" value={`${baseSymbol}${stats.averageExpense.toFixed(2)}`} />
         <StatCard label="Daily Burn" value={`${baseSymbol}${stats.dailyBurnRate.toFixed(2)}`} />
-        <StatCard label="Trip Duration" value={`${stats.tripDuration} day${stats.tripDuration !== 1 ? "s" : ""}`} />
+        <StatCard label="Trip Duration" value={`${stats.tripDuration}d`} />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard label="Expenses" value={String(stats.expenseCount)} />
         <StatCard label="Members" value={String(members.length)} />
-        <StatCard label="Recurring" value={`${stats.recurringCount} (${baseSymbol}${stats.recurringTotal.toFixed(0)})`} />
+        <StatCard label="Recurring" value={`${stats.recurringCount}`} />
         <StatCard label="One-time" value={baseSymbol + stats.oneTimeTotal.toFixed(0)} />
       </div>
 
@@ -78,7 +76,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {/* Spending by day */}
       {stats.spendingByDay.length > 1 && (
         <div className="card-elevated p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Day</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Day</div>
           <div className="relative h-32">
             <div className="absolute inset-0 flex items-end gap-1" style={{ paddingBottom: "18px" }}>
               {stats.spendingByDay.map((d) => (
@@ -107,7 +105,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {/* Spending by week */}
       {stats.spendingByWeek.length > 1 && (
         <div className="card-elevated p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Week</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Week</div>
           <div className="relative h-32">
             <div className="absolute inset-0 flex items-end gap-2" style={{ paddingBottom: "18px" }}>
               {stats.spendingByWeek.map((w) => (
@@ -135,7 +133,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
       {/* Per-member spending */}
       <div className="card-elevated p-4 animate-fadeIn">
-        <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Member</div>
+        <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Spending by Member</div>
         <div className="space-y-3">
           {stats.memberSpending
             .slice()
@@ -169,7 +167,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {/* Category breakdown */}
       {stats.categoryBreakdown.length > 0 && (
         <div className="card-elevated p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Category</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Category</div>
           <div className="space-y-3">
             {stats.categoryBreakdown.map((cat, idx) => (
               <div key={cat.category} className="transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms` }}>
@@ -200,7 +198,7 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
       {/* Currency breakdown */}
       {stats.currencyBreakdown.length > 1 && (
         <div className="card-elevated p-4 animate-fadeIn">
-          <div className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Currency</div>
+          <div className="text-[11px] font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>By Currency</div>
           <div className="space-y-2">
             {stats.currencyBreakdown.map((cb, idx) => (
               <div key={cb.currency} className="flex items-center justify-between text-sm py-1 transition-row row-enter" style={{ animationDelay: `${Math.min(idx, 10) * 30}ms`, borderBottom: "1px solid var(--md-sys-color-outline-variant)" }}>
@@ -229,9 +227,9 @@ export default function ExpenseStats({ expenses, members, baseSymbol }: ExpenseS
 
 function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="card-elevated p-3 animate-fadeIn">
-      <div className="text-xs mb-1 truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{label}</div>
-      <div className="text-base font-bold tabular-nums font-mono" style={{ color: accent ? "var(--md-sys-color-primary)" : "var(--md-sys-color-on-surface)" }}>
+    <div className="card-elevated p-3">
+      <div className="text-[11px] font-medium uppercase tracking-wider mb-1 truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{label}</div>
+      <div className="text-lg font-bold tabular-nums font-mono tracking-tight" style={{ color: accent ? "var(--md-sys-color-primary)" : "var(--md-sys-color-on-surface)" }}>
         {value}
       </div>
     </div>

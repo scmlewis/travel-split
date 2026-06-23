@@ -1,16 +1,16 @@
 import { memo } from "react";
 
 const COLORS = [
-  "#e07a3a",
-  "#d4622a",
-  "#c96a2e",
-  "#b85d3a",
-  "#a6683e",
-  "#8b6e4a",
-  "#6b7a5a",
-  "#4a8a6a",
-  "#3a7a8a",
-  "#4a6a9a",
+  "#0D7C6B",
+  "#1D9682",
+  "#4A6579",
+  "#4D5580",
+  "#34B19C",
+  "#627F94",
+  "#656E9A",
+  "#5C6065",
+  "#595F66",
+  "#727880",
 ];
 
 function hashName(name: string): number {

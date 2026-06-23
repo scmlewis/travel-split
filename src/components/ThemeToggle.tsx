@@ -23,12 +23,12 @@ export default function ThemeToggle({ theme, onChange }: ThemeToggleProps) {
   return (
     <button
       onClick={cycle}
-      className="text-xs px-3 py-2 rounded-lg transition-opacity whitespace-nowrap font-medium min-h-[44px] flex items-center gap-1.5"
+      className="text-xs px-3 py-2 rounded-lg transition-all whitespace-nowrap font-medium min-h-[36px] flex items-center gap-1.5 btn-press"
       style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
       title={`Theme: ${LABELS[theme]}`}
     >
       {ICONS[theme]}
-      {LABELS[theme]}
+      <span className="hidden sm:inline">{LABELS[theme]}</span>
     </button>
   );
 }

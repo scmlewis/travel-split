@@ -140,33 +140,37 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
   const inactiveBtn = { background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" };
 
   return (
-    <div className="card-elevated p-4 space-y-3">
-      <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add Expense</div>
+    <div className="card-elevated p-4 space-y-4">
+      <div className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add Expense</div>
 
       <div>
-        <label htmlFor="expense-title" className="block text-sm font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Title</label>
+        <label htmlFor="expense-title" className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Title</label>
         <input id="expense-title" className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Hotel, Dinner" />
       </div>
 
-      <div className="flex gap-2">
-        <input className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]" type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" />
-        <select className="w-24 rounded-lg px-3 py-2.5 text-sm min-h-[44px] font-medium" value={currency} onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}>
-          {(Object.keys(CURRENCY_MAP) as CurrencyCode[]).map((c) => (<option key={c} value={c}>{c}</option>))}
-        </select>
+      <div>
+        <label className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Amount</label>
+        <div className="flex gap-2">
+          <input className="flex-1 rounded-lg px-3 py-2.5 text-base font-bold font-mono tabular-nums min-h-[44px]" type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" />
+          <select className="w-24 rounded-lg px-3 py-2.5 text-sm min-h-[44px] font-semibold" value={currency} onChange={(e) => handleCurrencyChange(e.target.value as CurrencyCode)}>
+            {(Object.keys(CURRENCY_MAP) as CurrencyCode[]).map((c) => (<option key={c} value={c}>{c}</option>))}
+          </select>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-        <span>Rate:</span>
-        <input className="w-28 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.001" value={rate} onChange={(e) => setRate(e.target.value)} />
-        <span className="font-medium text-sm">= {baseSymbol}{(amountNum * rateNum).toFixed(2)}</span>
+        <span className="text-xs">Rate:</span>
+        <input className="w-28 rounded-lg px-3 py-2 text-sm min-h-[40px] font-mono" type="number" min="0" step="0.001" value={rate} onChange={(e) => setRate(e.target.value)} />
+        <span className="font-mono font-semibold text-sm">= {baseSymbol}{(amountNum * rateNum).toFixed(2)}</span>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Date:</span>
+        <span className="text-xs" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Date:</span>
         <input className="flex-1 rounded-lg px-3 py-2.5 text-sm min-h-[44px]" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </div>
 
       <div>
+        <label className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Paid by</label>
         <select className="w-full rounded-lg px-3 py-2.5 text-sm min-h-[44px]" value={payerId} onChange={(e) => setPayerId(e.target.value)}>
           <option value="">Who paid?</option>
           {members.map((m) => (<option key={m.id} value={m.id}>{m.name}</option>))}
@@ -174,11 +178,11 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Categories</label>
+        <label className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Categories</label>
         <div className="flex flex-wrap gap-1.5">
           {allCategories.map((cat) => (
             <button key={cat} onClick={() => toggleCategory(cat)}
-              className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${selectedCategories.includes(cat) ? "gradient-accent text-white font-semibold" : ""}`}
+              className={`text-xs px-3 py-1.5 rounded-lg transition-all min-h-[32px] ${selectedCategories.includes(cat) ? "gradient-accent font-semibold" : ""}`}
               style={!selectedCategories.includes(cat) ? inactiveBtn : undefined}>
               {getCategoryLabel(cat)}
             </button>
@@ -190,10 +194,11 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
       </div>
 
       <div>
+        <label className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split type</label>
         <div className="flex gap-1.5 mb-2">
           {(["equal", "exact", "percentage", "shares"] as SplitType[]).map((st) => (
             <button key={st} onClick={() => { setSplitType(st); setUseItems(false); }}
-              className={`text-xs px-3 py-2 rounded-lg transition-all min-h-[36px] capitalize ${splitType === st && !useItems ? "gradient-accent text-white font-semibold" : ""}`}
+              className={`text-xs px-3 py-2 rounded-lg transition-all min-h-[36px] capitalize flex-1 ${splitType === st && !useItems ? "gradient-accent font-semibold" : ""}`}
               style={splitType !== st || useItems ? inactiveBtn : undefined}>
               {st}
             </button>
@@ -204,7 +209,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
           <>
             {splitType === "equal" && (
               <div className="text-sm font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                Each pays {baseSymbol}{(amountNum / (members.length || 1)).toFixed(2)}
+                Each pays <span className="font-mono font-bold">{baseSymbol}{(amountNum / (members.length || 1)).toFixed(2)}</span>
               </div>
             )}
             {splitType !== "equal" && (
@@ -212,7 +217,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
                 {members.map((m) => (
                   <div key={m.id} className="flex items-center gap-2 text-sm">
                     <span className="w-20 truncate font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
-                    <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
+                    <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[40px] font-mono" type="number" min="0" step="0.01"
                       value={customShares[m.id] ?? ""} onChange={(e) => setCustomShares((prev) => ({ ...prev, [m.id]: e.target.value }))}
                       placeholder={splitType === "percentage" ? "%" : splitType === "shares" ? "shares" : "amount"} />
                     <span className="text-xs w-8" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{splitType === "percentage" ? "%" : splitType === "shares" ? "sh" : baseSymbol}</span>
@@ -230,7 +235,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
                 )}
                 {splitType === "shares" && (
                   <div className="text-xs font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                    Total: {Object.values(customShares).reduce((s, v) => s + (parseFloat(v) || 0), 0).toFixed(0)} shares
+                    Total: <span className="font-mono">{Object.values(customShares).reduce((s, v) => s + (parseFloat(v) || 0), 0).toFixed(0)}</span> shares
                   </div>
                 )}
               </div>
@@ -262,7 +267,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
               {members.map((m) => (
                 <div key={m.id} className="flex items-center gap-2 text-sm">
                   <span className="w-20 truncate font-medium" style={{ color: "var(--md-sys-color-on-surface)" }}>{m.name}</span>
-                  <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[44px] font-mono" type="number" min="0" step="0.01"
+                  <input className="flex-1 rounded-lg px-3 py-2 text-sm min-h-[40px] font-mono" type="number" min="0" step="0.01"
                     value={payers[m.id] ?? ""} onChange={(e) => setPayers((prev) => ({ ...prev, [m.id]: e.target.value }))} placeholder="0" />
                 </div>
               ))}
@@ -291,7 +296,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
                   <div className="flex flex-wrap gap-1">
                     {members.map((m) => (
                       <button key={m.id} onClick={() => toggleItemMember(item.id, m.id)}
-                        className={`text-[10px] px-2 py-1 rounded-md transition-all ${item.assignedTo.includes(m.id) ? "gradient-accent text-white" : ""}`}
+                        className={`text-[10px] px-2 py-1 rounded-md transition-all ${item.assignedTo.includes(m.id) ? "gradient-accent" : ""}`}
                         style={!item.assignedTo.includes(m.id) ? inactiveBtn : undefined}>
                         {m.name}
                       </button>
@@ -314,7 +319,7 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
             <div className="flex gap-1.5">
               {(["weekly", "monthly", "yearly"] as const).map((f) => (
                 <button key={f} onClick={() => setRecurringFreq(f)}
-                  className={`text-xs px-3 py-2 rounded-lg flex-1 capitalize min-h-[36px] ${recurringFreq === f ? "gradient-accent text-white font-semibold" : ""}`}
+                  className={`text-xs px-3 py-2 rounded-lg flex-1 capitalize min-h-[36px] ${recurringFreq === f ? "gradient-accent font-semibold" : ""}`}
                   style={recurringFreq !== f ? inactiveBtn : undefined}>
                   {f}
                 </button>

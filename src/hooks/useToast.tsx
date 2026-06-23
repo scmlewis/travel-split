@@ -95,7 +95,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           const colors = {
             success: "bg-emerald-600 dark:bg-emerald-500",
             error: "bg-red-600 dark:bg-red-500",
-            info: "bg-indigo-600 dark:bg-indigo-500",
+            info: "bg-neutral-700 dark:bg-neutral-600",
           };
           const icons = { success: <CheckIcon className="w-4 h-4" />, error: <XIcon className="w-4 h-4" />, info: <InfoIcon className="w-4 h-4" /> };
           return (

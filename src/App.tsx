@@ -421,14 +421,13 @@ export default function App() {
         <header
           className="sticky top-0 z-30 transition-shadow duration-200"
           style={{
-            borderColor: "var(--md-sys-color-outline-variant)",
             background: "var(--md-sys-color-surface)",
             borderBottom: "1px solid var(--md-sys-color-outline-variant)",
-            boxShadow: headerScrolled ? "var(--md-sys-elevation-2)" : "none",
+            boxShadow: headerScrolled ? "var(--md-sys-elevation-1)" : "none",
           }}
         >
         {/* Top row: back, name, +Expense, menu */}
-        <div className="px-5 py-4 flex items-center gap-2">
+        <div className="px-4 py-3 flex items-center gap-2">
           <button
             onClick={handleBackToTrips}
             className="hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
@@ -559,7 +558,7 @@ export default function App() {
       </header>
 
       <main className="relative overflow-hidden">
-        <div className="p-6 pb-24 space-y-6 relative z-20" role="tabpanel">
+        <div className="p-5 pb-24 space-y-5 relative z-20" role="tabpanel">
             {showForm && (
               <div className="card-elevated p-4 animate-fadeIn">
                 <ExpenseForm
@@ -606,10 +605,10 @@ export default function App() {
             ) : (
               <div className="space-y-4">
                 <div className="card-elevated p-4">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <UsersIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Members
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{currentTrip.members.length}</span>
+                    <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-mono" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{currentTrip.members.length}</span>
                   </h3>
                   <MemberPanel
                     members={currentTrip.members}
@@ -618,10 +617,10 @@ export default function App() {
                   />
                 </div>
                 <div className="card-elevated p-4">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Categories
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{allCategories.length}</span>
+                    <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-mono" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{allCategories.length}</span>
                   </h3>
                   <CategoryManager
                     customCategories={currentTrip.customCategories ?? []}
@@ -633,18 +632,18 @@ export default function App() {
                   const hasBudget = currentTrip.budget != null && currentTrip.budget > 0;
                   return (
                     <div className="card-elevated p-4">
-                      <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                      <h3 className="text-[11px] font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                         <TargetIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                         Budget
                         {hasBudget && (
-                          <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-primary)" }}>{sym}{currentTrip.budget!.toFixed(0)}</span>
+                          <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: "var(--md-sys-color-primary-container)", color: "var(--md-sys-color-primary)" }}>{sym}{currentTrip.budget!.toFixed(0)}</span>
                         )}
                       </h3>
                       <div className="space-y-2">
                         {hasBudget ? (
                           <>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm font-mono font-bold" style={{ color: "var(--md-sys-color-primary)" }}>
+                              <span className="text-base font-mono font-bold tabular-nums" style={{ color: "var(--md-sys-color-primary)" }}>
                                 {sym}{totalSpent.toFixed(2)} / {sym}{currentTrip.budget!.toFixed(2)}
                               </span>
                               <button
@@ -659,7 +658,7 @@ export default function App() {
                             <div className={`md-linear-progress ${totalSpent > currentTrip.budget! ? "md-linear-progress-error" : ""}`}>
                               <div className="md-linear-progress-fill" style={{ width: `${Math.min((totalSpent / currentTrip.budget!) * 100, 100)}%` }} />
                             </div>
-                            <div className="text-[10px] font-medium text-right" style={{ color: totalSpent > currentTrip.budget! ? "var(--md-sys-color-error)" : "var(--md-sys-color-primary)" }}>
+                            <div className="text-[10px] font-medium font-mono text-right" style={{ color: totalSpent > currentTrip.budget! ? "var(--md-sys-color-error)" : "var(--md-sys-color-primary)" }}>
                               {totalSpent > currentTrip.budget! ? `Over by ${sym}${(totalSpent - currentTrip.budget!).toFixed(2)}` : `${sym}${(currentTrip.budget! - totalSpent).toFixed(2)} remaining`}
                             </div>
                           </>
@@ -683,7 +682,7 @@ export default function App() {
                                   input.value = "";
                                 }
                               }}
-                              className="gradient-accent text-sm px-3 py-2 rounded-lg font-semibold min-h-[36px]"
+                              className="gradient-accent text-sm px-3 py-2 rounded-lg font-semibold min-h-[36px] btn-press"
                               aria-label="Save budget"
                             >
                               Set
@@ -695,11 +694,11 @@ export default function App() {
                   );
                 })()}
                 <div className="card-elevated p-4">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wider mb-3 flex items-center gap-2" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
                     <BookmarkIcon className="w-4 h-4" style={{ color: "var(--md-sys-color-primary)" }} />
                     Templates
                     {templates.length > 0 && (
-                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{templates.length}</span>
+                      <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-mono" style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}>{templates.length}</span>
                     )}
                   </h3>
                   <TemplateManager
@@ -713,14 +712,17 @@ export default function App() {
               </div>
             )}
 
-            <footer className="text-[10px] text-center" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-              Data saved to localStorage · Travel Split v2.0
+            <footer className="text-[10px] text-center py-4" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+              Data saved to localStorage · Travel Split v2.0 ·{" "}
+              <a href="https://github.com/scmlewis/travel-split" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity" style={{ color: "var(--md-sys-color-primary)" }}>Source</a>
+              {" "}· Built by{" "}
+              <a href="https://github.com/scmlewis" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity" style={{ color: "var(--md-sys-color-primary)" }}>scmlewis</a>
             </footer>
           </div>
         </main>
 
-      <div className="fixed left-1/2 -translate-x-1/2 z-40" style={{ bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}>
-        <div className="flex gap-1 card-elevated rounded-2xl p-1.5 shadow-xl">
+      <div className="fixed left-1/2 -translate-x-1/2 z-40" style={{ bottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}>
+        <div className="flex gap-0.5 rounded-xl p-1" style={{ background: "var(--md-sys-color-surface-container)", border: "1px solid var(--md-sys-color-outline-variant)" }}>
           <button
             onClick={() => setActiveTab("overview")}
             className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm transition-all min-h-[44px] ${activeTab === "overview" ? "tab-active" : "tab-inactive"}`}

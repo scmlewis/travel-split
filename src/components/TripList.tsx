@@ -34,12 +34,12 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
         {/* Header section */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: "var(--md-sys-color-primary-container)" }}>
-              <SuitcaseIcon className="w-8 h-8" style={{ color: "var(--md-sys-color-on-primary-container)" }} />
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: "var(--md-sys-color-primary-container)" }}>
+              <SuitcaseIcon className="w-7 h-7" style={{ color: "var(--md-sys-color-on-primary-container)" }} />
             </div>
           </div>
-          <h1 className="text-4xl font-bold mb-2" style={{ color: "var(--md-sys-color-on-surface)" }}>Travel Split</h1>
-          <p className="text-base" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split expenses effortlessly with friends</p>
+          <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>Travel Split</h1>
+          <p className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Split expenses with friends</p>
         </div>
 
         {/* Main card */}
@@ -100,13 +100,13 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                 return (
                   <div
                     key={trip.id}
-                    className="card flex items-center justify-between p-4 transition-all group cursor-pointer row-enter hover:scale-[1.01]"
+                    className="card flex items-center justify-between p-3.5 transition-all group cursor-pointer row-enter hover:scale-[1.01]"
                     style={{ animationDelay: `${idx * 50}ms`, borderRadius: "var(--md-sys-shape-large)" }}
                     onClick={() => onSelect(trip.id)}
                   >
                     <div className="min-w-0 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
-                        <SuitcaseIcon className="w-5 h-5" style={{ color: "var(--md-sys-color-primary)" }} />
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
+                        <SuitcaseIcon className="w-4.5 h-4.5" style={{ color: "var(--md-sys-color-primary)" }} />
                       </div>
                       <div className="min-w-0">
                         <div className="text-base font-semibold truncate" style={{ color: "var(--md-sys-color-on-surface)" }}>{trip.name}</div>
@@ -114,10 +114,11 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                           <span>{trip.members.length} members</span>
                           <span>·</span>
                           <span>{trip.expenses.length} expenses</span>
-                          <span>·</span>
-                          <span className="font-medium" style={{ color: "var(--md-sys-color-primary)" }}>{sym}{totalSpent.toFixed(2)}</span>
                         </div>
                       </div>
+                    </div>
+                    <div className="text-right shrink-0 ml-3">
+                      <div className="text-base font-bold tabular-nums font-mono" style={{ color: "var(--md-sys-color-primary)" }}>{sym}{totalSpent.toFixed(2)}</div>
                     </div>
                     <button
                       onClick={(e) => {
@@ -144,12 +145,12 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
           <div className="mt-8 text-center">
             <div className="card-elevated p-8">
               <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
-                  <GlobeIcon className="w-7 h-7" style={{ color: "var(--md-sys-color-primary)" }} />
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "var(--md-sys-color-surface-container-high)" }}>
+                  <GlobeIcon className="w-6 h-6" style={{ color: "var(--md-sys-color-primary)" }} />
                 </div>
               </div>
-              <div className="text-lg font-semibold mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>Ready to explore?</div>
-              <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Create your first trip and start splitting expenses with ease</div>
+              <div className="text-lg font-semibold mb-1" style={{ color: "var(--md-sys-color-on-surface)" }}>Ready to go?</div>
+              <div className="text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Create your first trip to start splitting</div>
             </div>
           </div>
         )}

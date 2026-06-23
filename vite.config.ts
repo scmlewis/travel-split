@@ -16,8 +16,8 @@ export default defineConfig({
         name: "Travel Split",
         short_name: "Split",
         description: "Travel expense splitting app",
-        theme_color: "#141210",
-        background_color: "#141210",
+        theme_color: "#0F1112",
+        background_color: "#0F1112",
         display: "standalone",
         icons: [
           {
