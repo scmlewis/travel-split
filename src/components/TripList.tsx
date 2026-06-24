@@ -128,7 +128,7 @@ export default function TripList({ trips, onSelect, onCreate, onDelete, theme, o
                           addToast(`Trip "${trip.name}" deleted`);
                         }
                       }}
-                      className="transition-colors px-3 py-2 opacity-0 group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="transition-colors px-3 py-2 sm:opacity-0 sm:group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
                       style={{ color: "var(--md-sys-color-on-surface-variant)" }}
                     >
                       <XIcon className="w-4 h-4" />
