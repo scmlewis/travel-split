@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { Member, Settlement, SettlementPayment } from "../types";
 import Avatar from "./Avatar";
 import { useToast } from "../hooks/useToast";
-import { DollarIcon, CheckIcon, CalendarIcon } from "./Icons";
+import { DollarIcon, CheckIcon, CalendarIcon, LinkIcon, HistoryIcon } from "./Icons";
 
 interface SettlementBoardProps {
   members: Member[];
@@ -10,6 +10,21 @@ interface SettlementBoardProps {
   baseSymbol: string;
   paidSettlements: Record<string, boolean | SettlementPayment>;
   onTogglePaid: (from: string, to: string, note?: string) => void;
+}
+
+function getPaymentUrl(member: Member, amount: number, note: string): string | null {
+  if (!member.paymentHandle) return null;
+  const handle = member.paymentHandle;
+  switch (member.paymentApp) {
+    case "venmo":
+      return `venmo://paycharge?txn=pay&recipients=${encodeURIComponent(handle)}&amount=${amount.toFixed(2)}&note=${encodeURIComponent(note)}`;
+    case "paypal":
+      return `https://paypal.me/${encodeURIComponent(handle)}/${amount.toFixed(2)}`;
+    case "cashapp":
+      return `https://cash.app/${encodeURIComponent(handle)}/${amount.toFixed(2)}`;
+    default:
+      return null;
+  }
 }
 
 export default function SettlementBoard({
@@ -21,6 +36,11 @@ export default function SettlementBoard({
 }: SettlementBoardProps) {
   const memberMap = useMemo(() => new Map(members.map((m) => [m.id, m])), [members]);
   const { addToast } = useToast();
+  const [expandedHistory, setExpandedHistory] = useState<string | null>(null);
+
+  const toggleHistory = (key: string) => {
+    setExpandedHistory(expandedHistory === key ? null : key);
+  };
 
   const isPaidEntry = (val: boolean | SettlementPayment): val is SettlementPayment => typeof val === "object" && val !== null;
 
@@ -157,6 +177,19 @@ export default function SettlementBoard({
                             style={{ width: `${pct}%`, background: "var(--md-sys-color-outline)" }}
                           />
                         </div>
+                        {to && getPaymentUrl(to, s.amount, `Payment from ${from?.name}`) && (
+                          <a
+                            href={getPaymentUrl(to, s.amount, `Payment from ${from?.name}`)!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs px-3 py-1.5 rounded-lg font-semibold btn-press min-h-[36px] shrink-0 flex items-center gap-1"
+                            style={{ background: "var(--md-sys-color-primary-container)", color: "var(--md-sys-color-on-primary-container)" }}
+                            aria-label={`Pay ${to?.name} via ${to.paymentApp}`}
+                          >
+                            <LinkIcon className="w-3.5 h-3.5" />
+                            Pay
+                          </a>
+                        )}
                         <button
                           onClick={() => {
                             onTogglePaid(s.from, s.to, new Date().toISOString().split("T")[0]);
@@ -184,40 +217,72 @@ export default function SettlementBoard({
                     const to = memberMap.get(s.to);
                     const entry = paidSettlements[`${s.from}|${s.to}`];
                     const paidDate = isPaidEntry(entry) ? entry.paidDate : undefined;
+                    const history = isPaidEntry(entry) ? entry.history : [];
+                    const historyKey = `${s.from}|${s.to}`;
+                    const isExpanded = expandedHistory === historyKey;
                     return (
-                      <div key={`paid-${idx}`} className="px-4 py-2.5 opacity-50" style={{ borderBottom: idx < paid.length - 1 ? "1px solid var(--md-sys-color-outline-variant)" : undefined }}>
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2 min-w-0">
-                            {from && <Avatar name={from.name} size="sm" />}
-                            <span className="line-through text-sm truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{from?.name ?? "?"}</span>
-                            <span className="shrink-0" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>→</span>
-                            {to && <Avatar name={to.name} size="sm" />}
-                            <span className="line-through text-sm truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{to?.name ?? "?"}</span>
-                            <CheckIcon className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {paidDate && (
-                              <span className="text-[10px] flex items-center gap-0.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                                <CalendarIcon className="w-3 h-3" />
-                                {paidDate}
+                      <div key={`paid-${idx}`} className="opacity-50" style={{ borderBottom: idx < paid.length - 1 ? "1px solid var(--md-sys-color-outline-variant)" : undefined }}>
+                        <div className="px-4 py-2.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                              {from && <Avatar name={from.name} size="sm" />}
+                              <span className="line-through text-sm truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{from?.name ?? "?"}</span>
+                              <span className="shrink-0" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>→</span>
+                              {to && <Avatar name={to.name} size="sm" />}
+                              <span className="line-through text-sm truncate" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{to?.name ?? "?"}</span>
+                              <CheckIcon className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {paidDate && (
+                                <span className="text-[10px] flex items-center gap-0.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                                  <CalendarIcon className="w-3 h-3" />
+                                  {paidDate}
+                                </span>
+                              )}
+                              <span className="font-mono tabular-nums line-through text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
+                                {baseSymbol}{s.amount.toFixed(2)}
                               </span>
-                            )}
-                            <span className="font-mono tabular-nums line-through text-sm" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>
-                              {baseSymbol}{s.amount.toFixed(2)}
-                            </span>
-                            <button
-                              onClick={() => {
-                                onTogglePaid(s.from, s.to);
-                                addToast("Settlement unmarked", "info");
-                              }}
-                              className="text-xs px-2.5 py-1.5 rounded-lg hover:text-red-400 transition-opacity btn-press min-h-[36px]"
-                              style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
-                              aria-label={`Unmark settlement from ${from?.name} to ${to?.name}`}
-                            >
-                              Undo
-                            </button>
+                              {history.length > 0 && (
+                                <button
+                                  onClick={() => toggleHistory(historyKey)}
+                                  className="text-xs px-2 py-1 rounded-lg hover:opacity-80 transition-opacity"
+                                  style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
+                                  aria-label={`Toggle payment history for ${from?.name} to ${to?.name}`}
+                                >
+                                  <HistoryIcon className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                              <button
+                                onClick={() => {
+                                  onTogglePaid(s.from, s.to);
+                                  addToast("Settlement unmarked", "info");
+                                }}
+                                className="text-xs px-2.5 py-1.5 rounded-lg hover:text-red-400 transition-opacity btn-press min-h-[36px]"
+                                style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface-variant)" }}
+                                aria-label={`Unmark settlement from ${from?.name} to ${to?.name}`}
+                              >
+                                Undo
+                              </button>
+                            </div>
                           </div>
                         </div>
+                        {isExpanded && history.length > 0 && (
+                          <div className="px-4 py-2 text-xs" style={{ background: "var(--md-sys-color-surface-container)", borderTop: "1px solid var(--md-sys-color-outline-variant)" }}>
+                            <div className="font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Payment history</div>
+                            {history.map((h, hIdx) => (
+                              <div key={hIdx} className="flex items-center gap-2 py-0.5">
+                                <CalendarIcon className="w-3 h-3" style={{ color: "var(--md-sys-color-on-surface-variant)" }} />
+                                <span style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{h.date}</span>
+                                {h.amount > 0 && (
+                                  <span className="font-mono ml-auto" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{baseSymbol}{h.amount.toFixed(2)}</span>
+                                )}
+                                {h.note && (
+                                  <span className="ml-2 italic" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>{h.note}</span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     );
                   })}

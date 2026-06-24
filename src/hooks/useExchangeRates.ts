@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useRef } from "react";
+import { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import type { CurrencyCode } from "../types";
 import { DEFAULT_EXCHANGE_RATES } from "../types";
@@ -87,5 +87,29 @@ export function useExchangeRates(baseCurrency: CurrencyCode) {
     }
   }, [setCached]);
 
-  return { rates, refresh, lastUpdated: cached?.timestamp };
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const isStale = useMemo(() => {
+    if (!cached?.timestamp) return true;
+    return now - cached.timestamp > 3600000;
+  }, [cached, now]);
+
+  const lastUpdated = cached?.timestamp;
+
+  const timeSinceUpdate = useMemo(() => {
+    if (!lastUpdated) return null;
+    const diff = now - lastUpdated;
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  }, [lastUpdated, now]);
+
+  return { rates, refresh, lastUpdated, isStale, timeSinceUpdate };
 }

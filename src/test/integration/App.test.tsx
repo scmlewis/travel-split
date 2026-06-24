@@ -113,9 +113,9 @@ describe("App integration", () => {
     // Submit
     await user.click(screen.getByRole("button", { name: "Add Expense" }));
 
-    // Should appear in expenses list
-    expect(screen.getByText("Dinner")).toBeInTheDocument();
-    expect(screen.getAllByText("HK$200.00").length).toBeGreaterThanOrEqual(1);
+     // Should appear in expenses list
+     expect(screen.getAllByText("Dinner").length).toBeGreaterThanOrEqual(1);
+     expect(screen.getAllByText("HK$200.00").length).toBeGreaterThanOrEqual(1);
   });
 
   it("tabs switch correctly", async () => {

@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
-import type { Member, CurrencyCode, OmitExpenseId, SplitType, ExpenseItem } from "../types";
+import type { Member, CurrencyCode, OmitExpenseId, SplitType, ExpenseItem, Expense } from "../types";
 import { CURRENCY_MAP, getCategoryLabel, todayString, generateId } from "../types";
 import { useToast } from "../hooks/useToast";
-import { CheckIcon, RepeatIcon } from "./Icons";
+import { CheckIcon, RepeatIcon, ClockIcon } from "./Icons";
 
 interface ExpenseFormProps {
   members: Member[];
@@ -10,9 +10,10 @@ interface ExpenseFormProps {
   exchangeRates: Record<CurrencyCode, number>;
   allCategories: string[];
   onAdd: (expense: OmitExpenseId) => void;
+  recentExpenses?: Expense[];
 }
 
-export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCategories, onAdd }: ExpenseFormProps) {
+export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCategories, onAdd, recentExpenses = [] }: ExpenseFormProps) {
   const { addToast } = useToast();
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -32,6 +33,28 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
   const [recurringFreq, setRecurringFreq] = useState<"weekly" | "monthly" | "yearly">("monthly");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [expenseCreatedAt] = useState(() => Date.now());
+
+  const recentUnique = useMemo(() => {
+    const seen = new Set<string>();
+    return recentExpenses.filter((e) => {
+      if (seen.has(e.title)) return false;
+      seen.add(e.title);
+      return true;
+    }).slice(0, 5);
+  }, [recentExpenses]);
+
+  const handleQuickAdd = (expense: Expense) => {
+    setTitle(expense.title);
+    setAmount(String(expense.totalAmount));
+    setCurrency(expense.currency);
+    setRate(String(expense.exchangeRate));
+    setPayerId(expense.payerId);
+    setDate(todayString());
+    setSelectedCategories(expense.categories || []);
+    setSplitType(expense.shares[0]?.splitType || "equal");
+    setNotes(expense.notes || "");
+    addToast(`Loaded "${expense.title}"`);
+  };
 
   const handleCurrencyChange = (c: CurrencyCode) => { setCurrency(c); setRate(String(exchangeRates[c])); };
 
@@ -142,6 +165,24 @@ export default function ExpenseForm({ members, baseSymbol, exchangeRates, allCat
   return (
     <div className="card-elevated p-4 space-y-4">
       <div className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Add Expense</div>
+
+      {recentUnique.length > 0 && (
+        <div>
+          <div className="flex items-center gap-1.5 mb-2">
+            <ClockIcon className="w-3.5 h-3.5" style={{ color: "var(--md-sys-color-on-surface-variant)" }} />
+            <span className="text-xs font-medium" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Quick add</span>
+          </div>
+          <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+            {recentUnique.map((exp) => (
+              <button key={exp.id} onClick={() => handleQuickAdd(exp)}
+                className="text-xs px-3 py-2 rounded-lg whitespace-nowrap transition-all min-h-[36px] shrink-0 font-medium"
+                style={{ background: "var(--md-sys-color-surface-container-high)", color: "var(--md-sys-color-on-surface)" }}>
+                {exp.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <label htmlFor="expense-title" className="block text-xs font-medium mb-1" style={{ color: "var(--md-sys-color-on-surface-variant)" }}>Title</label>

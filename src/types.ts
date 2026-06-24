@@ -1,6 +1,8 @@
 export interface Member {
   id: string;
   name: string;
+  paymentHandle?: string;
+  paymentApp?: "venmo" | "paypal" | "cashapp";
 }
 
 export type BuiltInCategory = "food" | "transport" | "accommodation" | "activities" | "shopping" | "utilities" | "other";

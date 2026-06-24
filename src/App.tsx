@@ -13,6 +13,8 @@ import { ArrowLeftIcon, XIcon, MoreIcon, RefreshIcon, UploadIcon, DownloadIcon, 
 import SummaryCards from "./components/SummaryCards";
 import MemberPanel from "./components/MemberPanel";
 import ExpenseForm from "./components/ExpenseForm";
+
+const isPaidEntry = (val: boolean | SettlementPayment): val is SettlementPayment => typeof val === "object" && val !== null;
 import ExpenseLedger from "./components/ExpenseLedger";
 import EditExpenseModal from "./components/EditExpenseModal";
 import SettlementBoard from "./components/SettlementBoard";
@@ -109,7 +111,7 @@ export default function App() {
     () => [...DEFAULT_CATEGORY_LIST, ...(currentTrip?.customCategories ?? [])],
     [currentTrip?.customCategories],
   );
-  const { rates: exchangeRates, refresh: refreshRates } = useExchangeRates(baseCurrency);
+  const { rates: exchangeRates, refresh: refreshRates, isStale, timeSinceUpdate } = useExchangeRates(baseCurrency);
 
   const balances = useMemo(
     () => (currentTrip ? calculateBalances(currentTrip.expenses, currentTrip.members) : []),
@@ -232,6 +234,18 @@ export default function App() {
     });
   }, [setAppState]);
 
+  const handleUpdateMember = useCallback((id: string, updates: Partial<Member>) => {
+    setAppState((prev) => {
+      return {
+        ...prev,
+        trips: prev.trips.map((t) => (t.id === prev.currentTripId ? {
+          ...t,
+          members: t.members.map((m) => (m.id === id ? { ...m, ...updates } : m)),
+        } : t)),
+      };
+    });
+  }, [setAppState]);
+
   const handleAddExpense = useCallback((data: OmitExpenseId) => {
     setAppState((prev) => {
       const expense: Expense = { ...data, id: generateId() };
@@ -264,8 +278,17 @@ export default function App() {
         if (t.id !== prev.currentTripId) return t;
         const key = `${from}|${to}`;
         const next = { ...t.paidSettlements } as Record<string, boolean | SettlementPayment>;
-        if (next[key]) delete next[key];
-        else next[key] = { paid: true, paidDate: note, history: [] };
+        if (next[key]) {
+          delete next[key];
+        } else {
+          const existingEntry = next[key];
+          const history = isPaidEntry(existingEntry) ? existingEntry.history : [];
+          next[key] = {
+            paid: true,
+            paidDate: note || new Date().toISOString().split("T")[0],
+            history: [...history, { date: note || new Date().toISOString().split("T")[0], amount: 0 }],
+          };
+        }
         return { ...t, paidSettlements: next };
       }),
     }));
@@ -509,6 +532,11 @@ export default function App() {
                   >
                     <RefreshIcon className="w-4 h-4" />
                     Refresh FX Rates
+                    {isStale && (
+                      <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: "rgba(245, 158, 11, 0.15)", color: "#f59e0b" }}>
+                        Stale{timeSinceUpdate ? ` ${timeSinceUpdate}` : ""}
+                      </span>
+                    )}
                   </button>
                   <button
                     onClick={() => { handleExport(); setShowMenu(false); }}
@@ -567,6 +595,7 @@ export default function App() {
                   exchangeRates={exchangeRates}
                   allCategories={allCategories}
                   onAdd={handleAddExpense}
+                  recentExpenses={currentTrip.expenses}
                 />
               </div>
             )}
@@ -614,6 +643,7 @@ export default function App() {
                     members={currentTrip.members}
                     onAdd={handleAddMember}
                     onRemove={handleRemoveMember}
+                    onUpdateMember={handleUpdateMember}
                   />
                 </div>
                 <div className="card-elevated p-4">
