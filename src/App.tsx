@@ -589,7 +589,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="relative overflow-hidden">
+      <main className="relative overflow-clip">
         <div className="p-5 pb-24 space-y-5 relative z-20" role="tabpanel">
             {showForm && (
               <div className="card-elevated p-4 animate-fadeIn">
