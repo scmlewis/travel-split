@@ -58,6 +58,10 @@ export default function App() {
   const [headerScrolled, setHeaderScrolled] = useState(false);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
+
+  useEffect(() => {
     const handleScroll = () => setHeaderScrolled(window.scrollY > 4);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
