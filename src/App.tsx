@@ -446,7 +446,7 @@ export default function App() {
     <div className="min-h-screen relative">
       <div className="max-w-7xl mx-auto">
         <header
-          className="sticky top-0 z-30 transition-shadow duration-200"
+          className="sticky top-0 z-30 transition-shadow duration-200 shrink-0"
           style={{
             background: "var(--md-sys-color-surface)",
             borderBottom: "1px solid var(--md-sys-color-outline-variant)",
@@ -589,7 +589,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="relative overflow-clip">
+      <main className="relative">
         <div className="p-5 pb-24 space-y-5 relative z-20" role="tabpanel">
             {showForm && (
               <div className="card-elevated p-4 animate-fadeIn">
